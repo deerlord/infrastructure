@@ -18,7 +18,7 @@ docker run -d \
   nginx
 sleep 10
 docker stop nginx
-stop rm nginx
+docker rm nginx
 EOF
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf <<'EOF'
 server {
