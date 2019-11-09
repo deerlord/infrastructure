@@ -19,18 +19,6 @@ docker run -d \
 sleep 10
 docker stop nginx
 stop rm nginx
-cat > /var/lib/docker/volumes/nginx/_data/conf.d/httpd.conf <<'EOF'
-events {
-  multi_accept off;
-  worker_connections 10;
-}
-http {
-  charset utf-8;
-  tcp_nopush on;
-  tcp_nodelay on;
-  server_tokens off;
-  client_max_body_size 16M;
-}
 EOF
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf <<'EOF'
 server {

@@ -18,7 +18,7 @@ cat > /var/lib/docker/volumes/dnsmasq/_data/hosts <<'EOF'
 127.0.0.1 doubleclick.net
 HOST_IP HOST_NAME HOST_NAME.HOST_DOMAIN
 EOF
-cat > /var/lib/docker/volumes/dnsmasqm/_data/conf <<'EOF'
+cat > /var/lib/docker/volumes/dnsmasq/_data/conf <<'EOF'
 user=root
 domain-needed
 bogus-priv
