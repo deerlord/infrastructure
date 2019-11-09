@@ -1,0 +1,10 @@
+#!/bin/bash
+
+docker run -d \
+  --env USER_ID=$(grep -P '^sphinx' /etc/passwd | awk -F':' '{print $3}') \
+  --env GROUP_ID=$(grep -P '^sphinx' /etc/group | awk -F':' '{print $3}') \
+  --net=sphinx_proxy \
+  --name=sphinx \
+  -v '/etc/localtime:/etc/localtime:ro' \
+  -v '/etc/timezone:/etc/timezone:ro' \
+  sphinx

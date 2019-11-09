@@ -1,0 +1,53 @@
+#!/bin/bash
+
+/usr/sbin/useradd -r -s /sbin/nologin dnsmasq
+docker volume create dnsmasq
+mkdir ./dnsmasq/
+cd ./dnsmasq/
+cat > Dockerfile <<'EOF'
+FROM debian
+RUN apt update -y
+RUN apt upgrade -y
+RUN apt install -y dnsmasq dnsmasq-utils
+RUN mkdir -p /etc/dnsmasq.d
+RUN echo 'conf-file=/etc/dnsmasq/conf' > /etc/dnsmasq.conf
+EXPOSE 53/udp
+CMD ["/usr/sbin/dnsmasq", "-k"]
+EOF
+cat > /var/lib/docker/volumes/dnsmasq/_data/hosts <<'EOF'
+127.0.0.1 doubleclick.net
+HOST_IP HOST_NAME HOST_NAME.HOST_DOMAIN
+EOF
+cat > /var/lib/docker/volumes/dnsmasqm/_data/conf <<'EOF'
+user=root
+domain-needed
+bogus-priv
+no-resolv
+no-poll
+local=/HOST_NAME/
+addn-hosts=/etc/dnsmasq/hosts
+dhcp-leasefile=/etc/dnsmasq/leases
+server=/HOST_NAME/
+server=8.8.8.8
+server=8.8.4.4
+no-hosts
+expand-hosts
+domain=HOST_DOMAIN
+dhcp-range=DHCP_START,DHCP_END,DHCP_TIME
+dhcp-option=option:router,HOST_GATEWAY
+#dhcp-option=option:NTP_SERVER,127.0.0.1
+EOF
+sed -i \
+  -e "s HOST_NAME ${HOST_NAME} g" \
+  -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
+  -e "s HOST_IP ${HOST_IP} g" \
+  -e "s HOST_GATEWAY ${HOST_GATEWAY} g" \
+  -e "s DHCP_START ${DHCP_START} g" \
+  -e "s DHCP_END ${DHCP_END} g" \
+  -e "s DHCP_TIME ${DHCP_TIME} g" \
+  -e "s NTP_SERVER ${NTP_SERVER} g" \
+  dnsmasq.conf
+docker build -t dnsmasq .
+cd ..
+rm -rf ./dnsmasq/
+chown -R dnsmasq /var/lib/docker/volumes/dnsmasq/_data/

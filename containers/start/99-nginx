@@ -1,0 +1,23 @@
+#!/bin/bash
+
+docker create \
+  --env USER_ID=$(grep -P '^nginx' /etc/passwd | awk -F':' '{print $3}') \
+  --env GROUP_ID=$(grep -P '^nginx' /etc/group | awk -F':' '{print $3}') \
+  --restart=always \
+  --name=nginx \
+  -v '/etc/localtime:/etc/localtime:ro' \
+  -v '/etc/timezone:/etc/timezone:ro' \
+  -v 'nginx:/etc/nginx/' \
+  -v 'ssl:/etc/ssl/' \
+  -p 80:80 \
+  -p 443:443 \
+  nginx
+if [[ $(docker network list | grep openhab_proxy | wc -l) -eq 1 ]]
+then
+  docker network connect openhab_proxy nginx
+fi
+if [[ $(docker network list | grep sphinx_proxy | wc -l) -eq 1 ]]
+then
+  docker network connect sphinx_proxy nginx
+fi
+docker start nginx

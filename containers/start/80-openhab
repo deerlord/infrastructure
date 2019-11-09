@@ -1,0 +1,16 @@
+#!/bin/bash
+
+docker run -d \
+  --env USER_ID=$(grep -P '^openhab' /etc/passwd | awk -F':' '{print $3}') \
+  --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
+  --restart=always \
+  --name=openhab \
+  --net=openhab_proxy \
+  --env CRYPTO_POLICY='limited' \
+  -v '/etc/localtime:/etc/localtime:ro' \
+  -v '/etc/timezone:/etc/timezone:ro' \
+  -v 'openhab_conf:/openhab/conf/' \
+  -v 'openhab_userdata:/openhab/userdata/' \
+  -v 'openhab_addons:/openhab/addons/' \
+  -v 'openhab_database:/openhab/database/' \
+  openhab/openhab

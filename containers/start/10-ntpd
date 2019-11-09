@@ -1,0 +1,9 @@
+#!/bin/bash
+
+docker run -d \
+  --env USER_ID=$(grep -P '^ntpd' /etc/passwd | awk -F':' '{print $3}') \
+  --env GROUP_ID=$(grep -P '^ntpd' /etc/group | awk -F':' '{print $3}') \
+  --restart=always \
+  --name=ntpd \
+  -p 123:123 \
+  ntpd

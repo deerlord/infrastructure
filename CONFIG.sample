@@ -1,0 +1,20 @@
+# NGINX SSL values
+export COUNTRY=''
+export STATE=''
+export LOCALITY=''
+export ORGANIZATION=''
+export ORGANIZATIONALUNIT=''
+export COMMONNAME=''
+export EMAIL=''
+# information about the host we're running on
+export HOST_NAME=''  # ex: HOSTNAME.google.com
+export HOST_DOMAIN='' # ex: mail.HOST_DOMAIN 
+export HOST_IP='192.168.1.2'
+export HOST_GATEWAY='192.168.1.1'
+export HOST_SUBNET='255.255.255.0'
+# DHCP settings for dnsmasq
+export DHCP_START='192.168.1.3'
+export DHCP_END='192.168.1.254'
+export DHCP_TIME='12h'
+# NTP values
+export NTP_SERVER='localhost'

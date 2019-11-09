@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for container in $(ls ./containers/start/)
+do
+  ./containers/start/${container}
+done

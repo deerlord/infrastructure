@@ -1,0 +1,54 @@
+#!/bin/bash
+
+docker pull nginx
+/usr/sbin/useradd -r -s /sbin/nologin nginx
+docker volume create nginx
+docker volume create ssl
+docker run -d \
+  --env USER_ID=$(grep -P '^nginx' /etc/passwd | awk -F':' '{print $3}') \
+  --env GROUP_ID=$(grep -P '^nginx' /etc/group | awk -F':' '{print $3}') \
+  --restart=always \
+  --name=nginx \
+  -v '/etc/localtime:/etc/localtime:ro' \
+  -v '/etc/timezone:/etc/timezone:ro' \
+  -v 'nginx:/etc/nginx/' \
+  -v 'ssl:/etc/ssl/' \
+  -p 80:80 \
+  -p 443:443 \
+  nginx
+sleep 10
+docker stop nginx
+stop rm nginx
+cat > /var/lib/docker/volumes/nginx/_data/conf.d/httpd.conf <<'EOF'
+events {
+  multi_accept off;
+  worker_connections 10;
+}
+http {
+  charset utf-8;
+  tcp_nopush on;
+  tcp_nodelay on;
+  server_tokens off;
+  client_max_body_size 16M;
+}
+EOF
+cat > /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf <<'EOF'
+server {
+  listen 80 default_server;
+  server_name _;
+  return 301 https://$host$request_uri;
+}
+server {
+  listen 443 ssl;
+  server_name *.deerlord.lan;
+  ssl_certificate /etc/ssl/nginx.crt;
+  ssl_certificate_key /etc/ssl/nginx.key;
+  ssl_protocols TLSv1.3;
+}
+EOF
+openssl req -newkey rsa:8192 -nodes \
+  -keyout /var/lib/docker/volumes/ssl/_data/nginx.key \
+  -x509 -days 3650 \
+  -out /var/lib/docker/volumes/ssl/_data/nginx.crt \
+  -subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${ORGANIZATIONALUNIT}/CN=${COMMONNAME}/emailAddress=${EMAIL}"
+chown -R nginx /var/lib/docker/volumes/nginx/_data/
