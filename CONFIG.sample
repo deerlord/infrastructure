@@ -4,7 +4,7 @@ export STATE=''
 export LOCALITY=''
 export ORGANIZATION=''
 export ORGANIZATIONALUNIT=''
-export COMMONNAME=''
+export COMMONNAME='*.HOST_DOMAIN'
 export EMAIL=''
 # information about the host we're running on
 export HOST_NAME=''  # ex: HOSTNAME.google.com

@@ -40,12 +40,15 @@ server {
 }
 server {
   listen 443 ssl;
-  server_name *.deerlord.lan;
+  server_name *.HOST_DOMAIN;
   ssl_certificate /etc/ssl/nginx.crt;
   ssl_certificate_key /etc/ssl/nginx.key;
   ssl_protocols TLSv1.3;
 }
 EOF
+sed -i \
+  -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
+  /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf
 openssl req -newkey rsa:8192 -nodes \
   -keyout /var/lib/docker/volumes/ssl/_data/nginx.key \
   -x509 -days 3650 \

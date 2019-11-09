@@ -1,5 +1,14 @@
 #!/bin/bash
 
+set -euo pipefail
+
+if [[ ! -f ./CONFIG ]]
+then
+  echo 'No CONFIG file found,'
+  echo '$ cp CONFIG.sample CONFIG'
+  echo 'then edit it accordingly.'
+  exit 1
+fi
 source ./CONFIG
 
 apt update -y
