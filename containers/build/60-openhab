@@ -6,7 +6,7 @@ docker volume create openhab_conf
 docker volume create openhab_userdata
 docker volume create openhab_addons
 docker network create --internal --subnet=172.19.0.0/29 openhab_proxy
-./containers/start *-openhab
+./containers/start/*-openhab
 sleep 10
 docker stop openhab
 docker rm openhab
