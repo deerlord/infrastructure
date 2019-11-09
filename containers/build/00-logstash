@@ -3,4 +3,5 @@
 docker pull docker.elastic.co/logstash/logstash
 /usr/sbin/useradd -r -s /sbin/nologin logstash
 docker volume create logstash
+docker network create --internal --subnet=172.19.0.16/29 logstash_proxy
 chown -R logstash /var/lib/docker/volumes/logstash/_data/
