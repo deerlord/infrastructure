@@ -19,11 +19,14 @@ EOF
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/openhab.conf <<'EOF'
 server {
   listen 443 ssl;
-  server_name openhab.deerlord.lan;
+  server_name openhab.HOST_DOMAIN;
   location / {
     proxy_pass http://openhab:8080/;
   }
 }
 EOF
+sed -i \
+  -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
+  /var/lib/docker/volumes/nginx/_data/conf.d/openhab.conf
 chown -R openhab /var/lib/docker/volumes/openhab_*/_data/
 chown nginx /var/lib/docker/volumes/nginx/_data/conf.d/openhab.conf

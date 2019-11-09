@@ -43,10 +43,13 @@ rm -rf ./sphinx/
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/sphinx.conf <<'EOF'
 server {
   listen 443 ssl;
-  server_name sphinx.deerlord.lan;
+  server_name sphinx.HOST_DOMAIN;
   location / {
     proxy_pass http://sphinx:8080/;
   }
 }
 EOF
+sed -i \
+  -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
+  /var/lib/docker/volumes/nginx/_data/conf.d/sphinx.conf
 chown nginx /var/lib/docker/volumes/nginx/_data/conf.d/sphinx.conf
