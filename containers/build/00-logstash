@@ -3,4 +3,4 @@
 docker pull docker.elastic.co/logstash/logstash
 /usr/sbin/useradd -r -s /sbin/nologin logstash
 docker volume create logstash
-chown -R logstash 
+chown -R logstash /var/lib/docker/volumes/logstash/_data/
