@@ -19,7 +19,6 @@ docker run -d \
 sleep 10
 docker stop nginx
 docker rm nginx
-EOF
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf <<'EOF'
 server {
   listen 80 default_server;

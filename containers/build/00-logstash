@@ -1,0 +1,6 @@
+#!/bin/bash
+
+docker pull docker.elastic.co/logstash/logstash
+/usr/sbin/useradd -r -s /sbin/nologin logstash
+docker volume create logstash
+chown -R logstash 
