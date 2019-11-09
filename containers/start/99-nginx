@@ -20,4 +20,8 @@ if [[ $(docker network list | grep sphinx_proxy | wc -l) -eq 1 ]]
 then
   docker network connect sphinx_proxy nginx
 fi
+if [[ $(docker network list | grep logstash_proxy | wc -l) -eq 1 ]]
+then
+  docker network connect logstash_proxy nginx
+fi
 docker start nginx
