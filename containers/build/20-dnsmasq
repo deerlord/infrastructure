@@ -46,7 +46,7 @@ sed -i \
   -e "s DHCP_END ${DHCP_END} g" \
   -e "s DHCP_TIME ${DHCP_TIME} g" \
   -e "s NTP_SERVER ${NTP_SERVER} g" \
-  dnsmasq.conf
+  /var/lib/docker/dnsmasq/_data/conf
 docker build -t dnsmasq .
 cd ..
 rm -rf ./dnsmasq/
