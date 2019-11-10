@@ -5,7 +5,7 @@ docker create \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
   --restart=always \
   --name=openhab \
-  --net=host \
+  --net=openhab_proxy \
   --env CRYPTO_POLICY='limited' \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
@@ -13,7 +13,6 @@ docker create \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
-docker network connect openhab_proxy openhab
 cat > profile <<'EOF'
 export OPENHAB_HTTP_ADDRESS=$(ip a | grep -A3 -P '^[[:digit:]]{1,10}: eth0' | grep inet | awk '{print $2}' | cut -d'/' -f1)
 EOF
