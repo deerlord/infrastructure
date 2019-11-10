@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+
+
 docker create \
   --env USER_ID=$(grep -P '^openhab' /etc/passwd | awk -F':' '{print $3}') \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
@@ -14,10 +17,11 @@ docker create \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
-cat > profile <<'EOF'
-export OPENHAB_HTTP_ADDRESS=172.19.0.2
-export http_proxy=http://172.19.0.3:8888
-export https_proxy=https://172.19.0.3:8888
+IP=$(docker inspect openhab | grep -oP 'IPAddress": "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | cut -d'"' -f3)
+cat > profile <<EOF
+export OPENHAB_HTTP_ADDRESS=${IP}
+export http_proxy=http://nginx:8888
+export https_proxy=https://nginx:8888
 EOF
 docker cp profile openhab:/etc/profile
 rm -f profile
