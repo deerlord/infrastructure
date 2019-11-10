@@ -13,12 +13,12 @@ docker create \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
-cat > profile <<'EOF'
+cat > bashrc <<'EOF'
 export OPENHAB_HTTP_ADDRESS=172.19.0.2
 export JAVA_OPTS='-Dhttp.proxyHost=http://nginx -Dhttp.proxyPort=8888 -Dhttps.proxyHost=https://nginx -Dhttps.proxyPort=8888'
 export http_proxy=http://nginx:8888
 export https_proxy=https://nginx:8888
 EOF
-docker cp profile openhab:/etc/profile
+docker cp profile openhab:/etc/bashrc
 rm -f profile
 docker start openhab
