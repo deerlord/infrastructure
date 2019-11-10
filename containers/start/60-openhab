@@ -19,6 +19,6 @@ export JAVA_OPTS='-Dhttp.proxyHost=http://nginx -Dhttp.proxyPort=8888 -Dhttps.pr
 export http_proxy=http://nginx:8888
 export https_proxy=https://nginx:8888
 EOF
-docker cp profile openhab:/etc/bashrc
-rm -f profile
+docker cp bashrc openhab:/etc/bash.bashrc
+rm -f bashrc
 docker start openhab
