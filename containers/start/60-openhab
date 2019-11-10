@@ -21,7 +21,7 @@ export https_proxy=https://nginx:8888
 EOF
 docker cp profile openhab:/etc/profile
 rm -f profile
-cat > resolv.conf >>'EOF'
+cat > resolv.conf <<'EOF'
 nameserver 127.0.0.11
 nameserver 172.22.0.2
 options ndots:0
