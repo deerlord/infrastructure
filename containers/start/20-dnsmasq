@@ -6,7 +6,6 @@ docker run -d \
   --restart=always \
   --name=dnsmasq \
   --net=dnsmasq \
-  --ip=172.22.0.2 \
   --cap-add=NET_ADMIN \
   -v 'dnsmasq:/etc/dnsmasq/' \
   -p 53:53 \

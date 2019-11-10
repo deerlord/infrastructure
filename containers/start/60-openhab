@@ -7,6 +7,7 @@ docker create \
   --name=openhab \
   --net=dnsmasq \
   --ip=172.22.0.3 \
+  --dns=172.22.0.2 \
   --env CRYPTO_POLICY='limited' \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
