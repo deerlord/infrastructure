@@ -7,7 +7,7 @@ docker run -d \
   --name=openhab \
   --net=openhab_proxy \
   --env CRYPTO_POLICY='limited' \
-  --env EXTRA_JAVA_OPTS='-Dhttp.proxySet=true -Dhttp.proxyHost=nginx -Dhttp.proxyPort=8888 -Dhttps.proxyHost=nginx -Dhttps.proxyPort=8888' \
+  --env EXTRA_JAVA_OPTS='-Dhttp.proxySet=true -Dhttp.proxyHost=nginx -Dhttp.proxyPort=8888 -Dhttps.proxyHost=nginx -Dhttps.proxyPort=8888 -Dhttp.nonProxyHosts=localhost' \
   --env http_proxy='http://nginx:8888' \
   --env https_proxy='https://nginx:8888' \
   -v '/etc/localtime:/etc/localtime:ro' \
