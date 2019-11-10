@@ -12,7 +12,6 @@ docker run -d \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   -v 'nginx:/etc/nginx/' \
-  -v 'ssl:/etc/ssl/' \
   -p 80:80 \
   -p 443:443 \
   nginx

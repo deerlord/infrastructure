@@ -12,9 +12,12 @@ docker create \
   -v 'openhab_conf:/openhab/conf/' \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
+  --ip=172.19.0.2 \
   openhab/openhab
 cat > profile <<'EOF'
-export OPENHAB_HTTP_ADDRESS=$(ip a | grep -A3 -P '^[[:digit:]]{1,10}: eth0' | grep inet | awk '{print $2}' | cut -d'/' -f1)
+export OPENHAB_HTTP_ADDRESS=172.19.0.2
+export http_proxy=172.19.0.3:8888
+export https_proxy=172.19.0.3:8888
 EOF
 docker cp profile openhab:/etc/profile
 docker start openhab

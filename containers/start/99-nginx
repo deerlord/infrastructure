@@ -9,16 +9,17 @@ docker create \
   -v '/etc/timezone:/etc/timezone:ro' \
   -v 'nginx:/etc/nginx/' \
   -v 'ssl:/etc/ssl/' \
+  --ip=172.
   -p 80:80 \
   -p 443:443 \
   nginx
 if [[ $(docker network list | grep openhab_proxy | wc -l) -eq 1 ]]
 then
-  docker network connect openhab_proxy nginx
+  docker network connect --ip=172.19.0.3 openhab_proxy nginx
 fi
 if [[ $(docker network list | grep sphinx_proxy | wc -l) -eq 1 ]]
 then
-  docker network connect sphinx_proxy nginx
+  docker network connect --ip=172.19.0.10 sphinx_proxy nginx
 fi
 if [[ $(docker network list | grep logstash_proxy | wc -l) -eq 1 ]]
 then

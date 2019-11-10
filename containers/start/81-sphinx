@@ -7,4 +7,5 @@ docker run -d \
   --name=sphinx \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
+  --ip=172.19.0.9 \
   sphinx
