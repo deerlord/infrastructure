@@ -32,11 +32,11 @@ server {
   ssl_protocols TLSv1.3;
 }
 EOF
-cat > /var/lib/docker/volumes/nginx/_data/conf.d/forward.conf.dev <<'EOF'
+cat > /var/lib/docker/volumes/nginx/_data/conf.d/forward.conf <<'EOF'
 server {
   listen 8888;
   location / {
-    proxy_pass $scheme://$http_host$request_uri;
+    proxy_pass $scheme://$host$request_uri;
   }
 }
 EOF
