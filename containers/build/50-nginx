@@ -35,6 +35,7 @@ EOF
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/forward.conf <<'EOF'
 server {
   listen 8888;
+  resolver 8.8.8.8 8.8.4.4;
   location / {
     proxy_pass $scheme://$host$request_uri;
   }
