@@ -5,9 +5,7 @@ docker create \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
   --restart=always \
   --name=openhab \
-  --net=dnsmasq \
-  --ip=172.22.0.3 \
-  --dns=172.22.0.2 \
+  --net=openhab_proxy \
   --env CRYPTO_POLICY='limited' \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
@@ -17,11 +15,10 @@ docker create \
   openhab/openhab
 cat > profile <<'EOF'
 export OPENHAB_HTTP_ADDRESS=172.19.0.2
-export _JAVA_OPTIONS='-Dhttp.proxyHost=172.19.0.3 -Dhttp.proxyPort=8888'
+export _JAVA_OPTIONS='-Dhttp.proxyHost=nginx -Dhttp.proxyPort=8888'
 export http_proxy=http://nginx:8888
 export https_proxy=https://nginx:8888
 EOF
 docker cp profile openhab:/etc/profile
 rm -f profile
-docker network connect openhab_proxy --ip=172.19.0.2 openhab
 docker start openhab
