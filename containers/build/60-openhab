@@ -6,8 +6,20 @@ docker volume create openhab_conf
 docker volume create openhab_userdata
 docker volume create openhab_addons
 docker network create --internal --subnet=172.19.0.0/29 openhab_proxy
-./containers/start/*-openhab
-sleep 15
+docker run -d \
+  --env USER_ID=$(grep -P '^openhab' /etc/passwd | awk -F':' '{print $3}') \
+  --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
+  --restart=always \
+  --name=openhab \
+  --net=host \
+  --env CRYPTO_POLICY='limited' \
+  -v '/etc/localtime:/etc/localtime:ro' \
+  -v '/etc/timezone:/etc/timezone:ro' \
+  -v 'openhab_conf:/openhab/conf/' \
+  -v 'openhab_userdata:/openhab/userdata/' \
+  -v 'openhab_addons:/openhab/addons/' \
+  openhab/openhab
+sleep 60
 docker stop openhab
 docker rm openhab
 cat >> /var/lib/docker/volumes/openhab_conf/_data/services/addons.cfg <<'EOF'
