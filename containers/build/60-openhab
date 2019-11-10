@@ -7,7 +7,7 @@ docker volume create openhab_userdata
 docker volume create openhab_addons
 docker network create --internal --subnet=172.19.0.0/29 openhab_proxy
 ./containers/start/*-openhab
-sleep 60
+sleep 15
 docker stop openhab
 docker rm openhab
 cat >> /var/lib/docker/volumes/openhab_conf/_data/services/addons.cfg <<'EOF'

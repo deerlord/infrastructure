@@ -17,9 +17,8 @@ docker create \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
-IP=$(docker inspect openhab | grep -oP 'IPAddress": "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | cut -d'"' -f3)
 cat > profile <<EOF
-export OPENHAB_HTTP_ADDRESS=${IP}
+export OPENHAB_HTTP_ADDRESS=172.19.0.2
 export http_proxy=http://nginx:8888
 export https_proxy=https://nginx:8888
 EOF
