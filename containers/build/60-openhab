@@ -19,7 +19,7 @@ docker run -d \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
-sleep 60
+sleep 15
 docker stop openhab
 docker rm openhab
 cat >> /var/lib/docker/volumes/openhab_conf/_data/services/addons.cfg <<'EOF'
