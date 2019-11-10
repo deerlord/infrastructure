@@ -5,6 +5,7 @@ docker run -d \
   --env GROUP_ID=$(grep -P '^dnsmasq' /etc/group | awk -F':' '{print $3}') \
   --restart=always \
   --name=dnsmasq \
+  --net=dnsmasq \
   --cap-add=NET_ADMIN \
   -v 'dnsmasq:/etc/dnsmasq/' \
   -p 53:53 \

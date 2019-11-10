@@ -24,4 +24,5 @@ export https_proxy=https://nginx:8888
 EOF
 docker cp profile openhab:/etc/profile
 rm -f profile
+docker network connect dnsmasq openhab
 docker start openhab
