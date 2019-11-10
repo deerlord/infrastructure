@@ -15,7 +15,7 @@ docker create \
   openhab/openhab
 cat > profile <<'EOF'
 export OPENHAB_HTTP_ADDRESS=172.19.0.2
-export _JAVA_OPTIONS='-Dhttp.proxyHost=nginx -Dhttp.proxyPort=8888'
+export JAVA_OPTS='-Djava.net.useSystemProxies=true'
 export http_proxy=http://nginx:8888
 export https_proxy=https://nginx:8888
 EOF
