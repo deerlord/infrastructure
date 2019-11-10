@@ -8,7 +8,6 @@ docker create \
   --net=dnsmasq \
   --ip=172.22.0.3 \
   --dns=172.22.0.2 \
-  --dns=127.0.0.11 \
   --env CRYPTO_POLICY='limited' \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
@@ -16,8 +15,9 @@ docker create \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
-cat > profile <<EOF
+cat > profile <<'EOF'
 export OPENHAB_HTTP_ADDRESS=172.19.0.2
+export _JAVA_OPTIONS='-Dhttp.proxyHost=172.19.0.3 -Dhttp.proxyPort=8888'
 export http_proxy=http://nginx:8888
 export https_proxy=https://nginx:8888
 EOF
