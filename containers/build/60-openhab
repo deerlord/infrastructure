@@ -18,11 +18,15 @@ cat > /var/lib/docker/volumes/openhab_conf/_data/services/jdbc.cfg <<'EOF'
 url=jdbc:sqlite:/openhab/userdata/sqlite.db
 EOF
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/openhab.conf <<'EOF'
+upstream openhab_upstream {
+  server openhab:8080;
+  server localhost;
+}
 server {
   listen 443 ssl;
   server_name openhab.HOST_DOMAIN;
   location / {
-    proxy_pass http://openhab:8080/;
+    proxy_pass http://openhab_upstream/;
     proxy_set_header Host $http_host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
