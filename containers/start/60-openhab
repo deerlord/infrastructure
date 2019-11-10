@@ -5,9 +5,9 @@ docker run -d \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
   --restart=always \
   --name=openhab \
-  --net=openhab_proxy \
+  --net=squid \
   --env CRYPTO_POLICY='limited' \
-  --env EXTRA_JAVA_OPTS='-Dhttp.proxySet=true -Dhttp.proxyHost=nginx -Dhttp.proxyPort=8888 -Dhttps.proxyHost=nginx -Dhttps.proxyPort=8888 -Dhttp.nonProxyHosts=localhost' \
+  --env EXTRA_JAVA_OPTS='-Dhttp.proxySet=true -Dhttp.proxyHost=squid -Dhttp.proxyPort=8080 -Dhttps.proxyHost=squid -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts=localhost' \
   --env http_proxy='http://nginx:8888' \
   --env https_proxy='https://nginx:8888' \
   -v '/etc/localtime:/etc/localtime:ro' \
@@ -16,3 +16,4 @@ docker run -d \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
+docker network connect nginx openhab

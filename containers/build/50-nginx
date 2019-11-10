@@ -4,11 +4,13 @@ docker pull nginx
 /usr/sbin/useradd -r -s /sbin/nologin nginx
 docker volume create nginx
 docker volume create ssl
+docker network create --internal --subnet=${NGINX_SUBNET} nginx
 docker run -d \
   --env USER_ID=$(grep -P '^nginx' /etc/passwd | awk -F':' '{print $3}') \
   --env GROUP_ID=$(grep -P '^nginx' /etc/group | awk -F':' '{print $3}') \
   --restart=always \
   --name=nginx \
+  --net=host \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   -v 'nginx:/etc/nginx/' \
@@ -30,23 +32,6 @@ server {
   ssl_certificate /etc/ssl/nginx.crt;
   ssl_certificate_key /etc/ssl/nginx.key;
   ssl_protocols TLSv1.3;
-}
-EOF
-cat > /var/lib/docker/volumes/nginx/_data/conf.d/forward.conf <<'EOF'
-server {
-  listen 8888;
-  server_name _;
-  resolver 8.8.8.8 8.8.4.4;
-  error_log /var/log/nginx/error.log debug;
-  access_log /var/log/nginx/access.log main;
-  location / {
-    proxy_pass $scheme://$host$request_uri;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header Request-URI $request_uri;
-  }
 }
 EOF
 sed -i \

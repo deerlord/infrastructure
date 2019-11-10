@@ -1,0 +1,15 @@
+#!/bin/bash
+
+docker pull debian
+/usr/sbin/useradd -r -s /sbin/nologin squid
+docker volume create squid
+docker network create --internal --subnet=${SQUID_SUBNET} squid
+mkdir ./squid/
+cd ./squid/
+cat > Dockerfile <<'EOF'
+FROM debian
+RUN apt update -y
+RUN apt upgrade -y
+RUN apt install -y squid
+
+EOF
