@@ -1,8 +1,5 @@
 #!/bin/bash
 
-
-
-
 docker create \
   --env USER_ID=$(grep -P '^openhab' /etc/passwd | awk -F':' '{print $3}') \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
@@ -24,5 +21,12 @@ export https_proxy=https://nginx:8888
 EOF
 docker cp profile openhab:/etc/profile
 rm -f profile
+cat > resolv.conf >>'EOF'
+nameserver 127.0.0.11
+nameserver 172.22.0.2
+options ndots:0
+EOF
+docker cp resolv.conf openhab:/etc/resolv.conf
+rm -f resolv.conf
 docker network connect dnsmasq openhab
 docker start openhab
