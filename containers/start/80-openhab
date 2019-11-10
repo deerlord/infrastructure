@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker run -d \
+docker create \
   --env USER_ID=$(grep -P '^openhab' /etc/passwd | awk -F':' '{print $3}') \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
   --restart=always \
@@ -14,3 +14,8 @@ docker run -d \
   -v 'openhab_addons:/openhab/addons/' \
   -v 'openhab_database:/openhab/database/' \
   openhab/openhab
+#cat > profile <<'EOF'
+#export OPENHAB_HTTP_ADDRESS=$(ip a | grep -A3 -P '^[[:digit:]]{1,10}: eth0' | grep inet | awk '{print $2}' | cut -d'/' -f1)
+#EOF
+#docker cp profile openhab:/etc/profile
+docker start openhab
