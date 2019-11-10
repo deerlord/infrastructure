@@ -8,6 +8,7 @@ docker create \
   --net=dnsmasq \
   --ip=172.22.0.3 \
   --dns=172.22.0.2 \
+  --dns=127.0.0.11 \
   --env CRYPTO_POLICY='limited' \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
