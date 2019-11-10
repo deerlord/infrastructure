@@ -23,7 +23,7 @@ docker network create --subnet=172.20.0.0/24 egress
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
 
 build_all() {
-  for image in $(ls ./containers/build)
+  for image in $(ls ./containers/build | grep -v 61-sphinx)
   do
     ./containers/build/${image}
   done
