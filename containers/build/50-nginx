@@ -33,6 +33,14 @@ server {
   ssl_protocols TLSv1.3;
 }
 EOF
+cat > /var/lib/docker/volumes/nginx/_data/conf.d/forward.conf.dev <<'EOF'
+server {
+  listen 8888;
+  location / {
+    proxy_pass $scheme://$http_host$request_uri;
+  }
+}
+EOF
 sed -i \
   -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
   /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf
