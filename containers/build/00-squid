@@ -2,4 +2,5 @@
 
 docker pull sameersbn/squid
 /usr/sbin/useradd -r -s /sbin/nologin squid
-docker volume create squid
+docker volume create squid_spool
+docker volume create squid_conf
