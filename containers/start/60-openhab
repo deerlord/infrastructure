@@ -1,8 +1,6 @@
 #!/bin/bash
 
-docker stop openhab
-docker rm openhab
-docker run -d \
+docker create \
   --env USER_ID=$(grep -P '^openhab' /etc/passwd | awk -F':' '{print $3}') \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
   --restart=always \
@@ -20,3 +18,12 @@ docker run -d \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
+
+http_egress() {
+  if [[ $(docker ps | grep squid | wc -l) -eq 1 ]]
+  then
+    docker network connect ${1} squid
+  fi
+}
+
+http_egress openhab

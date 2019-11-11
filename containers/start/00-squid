@@ -1,7 +1,5 @@
 #!/bin/bash
 
-docker stop squid
-docker rm squid
 docker create \
   --env USER_ID=$(grep -P '^squid' /etc/passwd | awk -F':' '{print $3}') \
   --env GROUP_ID=$(grep -P '^squid' /etc/group | awk -F':' '{print $3}') \
@@ -14,5 +12,4 @@ docker create \
   -v 'squid_conf:/etc/squid/' \
   -p 3128:3128 \
   sameersbn/squid
-docker network connect openhab squid
 docker start squid
