@@ -10,15 +10,6 @@ docker volume create squid_conf
 cat > /var/lib/docker/volumes/squid_conf/_data/squid.conf <<'EOF'
 http_port 3128
 
-# To make it ask for HTTP Basic Authorization
-auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
-auth_param basic children 5
-auth_param basic realm proxy
-auth_param basic credentialsttl 2 hours
-auth_param basic casesensitive on
-acl auth proxy_auth REQUIRED
-http_access allow auth
-
 # To disable all logging
 access_log none
 cache_log /dev/null
