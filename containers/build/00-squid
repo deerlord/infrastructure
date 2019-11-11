@@ -22,5 +22,6 @@ http_access deny manager
 http_access allow localnet
 http_access allow localhost
 http_port 80
+https_port 443
 EOF
 chown -R squid /var/lib/docker/volumes/squid_conf/_data/
