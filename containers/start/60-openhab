@@ -16,3 +16,4 @@ docker run -d \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
+docker network connect squid
