@@ -1,5 +1,7 @@
 #!/bin/bash
 
+docker stop openhab
+docker rm openhab
 docker run -d \
   --env USER_ID=$(grep -P '^openhab' /etc/passwd | awk -F':' '{print $3}') \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
