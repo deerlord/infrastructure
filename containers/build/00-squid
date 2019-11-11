@@ -1,14 +1,5 @@
 #!/bin/bash
 
-docker pull debian
+docker pull sameersbn/squid
 /usr/sbin/useradd -r -s /sbin/nologin squid
 docker volume create squid
-mkdir ./squid/
-cd ./squid/
-cat > Dockerfile <<'EOF'
-FROM debian
-RUN apt update -y
-RUN apt upgrade -y
-RUN apt install -y squid
-
-EOF

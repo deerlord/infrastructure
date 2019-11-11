@@ -5,7 +5,7 @@ docker run -d \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
   --restart=always \
   --name=openhab \
-  --net=squid \
+  --net=openhab \
   --env CRYPTO_POLICY='limited' \
   --env EXTRA_JAVA_OPTS='-Dhttp.proxySet=true -Dhttp.proxyHost=squid -Dhttp.proxyPort=8080 -Dhttps.proxyHost=squid -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts=localhost' \
   --env HTTP_PROXY='http://nginx:8888' \
@@ -16,4 +16,8 @@ docker run -d \
   -v 'openhab_userdata:/openhab/userdata/' \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
-docker network connect openhab openhab
+# check if squid is up
+if [[ docker ps | grep squid | wc -l) -eq 1 ]]
+then
+  docker network connect squid openhab
+fi

@@ -29,4 +29,8 @@ build_exclude_sphinx() {
   done
 }
 
-build_exclude_sphinx
+full_openhab() {
+  ./containers/build/00-squid
+  ./containers/build/50-nginx
+  ./containers/build/60-openhab
+}

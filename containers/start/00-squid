@@ -8,6 +8,6 @@ docker create \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   -v 'squid:/var/spool/squid' \
+  -p 3128:3128 \
   squid
-docker connect network openhab squid
 docker start squid
