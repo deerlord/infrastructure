@@ -4,7 +4,6 @@ docker pull nginx
 /usr/sbin/useradd -r -s /sbin/nologin nginx
 docker volume create nginx
 docker volume create ssl
-docker network create --internal --subnet=${NGINX_SUBNET} nginx
 docker run -d \
   --env USER_ID=$(grep -P '^nginx' /etc/passwd | awk -F':' '{print $3}') \
   --env GROUP_ID=$(grep -P '^nginx' /etc/group | awk -F':' '{print $3}') \

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+docker create \
+  --env USER_ID=$(grep -P '^squid' /etc/passwd | awk -F':' '{print $3}') \
+  --env GROUP_ID=$(grep -P '^squid' /etc/group | awk -F':' '{print $3}') \
+  --restart=always \
+  --name=squid \
+  -v '/etc/localtime:/etc/localtime:ro' \
+  -v '/etc/timezone:/etc/timezone:ro' \
+  -v 'squid:/var/spool/squid' \
+  squid
+docker connect network openhab squid
+docker start squid

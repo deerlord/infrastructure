@@ -3,7 +3,6 @@
 docker pull debian
 /usr/sbin/useradd -r -s /sbin/nologin squid
 docker volume create squid
-docker network create --internal --subnet=${SQUID_SUBNET} squid
 mkdir ./squid/
 cd ./squid/
 cat > Dockerfile <<'EOF'

@@ -12,4 +12,5 @@ docker create \
   -p 80:80 \
   -p 443:443 \
   nginx
+docker network connect openhab nginx
 docker start nginx

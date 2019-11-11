@@ -19,6 +19,6 @@ export DHCP_TIME='12h'
 # NTP values
 export NTP_SERVER='localhost'
 # internal subnet values
-export NGINX_SUBNET='172.20.0.0/24'
-export SQUID_SUBNET='172.21.0.0/24'
-
+export EGRESS_SUBNET='172.19.0.0/24'
+export OPENHAB_SUBNET='172.20.0.0/29'
+export SQUID_SUBNET='172.20.0.8/29'

@@ -17,7 +17,7 @@ apt install -y docker.io
 systemctl start docker
 systemctl enable docker
 
-docker network create --subnet=172.20.0.0/24 egress
+docker network create --subnet=$(EGRESS_SUBNET} egress
 
 # firewall rules
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
