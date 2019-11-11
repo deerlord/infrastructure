@@ -5,7 +5,7 @@ docker pull sameersbn/squid
 docker volume create squid_spool
 docker volume create squid_conf
 cat > /var/lib/docker/volumes/squid_conf/_data/squid.conf <<'EOF'
-acl localnet src 0.0.0.1-0.255.255.255.255
+acl localnet src 0.0.0.1-0.255.255.255
 acl localnet src 172.20.0.0/24
 acl localnet src 169.254.0.0/16
 acl SSL_ports port 443
