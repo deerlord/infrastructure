@@ -34,3 +34,7 @@ full_openhab() {
   ./containers/build/50-nginx
   ./containers/build/60-openhab
 }
+
+full_openhab
+
+
