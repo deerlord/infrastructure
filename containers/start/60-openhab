@@ -11,9 +11,9 @@ docker run -d \
   --env CRYPTO_POLICY='limited' \
   --env EXTRA_JAVA_OPTS='-Dhttp.proxySet=true -Dhttp.proxyHost=squid -Dhttp.proxyPort=3128 -Dhttps.proxyHost=squid -Dhttps.proxyPort=3128 -Dhttp.nonProxyHosts=localhost' \
   --env HTTP_PROXY='http://squid:3128' \
-  --env HTTPS_PROXY='https://squid:3128' \
+  --env HTTPS_PROXY='http://squid:3128' \
   --env http_proxy='http://squid:3128' \
-  --env https_proxy='https://squid:3128' \
+  --env https_proxy='http://squid:3128' \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   -v 'openhab_conf:/openhab/conf/' \
