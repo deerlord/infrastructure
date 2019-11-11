@@ -16,7 +16,6 @@ cat > /var/lib/docker/volumes/squid_conf/_data/squid.conf <<'EOF'
 http_port 3128
 
 acl localnet src 172.20.0.0/24
-acl CONNECT method CONNECT
 
 # To disable all logging
 access_log none
