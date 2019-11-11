@@ -14,5 +14,5 @@ docker create \
   -v 'squid_conf:/etc/squid/' \
   -p 3128:3128 \
   sameersbn/squid
-docker connect network openhab squid
+docker network connect openhab squid
 docker start squid
