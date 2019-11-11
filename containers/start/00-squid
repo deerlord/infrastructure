@@ -9,5 +9,7 @@ docker create \
   -v '/etc/timezone:/etc/timezone:ro' \
   -v 'squid_spool:/var/spool/squid' \
   -v 'squid_conf:/etc/squid/' \
+  -p 80:80 \
+  -p 443:443 \
   sameersbn/squid
 docker start squid
