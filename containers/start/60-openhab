@@ -27,3 +27,4 @@ http_egress() {
 }
 
 http_egress openhab
+docker start openhab
