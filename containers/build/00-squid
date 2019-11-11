@@ -13,49 +13,40 @@ docker pull sameersbn/squid
 docker volume create squid_spool
 docker volume create squid_conf
 cat > /var/lib/docker/volumes/squid_conf/_data/squid.conf <<'EOF'
+acl localnet src 0.0.0.1-0.255.255.255  # RFC 1122 "this" network (LAN)
+acl localnet src 10.0.0.0/8             # RFC 1918 local private network (LAN)
+acl localnet src 100.64.0.0/10          # RFC 6598 shared address space (CGN)
+acl localnet src 169.254.0.0/16         # RFC 3927 link-local (directly plugged) machines
+acl localnet src 172.16.0.0/12          # RFC 1918 local private network (LAN)
+acl localnet src 192.168.0.0/16         # RFC 1918 local private network (LAN)
+acl localnet src fc00::/7               # RFC 4193 local private network range
+acl localnet src fe80::/10              # RFC 4291 link-local (directly plugged) machines
+acl SSL_ports port 443
+acl Safe_ports port 80          # http
+acl Safe_ports port 21          # ftp
+acl Safe_ports port 443         # https
+acl Safe_ports port 70          # gopher
+acl Safe_ports port 210         # wais
+acl Safe_ports port 1025-65535  # unregistered ports
+acl Safe_ports port 280         # http-mgmt
+acl Safe_ports port 488         # gss-http
+acl Safe_ports port 591         # filemaker
+acl Safe_ports port 777         # multiling http
+acl Safe_ports port 901         # SWAT
+acl CONNECT method CONNECT
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localhost manager
+http_access deny manager
+http_access allow localnet
+http_access allow localhost
+http_access deny all
 http_port 3128
-
-acl localnet src 172.20.0.0/24
-
-# To disable all logging
+coredump_dir /var/cache/squid
+refresh_pattern ^ftp:           1440    20%     10080
+refresh_pattern ^gopher:        1440    0%      1440
+refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
+refresh_pattern .               0       20%     4320
 access_log none
-cache_log /dev/null
-
-# To disable caching
-cache deny all
-cache_mem 8 MB
-cache_dir null /tmp
-
-# To make it anonymous
-forwarded_for off
-request_header_access Allow allow all
-request_header_access Authorization allow all
-request_header_access WWW-Authenticate allow all
-request_header_access Proxy-Authorization allow all
-request_header_access Proxy-Authenticate allow all
-request_header_access Cache-Control allow all
-request_header_access Content-Encoding allow all
-request_header_access Content-Length allow all
-request_header_access Content-Type allow all
-request_header_access Date allow all
-request_header_access Expires allow all
-request_header_access Host allow all
-request_header_access If-Modified-Since allow all
-request_header_access Last-Modified allow all
-request_header_access Location allow all
-request_header_access Pragma allow all
-request_header_access Accept allow all
-request_header_access Accept-Charset allow all
-request_header_access Accept-Encoding allow all
-request_header_access Accept-Language allow all
-request_header_access Content-Language allow all
-request_header_access Mime-Version allow all
-request_header_access Retry-After allow all
-request_header_access Title allow all
-request_header_access Connection allow all
-request_header_access Proxy-Connection allow all
-request_header_access User-Agent allow all
-request_header_access Cookie allow all
-request_header_access All deny all
 EOF
 chown -R squid /var/lib/docker/volumes/squid_conf/_data/
