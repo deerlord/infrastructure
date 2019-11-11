@@ -1,10 +1,11 @@
 #!/bin/bash
 
+# cleanup
 docker stop nginx
 docker rm nginx
 docker volume remove nginx
 docker volume remove ssl
-/usr/sbin/userdel nginx
+docker rmi -f nginx
 
 docker pull nginx
 /usr/sbin/useradd -r -s /sbin/nologin nginx

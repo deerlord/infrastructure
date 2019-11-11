@@ -7,6 +7,7 @@ docker create \
   --env GROUP_ID=$(grep -P '^squid' /etc/group | awk -F':' '{print $3}') \
   --restart=always \
   --name=squid \
+  --name=egress \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   -v 'squid_spool:/var/spool/squid' \

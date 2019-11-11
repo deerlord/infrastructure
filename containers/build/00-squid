@@ -1,8 +1,13 @@
 #!/bin/bash
 
+# cleanup
 docker stop squid
 docker rm squid
 docker volume remove squid_conf
+docker volume remove squid_spool
+docker rmi -f squid
+
+# build
 docker pull sameersbn/squid
 /usr/sbin/useradd -r -s /sbin/nologin squid
 docker volume create squid_spool
