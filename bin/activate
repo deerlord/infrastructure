@@ -29,9 +29,8 @@ http_egress() {
 http_ingress() {
   container=${1}
   if [[ $(container_exists nginx) -eq 1 && $(container_exists $container) -eq 1 ]]
-    then
-      docker network connect ${container} nginx
-    fi
+  then
+    docker network connect ${container} nginx
   fi
 }
 
