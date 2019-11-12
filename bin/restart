@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -euo pipefail
+
+service=${1}
+
+./bin/activate
+docker stop ${service}
+docker rm ${service}
+./containers/start/*-${service}

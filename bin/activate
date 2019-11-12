@@ -1,0 +1,41 @@
+#!/bin/bash
+
+container_exists() {
+  if [[ $(docker ps -a | grep $1 | wc -l) -eq 1 ]]
+  then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+container_running() {
+  if [[ $(docker ps | grep $1 | wc -l) -eq 1 ]]
+  then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+http_egress() {
+  container=${1}
+  if [[ $(container_exists squid) -eq 1 && $(container_exists $container) -eq 1 ]]
+  then
+    docker network connect ${container} squid
+  fi
+}
+
+http_ingress() {
+  container=${1}
+  if [[ $(container_exists nginx) -eq 1 && $(container_exists $container) -eq 1 ]]
+    then
+      docker network connect ${container} nginx
+    fi
+  fi
+}
+
+run_as() {
+  echo "--env USER_ID=$(id -u ${1}) --env GROUP_ID=$(id -g ${1})"
+}
+
