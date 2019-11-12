@@ -5,16 +5,17 @@ docker stop squid
 docker rm squid
 docker rmi -f sameersbn/squid
 
+/usr/sbin/useradd -r -s /sbin/nologin squid
+
 mkdir ./squid/
 cd ./squid/
-cat > Dockerfile <<'EOF'
+cat > Dockerfile <<EOF
 FROM sameersbn/squid
 RUN ln -sf /dev/stdout /var/log/access.log
-RUN chown squid /var/log/access.log
+RUN chown $(id -u squid) /var/log/access.log
 EOF
 docker build -t squid .
 
-/usr/sbin/useradd -r -s /sbin/nologin squid
 docker volume create squid_spool
 docker volume create squid_conf
 cat > /var/lib/docker/volumes/squid_conf/_data/squid.conf <<'EOF'
