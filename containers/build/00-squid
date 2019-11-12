@@ -10,6 +10,7 @@ cd ./squid/
 cat > Dockerfile <<'EOF'
 FROM sameersbn/squid
 RUN ln -sf /dev/stdout /var/log/access.log
+RUN chown squid /var/log/access.log
 EOF
 docker build -t squid .
 
