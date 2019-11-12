@@ -3,9 +3,16 @@
 
 docker stop squid
 docker rm squid
-dockr rmi -f sameersbin/squid
+docker rmi -f sameersbn/squid
 
-docker pull sameersbn/squid
+mkdir ./squid/
+cd ./squid/
+cat > Dockerfile <<'EOF'
+FROM sameersbn/squid
+RUN ln -sf /dev/stdout /var/log/access.log
+EOF
+docker build -t squid .
+
 /usr/sbin/useradd -r -s /sbin/nologin squid
 docker volume create squid_spool
 docker volume create squid_conf
@@ -32,6 +39,6 @@ refresh_pattern ^ftp:           1440    20%     10080
 refresh_pattern ^gopher:        1440    0%      1440
 refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
 refresh_pattern .               0       20%     4320
-access_log /var/log/squid.log
+access_log /var/log/access.log
 EOF
 chown -R squid /var/lib/docker/volumes/squid_conf/_data/
