@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-if [[ ! -f ./CONFIG ]]
+if [[ ! -f ./conf.d/CONFIG ]]
 then
   echo 'No CONFIG file found,'
   echo '$ cp CONFIG.sample CONFIG'
