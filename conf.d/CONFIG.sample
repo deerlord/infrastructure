@@ -21,4 +21,5 @@ export NTP_SERVER='localhost'
 # internal subnet values
 export EGRESS_SUBNET='172.19.0.0/24'
 export OPENHAB_SUBNET='172.20.0.0/29'
-export SQUID_SUBNET='172.20.0.8/29'
+export SPHINX_SUBNET='172.20.0.8/29'
+export KODI_SUBNET='172.20.0.16/29'
