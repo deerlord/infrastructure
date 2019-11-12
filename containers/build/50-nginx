@@ -1,5 +1,9 @@
 #!/bin/bash
 
+docker stop nginx
+docker rm nginx
+docker rmi -f nginx
+
 docker pull nginx
 /usr/sbin/useradd -r -s /sbin/nologin nginx
 docker volume create nginx

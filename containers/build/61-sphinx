@@ -1,5 +1,9 @@
 #!/bin/bash
 
+docker stop sphinx
+docker rm sphinx
+docker rmi -f sphinx
+
 /usr/sbin/useradd -r -s /sbin/nologin sphinx
 docker network create --internal --subnet=172.19.0.8/29 sphinx_proxy
 mkdir ./sphinx/

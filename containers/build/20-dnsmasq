@@ -1,5 +1,9 @@
 #!/bin/bash
 
+docker stop dnsmasq
+docker rm dnsmasq
+docker rmi -f dnsmasq
+
 /usr/sbin/useradd -r -s /sbin/nologin dnsmasq
 docker volume create dnsmasq
 docker network create --internal --subnet=172.22.0.0/24 dnsmasq

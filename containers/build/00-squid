@@ -1,5 +1,10 @@
 #!/bin/bash
 
+
+docker stop squid
+docker rm squid
+dockr rmi -f sameersbin/squid
+
 docker pull sameersbn/squid
 /usr/sbin/useradd -r -s /sbin/nologin squid
 docker volume create squid_spool
