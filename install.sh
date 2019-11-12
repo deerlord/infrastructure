@@ -9,7 +9,7 @@ then
   echo 'then edit it accordingly.'
   exit 1
 fi
-source ./CONFIG
+source ./conf.d/CONFIG
 
 apt update -y
 apt upgrade -y
