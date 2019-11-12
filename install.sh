@@ -22,19 +22,11 @@ docker network create --subnet=${EGRESS_SUBNET} egress
 # firewall rules
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
 
-build_exclude_sphinx() {
-  for image in $(ls ./containers/build | grep -v 61-sphinx)
+build_all() {
+  for image in $(ls ./containers/build)
   do
-    ./containers/build/${image}
+    ./containers/build/${image}	
   done
 }
 
-full_openhab() {
-  ./containers/build/00-squid
-  ./containers/build/50-nginx
-  ./containers/build/60-openhab
-}
-
-full_openhab
-
-
+build_all
