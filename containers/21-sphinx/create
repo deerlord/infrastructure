@@ -1,7 +1,7 @@
 #!/bin/bash
 
 docker network create sphinx --internal
-docker run -d \
+docker create \
   $(run_as sphinx) \
   --net=sphinx \
   --name=infra.sphinx \
