@@ -4,7 +4,7 @@ docker network create sphinx --internal
 docker create \
   $(run_as sphinx) \
   --net=sphinx \
-  --name=infra.sphinx \
+  --name=sphinx \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   sphinx
