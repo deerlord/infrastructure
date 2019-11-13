@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -euo pipefail
-
 service=${1}
 
 docker stop ${service}

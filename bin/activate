@@ -3,7 +3,7 @@
 source ./conf.d/CONFIG
 
 container_exists() {
-  if [[ $(docker ps -a | awk '{print $7}' | grep -c $1) -eq 1 ]]
+  if [[ $(docker ps -a | grep -c $1) -eq 1 ]]
   then
     echo 1
   else
@@ -12,7 +12,7 @@ container_exists() {
 }
 
 container_running() {
-  if [[ $(docker ps | awk '{print $7}' | grep -c $1) -eq 1 ]]
+  if [[ $(docker ps | grep -c $1) -eq 1 ]]
   then
     echo 1
   else
