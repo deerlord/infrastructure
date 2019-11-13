@@ -65,14 +65,13 @@ server {
   }
 }
 EOF
-      sed -i \
-        -e "s container ${container} g" \
-        -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
-        $conf
-      chown nginx $conf
-      docker network connect $network $container
-      docker network connect $network nginx
-    fi
+    sed -i \
+      -e "s container ${container} g" \
+      -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
+      $conf
+    chown nginx $conf
+    docker network connect $network $container
+    docker network connect $network nginx
   fi
 }
 
