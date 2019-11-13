@@ -29,8 +29,6 @@ http_egress() {
   fi
   if [[ $(container_exists squid) -eq 1 && $(container_exists $container) -eq 1 ]]
   then
-    mv ${conf}-off $conf
-    chown squid $conf
     docker network connect $network $container
     docker network connect $network squid
   fi

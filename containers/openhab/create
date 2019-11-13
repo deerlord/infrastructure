@@ -1,10 +1,11 @@
 #!/bin/bash
 
+docker network create openhab
 docker create \
   $(run_as openhab) \
   --restart=always \
   --name=openhab \
-  --net=none \
+  --net=openhab \
   --env CRYPTO_POLICY='limited' \
   --env EXTRA_JAVA_OPTS='-Dhttp.proxySet=true -Dhttp.proxyHost=squid -Dhttp.proxyPort=3128 -Dhttps.proxyHost=squid -Dhttps.proxyPort=3128 -Dhttp.nonProxyHosts=localhost -Dhttp.socksProxyHost=squid -Dhttp.socksProxyPort=3128' \
   --env HTTP_PROXY='http://squid:3128' \
