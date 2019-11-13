@@ -5,7 +5,7 @@ mkdir ./squid/
 cd ./squid/
 cat > Dockerfile <<EOF
 FROM sameersbn/squid
-RUN mkdir -p /etc/squid/conf.d/
+RUN mkdir -p /etc/squid/conf.d/forward_proxy.conf
 RUN ln -sf /dev/stdout /var/log/access.log
 RUN chown $(id -u squid) /var/log/access.log
 EOF
@@ -17,6 +17,9 @@ docker volume create squid_spool
 docker volume create squid_conf
 docker network create egress
 cat > /var/lib/docker/volumes/squid_conf/_data/squid.conf <<'EOF'
+include /etc/squid/conf.d/*.conf
+EOF
+cat > /var/lib/docker/volumes/squid_conf/_data/conf.d/proxy.conf <<'EOF'
 acl localnet src 0.0.0.1-0.255.255.255  # RFC 1122 "this" network (LAN)
 acl localnet src 169.254.0.0/16         # RFC 3927 link-local (directly plugged) machines
 acl localnet src 172.20.0.0/24          # RFC 1918 local private network (LAN)
@@ -40,6 +43,5 @@ refresh_pattern ^gopher:        1440    0%      1440
 refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
 refresh_pattern .               0       20%     4320
 access_log /var/log/access.log
-include /etc/squid/conf.d/*
 EOF
 chown -R squid /var/lib/docker/volumes/squid_conf/_data/
