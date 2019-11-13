@@ -29,8 +29,8 @@ http_egress() {
   fi
   if [[ $(container_exists squid) -eq 1 && $(container_exists $container) -eq 1 ]]
   then
-    docker network connect $network $container
-    docker network connect $network squid
+    docker network connect $network infra.$container
+    docker network connect $network infra.squid
   fi
 }
 
@@ -63,8 +63,8 @@ EOF
       -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
       $conf
     chown nginx $conf
-    docker network connect $network $container
-    docker network connect $network nginx
+    docker network connect $network infra.$container
+    docker network connect $network infra.nginx
     public_service $container
   fi
 }
