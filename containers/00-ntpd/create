@@ -3,6 +3,6 @@
 docker run -d \
   $(run_as ntpd) \
   --restart=always \
-  --name=ntpd \
+  --name=infra/ntpd \
   -p 123:123 \
   ntpd

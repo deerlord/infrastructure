@@ -26,4 +26,12 @@ build_all() {
   done
 }
 
+create_all() {
+  for image in $(ls ./containers/*/build)
+  do
+    $image
+  done
+}
+
 build_all
+create_all

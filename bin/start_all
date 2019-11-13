@@ -1,8 +1,0 @@
-#!/bin/bash
-
-source ./bin/activate
-
-for container in $(ls ./containers/start/)
-do
-  ./containers/start/${container}
-done

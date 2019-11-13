@@ -3,7 +3,7 @@
 docker create \
   $(run_as squid) \
   --restart=always \
-  --name=squid \
+  --name=infra/squid \
   --net=egress \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \

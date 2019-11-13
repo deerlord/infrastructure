@@ -3,7 +3,7 @@
 docker run -d \
   $(run_as sphinx) \
   --net=sphinx_proxy \
-  --name=sphinx \
+  --name=infra/sphinx \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   sphinx

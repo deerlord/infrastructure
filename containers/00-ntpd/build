@@ -1,9 +1,5 @@
 #!/bin/bash
 
-docker stop ntpd
-docker rm ntpd
-docker rmi -f ntpd
-
 /usr/sbin/useradd -r -s /sbin/nologin ntpd
 mkdir ./ntpd/
 cd ./ntpd/

@@ -65,6 +65,9 @@ EOF
     chown nginx $conf
     docker network connect $network $container
     docker network connect $network nginx
+    cat >> /var/lib/docker/volumes/dnsmasq/_data/hosts <<EOF
+${HOST_IP} ${HOST_NAME} ${HOST_NAME}.${HOST_DOMAIN}
+EOF
   fi
 }
 

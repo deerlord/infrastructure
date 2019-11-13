@@ -1,11 +1,6 @@
 #!/bin/bash
 
-docker stop sphinx
-docker rm sphinx
-docker rmi -f sphinx
-
 /usr/sbin/useradd -r -s /sbin/nologin sphinx
-docker network create --internal --subnet=172.19.0.8/29 sphinx_proxy
 mkdir ./sphinx/
 cd ./sphinx/
 cat > speech.py <<'EOF'
@@ -44,22 +39,3 @@ EOF
 docker build -t sphinx .
 cd ..
 rm -rf ./sphinx/
-cat > /var/lib/docker/volumes/nginx/_data/conf.d/sphinx.conf <<'EOF'
-server {
-  listen 443 ssl;
-  server_name sphinx.HOST_DOMAIN;
-  location / {
-    set $upstream sphinx:8080;
-    proxy_pass http://$upstream/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header Request-URI $request_uri;
-  }
-}
-EOF
-sed -i \
-  -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
-  /var/lib/docker/volumes/nginx/_data/conf.d/sphinx.conf
-chown nginx /var/lib/docker/volumes/nginx/_data/conf.d/sphinx.conf

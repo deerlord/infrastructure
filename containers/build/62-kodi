@@ -1,6 +1,0 @@
-#!/bin/bash
-
-docker pull linuxserver/kodi-headless
-/usr/sbin/useradd -r -s /sbin/nologin kodi
-docker volume create kodi
-docker network create --internal --subnet=${KODI_SUBNET} kodi
