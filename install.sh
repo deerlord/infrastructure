@@ -28,6 +28,4 @@ build_all() {
   done
 }
 
-
-
 build_all

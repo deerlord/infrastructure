@@ -18,4 +18,3 @@ docker create \
   -v 'openhab_addons:/openhab/addons/' \
   openhab/openhab
 http_egress openhab
-docker start openhab

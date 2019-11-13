@@ -1,0 +1,19 @@
+#!/bin/bash
+
+./bin/activate
+
+if [[ $container == all ]]
+then
+  for image in $(ls init.d)
+  do
+    ./bin/init $container
+  done
+  exit 0
+fi
+
+if [[ $(container_exists $container) -eq 0 ]]
+then
+  ./containers/${container}/create
+fi
+
+docker start $container
