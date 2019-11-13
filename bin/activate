@@ -29,9 +29,9 @@ container_running() {
 }
 
 public_service() {
-  container=$1
+  NAME=$1
   cat >> /var/lib/docker/volumes/dnsmasq/_data/hosts <<EOF
-${HOST_IP} ${container} ${container}.${HOST_NAME}
+${HOST_IP} ${NAME} ${NAME}.${HOST_NAME}
 EOF
 }
 
