@@ -74,7 +74,7 @@ public_service() {
   container=$1
   cat >> /var/lib/docker/volumes/dnsmasq/_data/hosts <<EOF
 ${HOST_IP} ${container} ${container}.${HOST_NAME}
-  EOF
+EOF
 }
 
 run_as() {
