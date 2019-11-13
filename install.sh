@@ -21,7 +21,7 @@ systemctl enable docker
 
 for image in $(ls ./containers/)
 do
-  $image/build
-  $image/create
+  containers/$image/build
+  containers/$image/create
 done
 
