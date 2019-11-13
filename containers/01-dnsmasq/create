@@ -1,10 +1,9 @@
 #!/bin/bash
 
-docker create \
-  $(run_as dnsmasq) \
-  --restart=always \
-  --name=dnsmasq \
+
+$(basic_container dnsmasq) \
   --cap-add=NET_ADMIN \
   -v 'dnsmasq:/etc/dnsmasq/' \
   -p 53:53 \
   dnsmasq
+public_service dns

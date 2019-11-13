@@ -1,9 +1,6 @@
 #!/bin/bash
 
-docker create \
-  $(run_as squid) \
-  --restart=always \
-  --name=squid \
+$(basic_container squid) \
   --net=egress \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \

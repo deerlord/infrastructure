@@ -1,10 +1,8 @@
 #!/bin/bash
 
 docker network create sphinx --internal
-docker create \
-  $(run_as sphinx) \
+$(basic_container sphinx) \
   --net=sphinx \
-  --name=sphinx \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   sphinx

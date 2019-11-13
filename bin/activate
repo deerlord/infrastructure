@@ -2,6 +2,14 @@
 
 source ./conf.d/CONFIG
 
+basic_container() {
+  container=$1
+  echo docker create \
+    $(run_as $container) \
+    --restart=always \
+    --name=$container
+}
+
 container_exists() {
   if [[ $(docker ps -a | grep -c $1) -eq 1 ]]
   then
@@ -80,6 +88,7 @@ remove_http_ingress() {
   container=$1
   network="${container}_http_ingress"
   docker network disconnect $network $container > /dev/null 2>&1
+  docker network disconnect $network nginx > /dev/null 2>&1
   docker network remove $network > /dev/null 2>&1
 }
 
@@ -87,6 +96,7 @@ remove_http_egress() {
   container=$1
   network="${container}_http_egress"
   docker network disconnect $network $container > /dev/null 2>&1
+  docker network disconnect $network squid > /dev/null 2>&1
   docker network remove $network > /dev/null 2>&1
 }
 
@@ -94,9 +104,12 @@ run_as() {
   echo "--env USER_ID=$(id -u $1) --env GROUP_ID=$(id -g $1)"
 }
 
+export -f basic_container
 export -f container_exists
 export -f container_running
+export -f public_service
 export -f http_egress
 export -f http_ingress
+export -f remove_http_ingress
+export -f remove_http_egress
 export -f run_as
-export -f public_service

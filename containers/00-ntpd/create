@@ -1,8 +1,7 @@
 #!/bin/bash
 
-docker create \
-  $(run_as ntpd) \
-  --restart=always \
-  --name=ntpd \
+
+$(basic_container ntpd) \
   -p 123:123 \
   ntpd
+public_service time

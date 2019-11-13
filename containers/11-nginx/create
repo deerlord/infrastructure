@@ -1,9 +1,6 @@
 #!/bin/bash
 
-docker create \
-  $(run_as nginx) \
-  --restart=always \
-  --name=nginx \
+$(basic_container nginx) \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   -v 'nginx:/etc/nginx/' \
