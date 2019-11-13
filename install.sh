@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -euo pipefail
-
 if [[ ! -f ./conf.d/CONFIG ]]
 then
   echo 'No CONFIG file found,'
