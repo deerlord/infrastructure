@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker network create openhab
+docker network create openhab --internal
 docker create \
   $(run_as openhab) \
   --restart=always \
