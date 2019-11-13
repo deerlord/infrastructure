@@ -20,6 +20,13 @@ container_running() {
   fi
 }
 
+public_service() {
+  container=$1
+  cat >> /var/lib/docker/volumes/dnsmasq/_data/hosts <<EOF
+${HOST_IP} ${container} ${container}.${HOST_NAME}
+EOF
+}
+
 http_egress() {
   container=$1
   network="${container}_egress"
@@ -69,13 +76,6 @@ EOF
   fi
 }
 
-public_service() {
-  container=$1
-  cat >> /var/lib/docker/volumes/dnsmasq/_data/hosts <<EOF
-${HOST_IP} ${container} ${container}.${HOST_NAME}
-EOF
-}
-
 run_as() {
   echo "--env USER_ID=$(id -u $1) --env GROUP_ID=$(id -g $1)"
 }
@@ -85,3 +85,4 @@ export -f container_running
 export -f http_egress
 export -f http_ingress
 export -f run_as
+export -f public_service
