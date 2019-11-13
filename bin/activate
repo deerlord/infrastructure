@@ -29,7 +29,7 @@ EOF
 
 http_egress() {
   container=$1
-  network="${container}_egress"
+  network="${container}_http_egress"
   if [[ $(docker network ls | awk '{print $2}' | grep -c $network) -eq 0 ]]
   then
     docker network create $network --internal
@@ -43,7 +43,7 @@ http_egress() {
 
 http_ingress() {
   container=$1
-  network="${container}_ingress"
+  network="${container}_http_ingress"
   if [[ $(docker network ls | awk '{print $2}' | grep -c $network) -eq 0 ]]
   then
     docker network create $network --internal
@@ -74,6 +74,20 @@ EOF
     docker network connect $network nginx
     public_service $container
   fi
+}
+
+remove_http_ingress() {
+  container=$1
+  network="${container}_http_ingress"
+  docker network disconnect $network $container > /dev/null 2>&1
+  docker network remove $network > /dev/null 2>&1
+}
+
+remove_http_egress() {
+  container=$1
+  network="${container}_http_egress"
+  docker network disconnect $network $container > /dev/null 2>&1
+  docker network remove $network > /dev/null 2>&1
 }
 
 run_as() {
