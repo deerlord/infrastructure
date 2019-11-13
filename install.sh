@@ -19,19 +19,9 @@ systemctl enable docker
 # firewall rules
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
 
-build_all() {
-  for image in $(ls ./containers/*/build)
-  do
-    $image
-  done
-}
+for image in $(ls ./containers/*)
+do
+  $image/build
+  $image/create
+done
 
-create_all() {
-  for image in $(ls ./containers/*/create)
-  do
-    $image
-  done
-}
-
-build_all
-create_all
