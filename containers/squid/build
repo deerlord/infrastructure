@@ -5,7 +5,6 @@ mkdir ./squid/
 cd ./squid/
 cat > Dockerfile <<EOF
 FROM sameersbn/squid
-RUN mkdir -p /etc/squid/conf.d/forward_proxy.conf
 RUN ln -sf /dev/stdout /var/log/access.log
 RUN chown $(id -u squid) /var/log/access.log
 EOF
@@ -19,6 +18,7 @@ docker network create egress
 cat > /var/lib/docker/volumes/squid_conf/_data/squid.conf <<'EOF'
 include /etc/squid/conf.d/*.conf
 EOF
+mkdir /var/lib/docker/volumes/squid_conf/_data/conf.d/
 cat > /var/lib/docker/volumes/squid_conf/_data/conf.d/proxy.conf <<'EOF'
 acl localnet src 0.0.0.1-0.255.255.255  # RFC 1122 "this" network (LAN)
 acl localnet src 169.254.0.0/16         # RFC 3927 link-local (directly plugged) machines
