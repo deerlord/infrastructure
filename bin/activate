@@ -66,7 +66,6 @@ EOF
     docker network connect $network $container
     docker network connect $network nginx
     public_service $container
-EOF
   fi
 }
 
