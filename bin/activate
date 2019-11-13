@@ -1,7 +1,9 @@
 #!/bin/bash
 
+source ./conf.d/CONFIG
+
 container_exists() {
-  if [[ $(docker ps -a | grep $1 | wc -l) -eq 1 ]]
+  if [[ $(docker ps -a | awk '{print $7}' | grep -c $1) -eq 1 ]]
   then
     echo 1
   else
@@ -10,7 +12,7 @@ container_exists() {
 }
 
 container_running() {
-  if [[ $(docker ps | grep $1 | wc -l) -eq 1 ]]
+  if [[ $(docker ps | awk '{print $7}' | grep -c $1) -eq 1 ]]
   then
     echo 1
   else
@@ -19,23 +21,63 @@ container_running() {
 }
 
 http_egress() {
-  container=${1}
+  container=$1
+  network="${container}_egress"
+  if [[ $(docker network ls | awk '{print $2}' | grep -c $network) -eq 0 ]]
+  then
+    docker network create $network --internal
+  fi
   if [[ $(container_exists squid) -eq 1 && $(container_exists $container) -eq 1 ]]
   then
-    docker network connect ${container} squid
+    # add config
+    conf="/var/lib/docker/volumes/squid_conf/_data/conf.d/${container}.conf"
+    if [[ -f ${conf}-off ]]
+    then
+      mv ${conf}-off $conf
+      chown squid $conf
+      docker network connect $network $container
+      docker network connect $network squid
+    fi
   fi
 }
 
 http_ingress() {
-  container=${1}
+  container=$1
+  network="${container}_ingress"
+  if [[ $(docker network ls | awk '{print $2}' | grep -c $network) -eq 0 ]]
+  then
+    docker network create $network --internal
+  fi
   if [[ $(container_exists nginx) -eq 1 && $(container_exists $container) -eq 1 ]]
   then
-    docker network connect ${container} nginx
+    conf="/var/lib/docker/volumes/nginx/_data/conf.d/${container}.conf"
+cat > $conf <<'EOF'
+server {
+  listen 443 ssl;
+  server_name container.HOST_DOMAIN;
+  location / {
+    proxy_pass http://container:8080/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Request-URI $request_uri;
+  }
+}
+EOF
+      sed -i \
+        -e "s container ${container} g" \
+        -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
+        $conf
+      chown nginx $conf
+      docker network connect $network $container
+      docker network connect $network nginx
+    fi
   fi
 }
 
 run_as() {
-  echo "--env USER_ID=$(id -u ${1}) --env GROUP_ID=$(id -g ${1})"
+  echo "--env USER_ID=$(id -u $1) --env GROUP_ID=$(id -g $1)"
 }
 
 export -f container_exists
