@@ -3,7 +3,7 @@
 docker create \
   $(run_as nginx) \
   --restart=always \
-  --name=infra/nginx \
+  --name=infra.nginx \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   -v 'nginx:/etc/nginx/' \

@@ -3,7 +3,7 @@
 docker run -d \
   $(run_as dnsmasq) \
   --restart=always \
-  --name=infra/dnsmasq \
+  --name=infra.dnsmasq \
   --cap-add=NET_ADMIN \
   -v 'dnsmasq:/etc/dnsmasq/' \
   -p 53:53 \
