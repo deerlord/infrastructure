@@ -27,7 +27,7 @@ build_all() {
 }
 
 create_all() {
-  for image in $(ls ./containers/*/build)
+  for image in $(ls ./containers/*/create)
   do
     $image
   done
