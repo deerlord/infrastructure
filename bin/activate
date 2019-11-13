@@ -29,15 +29,10 @@ http_egress() {
   fi
   if [[ $(container_exists squid) -eq 1 && $(container_exists $container) -eq 1 ]]
   then
-    # add config
-    conf="/var/lib/docker/volumes/squid_conf/_data/conf.d/${container}.conf"
-    if [[ -f ${conf}-off ]]
-    then
-      mv ${conf}-off $conf
-      chown squid $conf
-      docker network connect $network $container
-      docker network connect $network squid
-    fi
+    mv ${conf}-off $conf
+    chown squid $conf
+    docker network connect $network $container
+    docker network connect $network squid
   fi
 }
 
