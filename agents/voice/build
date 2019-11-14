@@ -80,5 +80,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 httpd = HTTPServer(('', 8080), RequestHandler)
 httpd.serve_forever()
 EOF
+docker build -t voice .
 cd ../../
 rm -rf ./.build/voice/
