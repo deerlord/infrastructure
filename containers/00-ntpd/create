@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 $(basic_container ntpd) \
   -p 123:123 \
   ntpd

@@ -5,7 +5,7 @@ Requires=docker.service
 
 [Service]
 TimeoutStartSec=0
-ExecStart=docker start infra.%n
+ExecStart=docker start %n
 
 [Install]
 WantedBy=multi-user.target
