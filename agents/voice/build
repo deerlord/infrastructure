@@ -18,6 +18,7 @@ EOF
 cat > ./voice.py <<'EOF'
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from io import BytesIO
+import sounddevice
 import requests
 CHUNK = 1024
 class AudioListener():
