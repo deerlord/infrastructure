@@ -1,20 +1,20 @@
+# information about the host we're running on
+export HOST_NAME=''  # HOSTNAME.google.com
+export HOST_DOMAIN='' # mail.HOST_DOMAIN 
+export HOST_IP='172.16.0.5'
+export HOST_GATEWAY='172.16.0.1'
+export HOST_SUBNET='255.255.0.0'
 # NGINX SSL values
 export COUNTRY=''
 export STATE=''
 export LOCALITY=''
 export ORGANIZATION=''
 export ORGANIZATIONALUNIT=''
-export COMMONNAME='*.HOST_DOMAIN'
+export COMMONNAME="*.${HOST_DOMAIN}"
 export EMAIL=''
-# information about the host we're running on
-export HOST_NAME=''  # ex: HOSTNAME.google.com
-export HOST_DOMAIN='' # ex: mail.HOST_DOMAIN 
-export HOST_IP='172.16.0.5'
-export HOST_GATEWAY='172.16.0.1'
-export HOST_SUBNET='255.255.0.0'
 # DHCP settings for dnsmasq
 export DHCP_START='172.16.0.10'
 export DHCP_END='171.16.0.50'
 export DHCP_TIME='12h'
 # NTP values
-export NTP_SERVER='172.16.0.5'
+export NTP_SERVER="time.${HOST_DOMAIN}"
