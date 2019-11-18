@@ -1,27 +1,10 @@
-#!/bin/bash
-
-docker pull debian
-/usr/sbin/useradd -r -s /sbin/nologin voice
-mkdir -p ./.build/voice/
-cd ./.build/voice/
-cat > Dockerfile <<'EOF'
-FROM debian
-RUN apt update -y
-RUN apt install -y python3.7
-RUN apt install -y python3-pip
-RUN apt install -y libportaudio2
-RUN pip3 install sounddevice
-RUN pip3 install requests
-RUN mkdir -p /opt/voice/
-COPY ./voice.py /opt/voice/
-CMD ["python3", "/opt/voice/voice.py"]
-EOF
-cat > ./voice.py <<'EOF'
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from io import BytesIO
 import sounddevice
 import requests
+
 CHUNK = 1024
+
 class AudioListener():
     def __init__(self):
         # find microphone
@@ -33,6 +16,7 @@ class AudioListener():
         )
         self.__buffer = []
         self.__quiet_count = 0
+
     def __trigger(self, chunk):
         retval = False
         # if chunk has "sound" return True, else False
@@ -41,6 +25,7 @@ class AudioListener():
         else:
             self.__quiet_count += 1
         return retval
+    
     def __listen(self):
         for frame in self.__stream.read(self.__stream.read_available):
             if self.__trigger(frame):
@@ -51,12 +36,15 @@ class AudioListener():
             ):
                 url = 'https://openhab.HOST_DOMAIN/api/voice/'
                 files = {'files': self.__buffer}
-		resp = requests.post(url, files=files)
+                resp = requests.post(url, files=files)
                 self.__buffer = []
                 self.__quiet_count = 0
+    
     def run(self):
         while True:
             self.__listen()
+
+
 class AudioPlayer():
     def __init__(self):
         self.__stream = sounddevice.RawOutputStream(
@@ -64,25 +52,28 @@ class AudioPlayer():
             blocksize=1024,
             device=2,
             channels=2,
-	)
+        )
+    
     def play(self, data):
         # make sure data is prepared for writing
         self.__stream.write(data)
+
+
 listener = AudioListener()
 # start thread
 player = AudioPlayer()
+
+
 class RequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         audio = self.rfile.read(content_length)
         self.send_response(200)
         self.end_headers()
-	listener.stop()
-	player.play(audio)
-	listener.start()
+        listener.stop()
+        player.play(audio)
+        listener.start()
+
+
 httpd = HTTPServer(('', 8080), RequestHandler)
 httpd.serve_forever()
-EOF
-docker build -t voice .
-cd ../../
-rm -rf ./.build/voice/

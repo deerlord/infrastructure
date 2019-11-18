@@ -5,6 +5,7 @@ docker pull openhab/openhab
 docker volume create openhab_conf
 docker volume create openhab_userdata
 docker volume create openhab_addons
+docker network create openhab --internal
 docker run -d \
   --env USER_ID=$(grep -P '^openhab' /etc/passwd | awk -F':' '{print $3}') \
   --env GROUP_ID=$(grep -P '^openhab' /etc/group | awk -F':' '{print $3}') \
@@ -28,22 +29,4 @@ touch /var/lib/docker/volumes/openhab_userdata/_data/sqlite.db
 cat > /var/lib/docker/volumes/openhab_conf/_data/services/jdbc.cfg <<'EOF'
 url=jdbc:sqlite:/openhab/userdata/sqlite.db
 EOF
-cat > /var/lib/docker/volumes/nginx/_data/conf.d/openhab.conf <<'EOF'
-server {
-  listen 443 ssl;
-  server_name openhab.HOST_DOMAIN;
-  location / {
-    proxy_pass http://openhab:8080/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header Request-URI $request_uri;
-  }
-}
-EOF
-sed -i \
-  -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
-  /var/lib/docker/volumes/nginx/_data/conf.d/openhab.conf
 chown -R openhab /var/lib/docker/volumes/openhab_*/_data/
-chown nginx /var/lib/docker/volumes/nginx/_data/conf.d/openhab.conf

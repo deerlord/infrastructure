@@ -1,0 +1,8 @@
+#!/bin/bash
+
+$(basic_container voice) \
+  --net=openhab \
+  -v '/etc/localtime:/etc/localtime:ro' \
+  -v '/etc/timezone:/etc/timezone:ro' \
+  voice
+http_ingress voice
