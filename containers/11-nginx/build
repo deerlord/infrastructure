@@ -32,7 +32,7 @@ server {
 EOF
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/blackhole.conf <<'EOF'
 server {
-  listen 80;
+  listen 443;
   server *;
   return 404;
 }
