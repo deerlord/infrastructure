@@ -29,11 +29,9 @@ server {
   ssl_certificate_key /etc/ssl/nginx.key;
   ssl_protocols TLSv1.3;
 }
-EOF
-cat > /var/lib/docker/volumes/nginx/_data/conf.d/blackhole.conf <<'EOF'
 server {
-  listen 443;
-  server *;
+  listen 443 ssl;
+  server_name *;
   return 404;
 }
 EOF
