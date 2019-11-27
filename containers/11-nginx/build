@@ -37,14 +37,6 @@ server {
   server_name _;
   return 444;
 }
-server {
-  listen 443 ssl;
-  ssl_certificate /etc/ssl/nginx.crt;
-  ssl_certificate /etc/ssl/nginx.key;
-  ssl_protocols TLSv1.3;
-  server_name _;
-  return 444;
-}
 EOF
 sed -i \
   -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
