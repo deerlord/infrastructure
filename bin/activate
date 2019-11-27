@@ -16,6 +16,7 @@ dev_remove_images() {
     docker rmi -f $id
   done
   docker volume remove nginx
+  docker volume remove ssl
   docker volume remove dnsmasq
 }
 
