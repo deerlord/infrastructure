@@ -2,20 +2,38 @@
 
 docker pull debian
 /usr/sbin/useradd -r -s /sbin/nologin voice
-mkdir -p ./.build/voice/
-cd ./.build/voice/
+mkdir -p ./.build/microphone/
+cd ./.build/microphone/
 cat > Dockerfile <<'EOF'
 FROM debian
 RUN apt update -y
 RUN apt install -y python3.7
 RUN apt install -y python3-pip
 RUN apt install -y libportaudio2
-RUN pip3 install sounddevice
+RUN apt install -y libffi-dev
+RUN apt install -y python3-sounddevice
 RUN pip3 install requests
 RUN mkdir -p /opt/voice/
 COPY ./exec/microphone.py /opt/voice/
 CMD ["python3", "/opt/voice/microphone.py"]
 EOF
-docker build -t voice .
+docker build -t microphone .
 cd ../../
-rm -rf ./.build/voice/
+rm -rf ./.build/microphone/
+mkdr -p ./.build/speaker/
+cd ./.build/speaker/
+cat > Dockerfile <<'EOF'
+FROM debian
+RUN apt update -y
+RUN apt install -y python3.7
+RUN apt install -y python3-pip
+RUN apt install -y libdev-ffi
+RUN apt install -y libportaudio2
+RUN pip3 install sounddevice
+RUN mkdir -p /opt/voice/
+COPY ./exec/speaker.py /opt/voice/
+CMD ["python3", "/opt/voice/speaker.py"]
+EOF
+docker build -t speaker .
+cd ../../
+rm -rf ./.build/speaker/

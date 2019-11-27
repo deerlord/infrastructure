@@ -1,9 +1,14 @@
 #!/bin/bash
 
-
 $(basic_container dnsmasq) \
   --cap-add=NET_ADMIN \
   -v 'dnsmasq:/etc/dnsmasq/' \
   -p 53:53 \
+  -p 67:67/udp \
   dnsmasq
 public_service dns
+docker start dnsmasq
+docker exec -it dnsmasq \
+  echo -e "nameserver ${DNS_ONE}\nnameserver ${DNS_TWO}" > /etc/resolv.conf
+docker stop dnsmasq
+
