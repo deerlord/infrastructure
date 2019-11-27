@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 if [[ ! -f ./conf.d/CONFIG ]]
 then
   echo 'No CONFIG file found,'
@@ -19,9 +21,25 @@ systemctl enable docker
 # firewall rules
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
 
-for image in $(ls ./containers/)
-do
-  containers/$image/build
-  containers/$image/create
-done
+
+blackhole_testing() {
+  ./containers/00-ntpd/build
+  ./containers/00-ntpd/create
+  ./containers/01-dnsmasq/build
+  ./containers/01-dnsmasq/create
+  ./containers/10-squid/build
+  ./containers/10-squid/create
+  ./containers/11-nginx/build
+  ./containers/11-nginx/create
+  ./containers/20-openhab/build
+  ./containers/20-openhab/create
+}
+
+all() {
+  for image in $(ls ./containers/)
+  do
+    containers/$image/build
+    containers/$image/create
+  done
+}
 
