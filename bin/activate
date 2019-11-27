@@ -21,7 +21,7 @@ basic_container() {
   container=$1
   echo docker create \
     $(run_as $container) \
-    --restart=always \
+    --restart=unless-stopped \
     --name=$container
 }
 
