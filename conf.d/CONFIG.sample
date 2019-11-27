@@ -9,8 +9,8 @@ export DHCP_START='172.16.0.10'
 export DHCP_END='171.16.0.50'
 export DHCP_TIME='12h'
 # DNS values
-DNS_ONE=8.8.8.8
-DNS_TWO=8.8.4.4
+export DNS_ONE=8.8.8.8
+export DNS_TWO=8.8.4.4
 # NGINX SSL values
 export COUNTRY=''
 export STATE=''
