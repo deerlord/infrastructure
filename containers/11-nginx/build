@@ -30,6 +30,16 @@ server {
   ssl_protocols TLSv1.3;
 }
 EOF
+cat > /var/lib/docker/volumes/nginx/_data/conf.d/blackhole.conf <<'EOF'
+server {
+  listen 80;
+  server *;
+  
+  location / {
+    root /noexist;
+  }
+}
+EOF
 sed -i \
   -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
   /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf
