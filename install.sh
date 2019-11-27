@@ -23,10 +23,10 @@ systemctl enable docker
 
 
 blackhole_testing() {
-  ./containers/00-ntpd/build
-  ./containers/00-ntpd/create
-  ./containers/01-dnsmasq/build
-  ./containers/01-dnsmasq/create
+  ./containers/00-dnsmasq/build
+  ./containers/00-dnsmasq/create
+  ./containers/01-ntpd/build
+  ./containers/01-ntpd/create
   ./containers/10-squid/build
   ./containers/10-squid/create
   ./containers/11-nginx/build
@@ -43,3 +43,4 @@ all() {
   done
 }
 
+blackhole_testing
