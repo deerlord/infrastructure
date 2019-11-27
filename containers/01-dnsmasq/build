@@ -14,7 +14,7 @@ RUN echo 'conf-file=/etc/dnsmasq/conf' > /etc/dnsmasq.conf
 EXPOSE 53/udp
 EXPOSE 53/tcp
 EXPOSE 67/udp
-CMD ["/usr/sbin/dnsmasq", "-k"]
+CMD ["/usr/sbin/dnsmasq", "-k", "--log-facility=/var/log/dnsmasq"]
 EOF
 cat > /var/lib/docker/volumes/dnsmasq/_data/hosts <<'EOF'
 127.0.0.1 doubleclick.net
