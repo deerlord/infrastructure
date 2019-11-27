@@ -10,7 +10,7 @@ RUN apt update -y
 RUN apt upgrade -y
 RUN apt install -y wget
 RUN apt install -y dnsmasq dnsmasq-utils
-RUN mkdir -p /etc/dnsmasq.d
+RUN mkdir -p /etc/dnsmasq/
 RUN echo 'conf-file=/etc/dnsmasq/conf' > /etc/dnsmasq.conf
 EXPOSE 53/udp
 EXPOSE 53/tcp
@@ -42,7 +42,7 @@ expand-hosts
 domain=HOST_DOMAIN
 dhcp-range=DHCP_START,DHCP_END,DHCP_TIME
 dhcp-option=option:router,HOST_GATEWAY
-#dhcp-option=option:NTP_SERVER,127.0.0.1
+dhcp-option=option:NTP_SERVER,127.0.0.1
 log-queries
 log-dhcp
 EOF
