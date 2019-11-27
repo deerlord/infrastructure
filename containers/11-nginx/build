@@ -32,7 +32,7 @@ server {
 server {
   listen 443 ssl;
   server_name *;
-  return 404;
+  return 444;
 }
 EOF
 sed -i \

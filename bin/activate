@@ -15,6 +15,9 @@ dev_remove_images() {
   do
     docker rmi -f $id
   done
+  docker volume remove nginx
+  docker volume remove dnsmasq
+
 }
 
 basic_container() {
