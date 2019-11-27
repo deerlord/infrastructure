@@ -18,7 +18,7 @@ docker stop nginx
 docker rm nginx
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf <<'EOF'
 server {
-  listen 80;
+  listen 80 default_server;
   server_name _;
   return 301 https://$host$request_uri;
 }
@@ -32,9 +32,10 @@ server {
 EOF
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/blackhole.conf <<'EOF'
 server {
-  listen 80 default_server;
-  listen [::]:80 default_server;
-  server_name _;
+  listen 443;
+  server_name *;
+  ssl_certificate /etc/ssl/nginx.crt;
+  ssl_certificate_key /etc/ssl/nginx.key;
   return 444;
 }
 EOF
