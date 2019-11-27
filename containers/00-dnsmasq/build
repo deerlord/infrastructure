@@ -42,7 +42,7 @@ expand-hosts
 domain=HOST_DOMAIN
 dhcp-range=DHCP_START,DHCP_END,DHCP_TIME
 dhcp-option=option:router,HOST_GATEWAY
-dhcp-option=option:ntp-server,NTP_SERVER
+dhcp-option=option:ntp-server,/NTP_SERVER/
 log-queries
 log-dhcp
 EOF
