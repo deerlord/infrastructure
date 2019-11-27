@@ -32,10 +32,11 @@ server {
 EOF
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/blackhole.conf <<'EOF'
 server {
-  listen 443;
+  listen 443 ssl;
   server_name *;
   ssl_certificate /etc/ssl/nginx.crt;
   ssl_certificate_key /etc/ssl/nginx.key;
+  ssl_protocols TLSv1.3;
   return 444;
 }
 EOF
