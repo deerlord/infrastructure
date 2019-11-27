@@ -9,6 +9,6 @@ $(basic_container dnsmasq) \
 public_service dns
 docker start dnsmasq
 docker exec -it dnsmasq \
-  echo -e "nameserver ${DNS_ONE}\nnameserver ${DNS_TWO}" > /etc/resolv.conf
+  sed -i "/${HOST_GATEWAY}/ d" /etc/resolv.conf
 docker stop dnsmasq
 

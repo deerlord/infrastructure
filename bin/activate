@@ -2,6 +2,21 @@
 
 source ./conf.d/CONFIG
 
+dev_remove_containers() {
+  docker ps -a | awk '{print $1}' | while read id
+  do
+    docker stop $id
+    docker rm $id
+  done
+}
+
+dev_remove_images() {
+  docker images -a | awk '{print $3}' | while read id
+  do
+    docker rmi -f $id
+  done
+}
+
 basic_container() {
   container=$1
   echo docker create \
