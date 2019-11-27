@@ -15,9 +15,18 @@ dev_remove_images() {
   do
     docker rmi -f $id
   done
-  docker volume remove nginx
-  docker volume remove ssl
-  docker volume remove dnsmasq
+  docker volume rm nginx
+  docker volume rm ssl
+  docker volume rm dnsmasq
+  docker volume rm openhab_addons
+  docker volume rm openhab_conf
+  docker volume rm openhab_userdata
+  docker volume rm squid_conf
+  docker volume rm squid_spool
+  docker network rm egress
+  docker network rm openhab
+  docker network rm openhab_http_egress
+  docker network rm openhab_http_ingress
 }
 
 basic_container() {
