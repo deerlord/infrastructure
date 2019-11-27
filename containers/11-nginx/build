@@ -34,10 +34,7 @@ cat > /var/lib/docker/volumes/nginx/_data/conf.d/blackhole.conf <<'EOF'
 server {
   listen 80;
   server *;
-  
-  location / {
-    root /noexist;
-  }
+  return 404;
 }
 EOF
 sed -i \
