@@ -152,6 +152,15 @@ update_ad_domains() {
     > /var/lib/docker/volumes/dnsmasq/_data/ad_domains
 }
 
+add_lease() {
+  timestamp=$(date +%s)
+  mac_address="$1"
+  ipv_four="$2"
+  hostname="$3"
+  unknown="$4"
+
+}
+
 export -f basic_container
 export -f container_exists
 export -f container_running

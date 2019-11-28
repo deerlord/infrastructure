@@ -1,5 +1,5 @@
 # information about the host we're running on
-export HOST_NAME=''  # HOSTNAME.google.com
+export HOST_NAME=="$(hostnamectl | grep 'Static hostname' | awk '{print $3}')" # HOSTNAME.google.com
 export HOST_DOMAIN='' # mail.HOST_DOMAIN 
 export HOST_IP='172.16.0.5'
 export HOST_GATEWAY='172.16.0.1'
