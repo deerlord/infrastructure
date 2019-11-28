@@ -21,4 +21,3 @@ export COMMONNAME="*.${HOST_DOMAIN}"
 export EMAIL=''
 # NTP values
 export NTP_SERVER="time.${HOST_DOMAIN}"
-
