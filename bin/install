@@ -27,8 +27,9 @@ iface ${interface} inet static
   address ${HOST_IP}
   netmask ${HOST_SUBNET}
   gateway ${HOST_GATEWAY}
-  dns-nameservers ${HOST_GATEWAY}
+  dns-nameservers localhost
 EOF
+add_static_lease ${HOST_MAC} ${HOST_IP}
 }
 
 set_static_ip enp0s25

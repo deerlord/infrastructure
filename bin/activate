@@ -153,11 +153,16 @@ update_ad_domains() {
 }
 
 add_static_lease() {
+  mac_address="$1"
+  ip="$2"
   has_lease=$(grep -c ${ip} /var/lib/docker/volumes/dnsmasq/_data/static) 
   if [[ $has_lease -eq 0 ]]
   then
     echo "dhcp-host=${mac_address},${ip}" >> /var/lib/docker/volumes/dnsmasq/_data/static
-    docker restart dnsmasq
+    if [[ $(container_running dnsmasq) -eq 1 ]]
+    then
+      docker restart dnsmasq
+    fi
   fi
 }
 
