@@ -18,7 +18,6 @@ EXPOSE 67/udp
 CMD ["/usr/sbin/dnsmasq", "-k", "--log-facility=/var/log/dnsmasq"]
 EOF
 cat > /var/lib/docker/volumes/dnsmasq/_data/local_hosts <<EOF
-127.0.0.1 doubleclick.net
 ${HOST_IP} ${HOST_NAME} ${HOST_NAME}.${HOST_DOMAIN}
 ${HOST_GATEWAY} router router.${HOST_DOMAIN}
 EOF
