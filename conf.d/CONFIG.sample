@@ -9,6 +9,12 @@ export HOST_SUBNET='255.255.0.0'
 export DHCP_START='172.16.0.10'
 export DHCP_END='171.16.0.50'
 export DHCP_TIME='12h'
+export DHCP_ETH_START=''
+export DHCP_ETH_END=''
+export DHCP_ETH_TIME=''
+export DHCP_WIFI_START=''
+export DHCP_WIFI_END=''
+export DHCP_WIFI_TIME=''
 # DNS values
 export DNS_ONE=8.8.8.8
 export DNS_TWO=8.8.4.4
