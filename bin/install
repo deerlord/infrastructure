@@ -60,6 +60,8 @@ all() {
 debug() {
   bash -x ./containers/00-dnsmasq/build
   bash -x ./containers/00-dnsmasq/create
+  bash -x ./containers/01-ntpd/build
+  bash -x ./containers/01-ntpd/create
 }
 
 debug
