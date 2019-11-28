@@ -58,4 +58,9 @@ all() {
   done
 }
 
-all
+debug() {
+  bash -x ./containers/00-dnsmasq/build
+  bash -x ./containers/00-dnsmasq/create
+}
+
+debug
