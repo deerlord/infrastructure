@@ -1,0 +1,4 @@
+#!/bin/bash
+
+alias certs='cat /var/lib/docker/volumes/ssl/_data/clients/*'
+alias revoked='cat /var/lib/docker/volumes/ssl/_data/revoked/*'

@@ -58,7 +58,7 @@ container_running() {
 public_service() {
   NAME=$1
   cat >> /var/lib/docker/volumes/dnsmasq/_data/hosts <<EOF
-${HOST_IP} ${NAME} ${NAME}.${HOST_NAME}
+${HOST_IP} ${NAME} ${NAME}.${HOST_DOMAIN}
 EOF
 }
 
@@ -135,8 +135,15 @@ add_openhab_http_item() {
   name="$1"
   cert="$2"
   # verify and possibly convert cert
-  echo "${cert}" > /var/lib/docker/volumes/ssl/_data/clients/${name}.crt
-  chown nginx. /var/lib/docker/volumes/ssl/_data/clients/${name}.crt
+  existing_cert=$(grep -l "${2}" /var/lib/docker/volumes/ss/_data/clients/* | grep -c "${name}")
+  if [[ ${existing_cert} -eq 0 ]]
+  then
+    echo "${cert}" > /var/lib/docker/volumes/ssl/_data/clients/${name}.crt
+    chown nginx. /var/lib/docker/volumes/ssl/_data/clients/${name}.crt
+    cat /var/lib/docker/volumes/ssl/_data/clients/${name}.crt >> \
+      /var/lib/docker/volumes/ssl/_data/clients.crt
+  fi
+
 }
 
 export -f basic_container
