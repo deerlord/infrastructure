@@ -1,15 +1,11 @@
-#!/bin/bash
-
-/usr/sbin/useradd -r -s /sbin/nologin voice
-mkdir -p ./.build/voice/
-cd ./.build/voice/
-cat > voice.py <<'EOF'
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import aiohttp
 from io import BytesIO
 import speech_recognition as sr
+
 KEYWORD='hal'
-def speech(audio):
+
+def speech_to_text(audio):
     result = None
     try:
         r = sr.Recognizer()
@@ -21,42 +17,41 @@ def speech(audio):
     except:
         pass
     return result
+
+
+def execute_command(cmd):
+    pass
+
+
 def process(audio):
     retval = False
-    text = speech(audio)
+    text = speech_to_text(audio)
     if isinstance(text, str) and len(str):
         words = text.split(' ')
-	keyword = words[0].lower()
-        cmd = ' '.join(words[1:])
+        if not isinstance(words, list):
+            return retval
+        keyword = words.pop().lower()
+        if not len(words):
+            return retval
+        cmd = ' '.join(words)
     else:
         keyword = ''
     if keyword == KEYWORD:
-        pass  # send command
-        # get result
-        # check result
-        retval = True
+        retval = execute_command(words)
     return retval
-class RequestHandler(BaseHTTPRequestHandler):
+
+
+class SpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         audio = self.rfile.read(content_length)
         result = process(audio)
         self.send_response(200 if result else 500)
         self.end_headers()
-        self.wfile.write(BytesIO())
-httpd = HTTPServer(('', 8080), RequestHandler)
+        response = BytesIO()
+        self.wfile.write(response)
+
+
+httpd = HTTPServer(('', 8080), SpeechHandler)
 httpd.serve_forever()
-EOF
-cat > Dockerfile <<'EOF'
-FROM debian
-RUN apt update -y
-RUN apt install -y python3.7
-RUN apt install -y python3-pip
-RUN pip3 install SpeechRecognition
-RUN mkdir /opt/
-COPY ./app /opt/
-CMD ["python3", "/opt/app"]
-EOF
-docker build -t voice .
-cd ../../
-rm -rf ./.build/sphinx/
+
