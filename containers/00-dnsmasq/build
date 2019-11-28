@@ -24,7 +24,7 @@ HOST_GATEWAY router router.HOST_DOMAIN
 EOF
 list='https://raw.githubusercontent.com/hectorm/hmirror/master/data/adaway.org/list.txt'
 curl ${list} 2>/dev/null | \
-  sed 's/\n/ /g' \
+  tr -d '\n' ' ' \
   sed "s/^/${HOST_IP} /" >> /var/lib/docker/volumes/dnsmasq/_data/hosts
 cat > /var/lib/docker/volumes/dnsmasq/_data/conf <<'EOF'
 user=root
