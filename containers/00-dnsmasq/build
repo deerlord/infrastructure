@@ -48,25 +48,8 @@ dhcp-option=option:ntp-server,127.0.0.1
 log-queries
 log-dhcp
 EOF
-#sed -i \
-#  -e "s HOST_IP ${HOST_IP} g" \
-#  -e "s HOST_NAME ${HOST_NAME} g" \
-#  -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
-#  -e "s HOST_GATEWAY ${HOST_GATEWAY} g" \
-#  /var/lib/docker/volumes/dnsmasq/_data/hosts
-#sed -i \
-#  -e "s HOST_NAME ${HOST_NAME} g" \
-#  -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
-#  -e "s HOST_IP ${HOST_IP} g" \
-#  -e "s HOST_GATEWAY ${HOST_GATEWAY} g" \
-#  -e "s DHCP_START ${DHCP_START} g" \
-#  -e "s DHCP_END ${DHCP_END} g" \
-#  -e "s DHCP_TIME ${DHCP_TIME} g" \
-#  -e "s NTP_SERVER ${NTP_SERVER} g" \
-#  /var/lib/docker/volumes/dnsmasq/_data/conf
 docker build -t dnsmasq .
 cd ..
 rm -rf ./dnsmasq/
 update_ad_domains
 chown -R dnsmasq /var/lib/docker/volumes/dnsmasq/_data/
-
