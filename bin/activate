@@ -57,7 +57,7 @@ container_running() {
 
 public_service() {
   NAME=$1
-  cat >> /var/lib/docker/volumes/dnsmasq/_data/hosts <<EOF
+  cat >> /var/lib/docker/volumes/dnsmasq/_data/local_hosts <<EOF
 ${HOST_IP} ${NAME} ${NAME}.${HOST_DOMAIN}
 EOF
 }
@@ -158,7 +158,6 @@ add_lease() {
   ipv_four="$2"
   hostname="$3"
   unknown="$4"
-
 }
 
 export -f basic_container
