@@ -43,4 +43,4 @@ all() {
   done
 }
 
-blackhole_testing
+all
