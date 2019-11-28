@@ -131,6 +131,14 @@ run_as() {
   echo "--env USER_ID=$(id -u $1) --env GROUP_ID=$(id -g $1)"
 }
 
+add_openhab_http_item() {
+  name="$1"
+  cert="$2"
+  # verify and possibly convert cert
+  echo "${cert}" > /var/lib/docker/volumes/ssl/_data/clients/${name}.crt
+  chown nginx. /var/lib/docker/volumes/ssl/_data/clients/${name}.crt
+}
+
 export -f basic_container
 export -f container_exists
 export -f container_running
