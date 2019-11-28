@@ -176,3 +176,4 @@ export -f remove_http_ingress
 export -f remove_http_egress
 export -f run_as
 export -f update_ad_domains
+export -f add_static_lease
