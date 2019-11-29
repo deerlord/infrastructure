@@ -27,7 +27,7 @@ def parse_text(text):
     return retval
 
 def parse_language(sentence):
-    keyword = sentence.words[0].text
+    keyword = sentence.words[0].text.lower()
     verbs = [
         for word in sentence.words[1:]
         if word.upos == 'VERB'

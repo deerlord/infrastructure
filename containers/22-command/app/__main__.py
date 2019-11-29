@@ -28,4 +28,3 @@ class SpeechHandler(BaseHTTPRequestHandler):
 
 httpd = HTTPServer(('', 8080), SpeechHandler)
 httpd.serve_forever()
-
