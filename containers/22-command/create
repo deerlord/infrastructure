@@ -6,3 +6,10 @@ $(basic_container command) \
   -v '/etc/timezone:/etc/timezone:ro' \
   command
 http_ingress command
+sed -i '/^}/ d' /var/lib/docker/volumes/nginx/_data/conf.d/command.conf
+cat >> /var/lib/docker/volumes/nginx/_data/conf.d/command.conf <<'EOF'
+  # client cert stuff
+  ssl_trusted_certificate /etc/ssl/command.crt;
+  ssl_verify_client on;
+}
+EOF
