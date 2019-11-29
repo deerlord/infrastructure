@@ -3,7 +3,7 @@ import stanfordnlp
 
 NLP = stanfordnlp.Pipeline(lang='en')
 
-def parse_audio(audio):
+def __parse_audio(audio):
     result = None
     try:
         r = sr.Recognizer()
@@ -17,7 +17,7 @@ def parse_audio(audio):
     return result
 
 
-def parse_text(text):
+def __parse_text(text):
     retval = ''
     doc = NLP(text)
     if len(sentences) > 1:
@@ -26,7 +26,7 @@ def parse_text(text):
             retval = s
     return retval
 
-def parse_language(sentence):
+def __parse_language(sentence):
     keyword = sentence.words[0].text.lower()
     verbs = [
         for word in sentence.words[1:]
@@ -36,12 +36,12 @@ def parse_language(sentence):
 
 
 def pipeline(audio):
-    keyword = ''
-    verbs = []
-    text = parse_audio(audio)
+    data = {'keyword': '', 'verbs': []}
+    text = __parse_audio(audio)
     if len(text) == 0:
         return None  # no actual text
-    doc = parse_text(text)
+    doc = __parse_text(text)
     if doc != '':
-      keyword, verbs = parse_language(doc)
-    return keyword, verbs
+      keyword, verbs = __parse_language(doc)
+      data.update({'keyword': keyword, 'verbs': verbs})
+    return data
