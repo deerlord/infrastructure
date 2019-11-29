@@ -1,0 +1,9 @@
+#!/bin/bash
+
+$(basic_container samba) \
+  -p 139:139 \
+  -p 445:445 \
+  -p 137:137/udp \
+  -p 138:138/udp \
+
+

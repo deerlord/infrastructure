@@ -1,0 +1,12 @@
+#!/bin/bash
+
+/usr/sbin/useradd -r -s /sbin/nologin fileserver
+mkdir -p ./.build/fileserver/
+cd ./.build/fileserver/
+cat > Dockerfile <<'EOF'
+FROM debian
+
+
+EOF
+cd ../..
+rm -rf ./.build/fileserver/
