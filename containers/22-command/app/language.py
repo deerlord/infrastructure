@@ -1,8 +1,6 @@
 import speech_recognition as sr
 import stanfordnlp
 #import intent_engine
-#from nltk.tag import StanfordNERTagger
-#from nltk.tokenize import word_tokenize
 
 NLP = stanfordnlp.Pipeline(lang='en')
 
