@@ -2,8 +2,23 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import aiohttp
 from io import BytesIO
 import speech_recognition as sr
+import requests
 
 KEYWORD='hal'
+
+
+# basic command via REST
+
+def command(item, cmd):
+    headers = {'Accept': 'application/json'}
+    result = request.post(
+        'http://openhab:8080/rest/items/' + item,
+        headers=headers,
+        data=cmd,
+    )
+    # parse result
+    # return true/false
+
 
 def speech_to_text(audio):
     result = None
@@ -20,7 +35,10 @@ def speech_to_text(audio):
 
 
 def execute_command(cmd):
-    pass
+    # find item, language parser?
+    # send item and command
+    #item = None
+    return command(item, cmd)
 
 
 def process(audio):
