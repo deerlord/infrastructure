@@ -36,11 +36,12 @@ def parse_language(sentence):
 
 
 def pipeline(audio):
-    command = False
+    keyword = ''
+    verbs = []
     text = parse_audio(audio)
     if len(text) == 0:
         return None  # no actual text
     doc = parse_text(text)
     if doc != '':
-      command = parse_language(doc)
-    return command
+      keyword, verbs = parse_language(doc)
+    return keyword, verbs

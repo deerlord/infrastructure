@@ -7,8 +7,8 @@ import language
 KEYWORD = 'HAL'.lower()
 
 def glue(audio):
-    command = language.pipeline(audio)
-    if command.words[0].text.lower() == KEYWORD:
+    keyword, verbs = language.pipeline(audio)
+    if keyword == KEYWORD:
         pass  # do the things
     # figure out what openhab command to run
 
