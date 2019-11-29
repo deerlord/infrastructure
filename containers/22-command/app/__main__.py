@@ -12,7 +12,7 @@ def openhab_process(command):
     """
     # figure out wtf we are doing
     if interact with item
-      items = hab.fetch_all_items()
+      items = hab.()
       i = items.get(item_name)
       if i
        # might need to parse
