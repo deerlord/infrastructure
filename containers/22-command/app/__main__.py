@@ -4,13 +4,18 @@ from io import BytesIO
 import openhab
 import language
 
-KEYWORD = 'hal'
+KEYWORD = 'HAL'.lower()
+
+def glue(audio):
+    command = language.pipeline(audio)
+    if command.words[0].text.lower() == KEYWORD:
+        pass  # do the things
+    # figure out what openhab command to run
 
 class SpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
-        audio = self.rfile.read(content_length)
-        command = language.pipeline(audio)
+        result = glue(self.rfile.read(content_length))
         # find what openhab function we need to run
         # ex:
         #    # parse command to item, cmd

@@ -18,31 +18,29 @@ def parse_audio(audio):
 
 
 def parse_text(text):
+    retval = ''
     doc = NLP(text)
-    if len(sentences) != 1:
-        return None
-    s = sentences[0]
-    if len(s) == 0:
-        return None
-    keyword = s.words[0].text
+    if len(sentences) > 1:
+        s = sentences[0]
+        if len(s.words) >= 2:
+            retval = s
+    return retval
+
+def parse_language(sentence):
+    keyword = sentence.words[0].text
     verbs = [
-        for word in s.words[1:]
+        for word in sentence.words[1:]
         if word.upos == 'VERB'
     ]
-    # probably need to parse this further, such as returning
-    # noun (item), command (verb), etc.
-    return doc
-
-def parse_language(data):
-    return data
+    return keyword, verbs
 
 
 def pipeline(audio):
+    command = False
     text = parse_audio(audio)
     if len(text) == 0:
         return None  # no actual text
-    language = parse_text(text)
-    # depending on how this is parsed in language_text(),
-    # may need to parse further. 
-    result = parse_language(language)
-    return result
+    doc = parse_text(text)
+    if doc != '':
+      command = parse_language(doc)
+    return command
