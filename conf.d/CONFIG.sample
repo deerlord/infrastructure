@@ -4,7 +4,7 @@ export HOST_DOMAIN='' # mail.HOST_DOMAIN
 export HOST_IP='172.16.0.5'
 export HOST_MAC='' # mac address
 export HOST_GATEWAY='172.16.0.1'
-export GATEWAY_MAC="$(grep ${HOST_GATEWAY} /proc/net/arp | awk '{print $4}')"
+export GATEWAY_MAC="$(grep -P "^${HOST_GATEWAY} " /proc/net/arp | awk '{print $4}')"
 export HOST_SUBNET='255.255.0.0'
 # DHCP settings for dnsmasq
 export DHCP_START='172.16.0.10'

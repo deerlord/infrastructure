@@ -57,9 +57,8 @@ container_running() {
 
 public_service() {
   NAME=$1
-  cat >> /var/lib/docker/volumes/dnsmasq/_data/local_hosts <<EOF
-${HOST_IP} ${NAME} ${NAME}.${HOST_DOMAIN}
-EOF
+  echo "${HOST_IP} ${NAME}.${HOST_DOMAIN}" >> /var/lib/docker/volumes/dnsmasq/_data/local_hosts
+  docker restart dnsmasq
 }
 
 http_egress() {

@@ -30,7 +30,7 @@ domain-needed
 bogus-priv
 no-resolv
 no-poll
-domain=${HOST_DOMAIN}
+domain=/${HOST_DOMAIN}/
 expand-hosts
 local=/${HOST_DOMAIN}/
 addn-hosts=/etc/dnsmasq/local_hosts
