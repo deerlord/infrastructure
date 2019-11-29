@@ -6,7 +6,7 @@ import requests
 
 KEYWORD='hal'
 
-def command(item, cmd):
+def use_item(item, cmd):
     headers = {'Accept': 'application/json'}
     result = request.post(
         'http://openhab:8080/rest/items/' + item,
@@ -34,8 +34,11 @@ def speech_to_text(audio):
 def execute_command(cmd):
     # find item, language parser?
     # send item and command
-    #item = None
-    return command(item, cmd)
+    # example
+    command = use_item
+    retval = command(item, cmd)
+    # common ending line
+    return retval
 
 
 def process(audio):
