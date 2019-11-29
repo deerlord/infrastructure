@@ -64,4 +64,4 @@ debug() {
   bash -x ./containers/01-ntpd/create
 }
 
-debug
+all
