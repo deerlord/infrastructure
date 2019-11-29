@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [[ $0 =~ ^./ ]]
+then
+  script="$(echo $0 | sed 's ^\./  ')"
+elif [[ $0 =~ ^../ ]]
+then
+  script="$(echo $0 | sed 's ^\.\./  ')"
+else
+  script="$0"
+fi
+path="$(realpath $script | awk -F"$script" '{print $1}')"
+
+source ${path}bin/activate
+container="$1"
+if [[ $(container_running $container) -eq 1 ]]
+then
+  restart=$(${path}containers/*-${container}/restart)
+  if [[ -e $restart ]]
+  then
+    $restart
+  fi
+fi
