@@ -1,9 +1,9 @@
 #!/bin/bash
 
-/usr/sbin/useradd -r -s /sbin/nologin voice
-mkdir -p ./.build/voice/
-cd ./.build/voice/
-cp -r ../../containers/22-voice/app ./
+/usr/sbin/useradd -r -s /sbin/nologin command
+mkdir -p ./.build/command/
+cd ./.build/command/
+cp -r ../../containers/22-command/app ./
 cat > Dockerfile <<'EOF'
 FROM debian
 RUN apt update -y
@@ -13,6 +13,6 @@ RUN pip3 install SpeechRecognition
 COPY ./app /opt/
 CMD ["python3", "/opt/app"]
 EOF
-docker build -t voice .
+docker build -t command .
 cd ../../
-rm -rf ./.build/voice/
+rm -rf ./.build/command/

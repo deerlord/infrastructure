@@ -36,9 +36,7 @@ def process(audio):
         cmd = ' '.join(words)
     else:
         keyword = ''
-    if keyword == KEYWORD:
-        retval = execute_command(words)
-    return retval
+    return execute_command(cmd) if keyword == KEYWORD else None
 
 
 class SpeechHandler(BaseHTTPRequestHandler):
