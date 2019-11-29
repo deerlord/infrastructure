@@ -43,7 +43,7 @@ server {
   ssl_certificate_key /etc/ssl/control.key;
   ssl_protocols TLSv1.3;
   ssl_client_certificate /etc/ssl/clients.crt;
-  ssl_crl /etc/ssl/revoked.crt
+  ssl_crl /etc/ssl/revoked.crt;
   ssl_verify_client on;
 }
 EOF
