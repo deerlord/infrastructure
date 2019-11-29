@@ -4,7 +4,7 @@ from io import BytesIO
 import openhab
 import language
 
-KEYWORD='hal'
+KEYWORD = 'hal'
 
 class SpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -13,7 +13,7 @@ class SpeechHandler(BaseHTTPRequestHandler):
         command = language.pipeline(audio)
         # find what openhab function we need to run
         # ex:
-        #    # pase command to item, cmd
+        #    # parse command to item, cmd
         #    openhab.use_item(item, cmd)
         self.send_response(200 if result else 500)
         self.end_headers()

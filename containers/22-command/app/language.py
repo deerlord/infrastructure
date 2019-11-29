@@ -1,8 +1,6 @@
 import speech_recognition as sr
 import stanfordnlp
 
-KEYWORD='hal'
-
 def parse_audio(audio):
     result = None
     try:
@@ -18,8 +16,18 @@ def parse_audio(audio):
 
 
 def parse_text(text):
-    nlp = standfordnlp.Pipeline()
+    nlp = standfordnlp.Pipeline(lang='en')
     doc = nlp(text)
+    if len(sentences) != 1:
+        return None
+    s = sentences[0]
+    if len(s) == 0:
+        return None
+    keyword = s.words[0].text
+    verbs = [
+        for word in s.words
+        if word.upos == 'VERB'
+    ]
     # probably need to parse this further, such as returning
     # noun (item), command (verb), etc.
     return doc
@@ -35,5 +43,5 @@ def pipeline(audio):
     language = parse_text(text)
     # depending on how this is parsed in language_text(),
     # may need to parse further. 
-    result = parse_langauge(language)
+    result = parse_language(language)
     return result
