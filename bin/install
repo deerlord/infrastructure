@@ -36,21 +36,8 @@ set_static_ip enp0s25
 # firewall rules
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
 
-blackhole_testing() {
-  ./containers/00-dnsmasq/build
-  ./containers/00-dnsmasq/create
-  ./containers/01-ntpd/build
-  ./containers/01-ntpd/create
-  ./containers/10-squid/build
-  ./containers/10-squid/create
-  ./containers/11-nginx/build
-  ./containers/11-nginx/create
-  ./containers/20-openhab/build
-  ./containers/20-openhab/create
-}
-
 all() {
-  for image in $(ls ./containers/)
+  for image in $(ls ./containers/ | grep -v command)
   do
     containers/$image/build
     containers/$image/create
