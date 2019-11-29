@@ -47,6 +47,7 @@ server {
   ssl_verify_client on;
 }
 EOF
+> /var/lib/docker/volumes/nginx/_data/conf.d/items.conf
 cat > /var/lib/docker/volumes/nginx/_data/conf.d/blackhole.conf <<'EOF'
 server {
   listen 443 ssl default_server;
