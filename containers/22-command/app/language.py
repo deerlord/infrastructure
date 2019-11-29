@@ -1,6 +1,8 @@
 import speech_recognition as sr
 import stanfordnlp
 
+NLP = stanfordnlp.Pipeline(lang='en')
+
 def parse_audio(audio):
     result = None
     try:
@@ -16,8 +18,7 @@ def parse_audio(audio):
 
 
 def parse_text(text):
-    nlp = standfordnlp.Pipeline(lang='en')
-    doc = nlp(text)
+    doc = NLP(text)
     if len(sentences) != 1:
         return None
     s = sentences[0]
@@ -25,7 +26,7 @@ def parse_text(text):
         return None
     keyword = s.words[0].text
     verbs = [
-        for word in s.words
+        for word in s.words[1:]
         if word.upos == 'VERB'
     ]
     # probably need to parse this further, such as returning
