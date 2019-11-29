@@ -6,9 +6,6 @@ import requests
 
 KEYWORD='hal'
 
-
-# basic command via REST
-
 def command(item, cmd):
     headers = {'Accept': 'application/json'}
     result = request.post(
