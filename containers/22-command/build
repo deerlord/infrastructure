@@ -13,7 +13,7 @@ RUN pip3 install aiohttp
 RUN pip3 install requests
 RUN pip3 install stanfordnlp
 RUN pip3 install python-openhab 
-RUN python3 -c 'import stanfordnlp; standfordnlp.download("en")'
+RUN python3 -c 'import stanfordnlp; stanfordnlp.download("en")'
 RUN pip3 install SpeechRecognition
 COPY ./app /opt/app
 CMD ["python3", "/opt/app"]
