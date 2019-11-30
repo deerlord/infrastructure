@@ -1,10 +1,11 @@
 #!/bin/bash
 
 $(basic_container command) \
-  --net=openhab \
+  --net=host \
   -v '/etc/localtime:/etc/localtime:ro' \
   -v '/etc/timezone:/etc/timezone:ro' \
   command
+exit 0
 http_ingress command
 sed -i '/^}/ d' /var/lib/docker/volumes/nginx/_data/conf.d/command.conf
 cat >> /var/lib/docker/volumes/nginx/_data/conf.d/command.conf <<'EOF'
