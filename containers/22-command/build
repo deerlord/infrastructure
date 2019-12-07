@@ -6,14 +6,23 @@ cd ./.build/command/
 cp -r ../../containers/22-command/app ./
 cat > Dockerfile <<'EOF'
 FROM debian
-RUN apt update -y && apt upgrade -y && apt install -y python3.7 python3-pip
+RUN apt update -y && apt upgrade -y && \
+  apt install -y python3.7 \
+    python3-pip \
+    python3-all-dev \
+    build-essential \
+    swig \
+    git \
+    libpulse-dev \
+    libasound2-dev
 RUN apt install -y curl
-RUN pip3 install aiohttp 
-RUN pip3 install requests
-RUN pip3 install stanfordnlp
-RUN pip3 install python-openhab 
+RUN pip3 install pocketsphinx \
+  SpeechRecognition \
+  aiohttp \
+  requests \
+  stanfordnlp \
+  python-openhab
 RUN python3 -c 'import stanfordnlp; stanfordnlp.download("en",force=True)'
-RUN pip3 install SpeechRecognition
 COPY ./app /opt/app
 EOF
 docker build -t command .

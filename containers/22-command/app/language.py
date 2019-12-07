@@ -18,6 +18,23 @@ def __parse_audio(audio):
     return result
 
 
+def __simple_intent(text):
+    _text = text
+    text = text.lower()
+    words = text.split(' ')
+    if words[0] == 'turn':
+        if words[1] == 'off':
+            pass  # turn off words[2:]
+        elif words[1] == 'on':
+            pass  # turn on words[2:]
+    elif words[0] == 'play':
+        pass  # music
+    if words[-1] == 'leaving':
+        pass  # idle house setting
+    elif words[-1] == 'home':
+        pass  # house active
+    
+
 def __parse_text(text):
     retval = ''
     keyword, *command = text.split(' ')
@@ -61,7 +78,8 @@ def __parse_complex_noun(words, index):
     if initial.dependency_relation == 'compound':
         next_word = words[index + 1]
         if next_word.dependency_relation == 'obj':
-            if 'Number' in next_word.feats
+            if 'Number' in next_word.feats:
+                pass  # not sure what I was doing
 
 def pipeline(audio):
     data = {'keyword': '', 'verbs': []}
