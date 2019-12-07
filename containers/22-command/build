@@ -28,3 +28,4 @@ EOF
 docker build -t command .
 cd ../../
 rm -rf ./.build/command/
+docker image prune

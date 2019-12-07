@@ -22,18 +22,32 @@ def __simple_intent(text):
     _text = text
     text = text.lower()
     words = text.split(' ')
+    data = {
+        'action': None,
+        'item': None,
+    }
     if words[0] == 'turn':
         if words[1] == 'off':
-            pass  # turn off words[2:]
+            data['action'] = 'off'
         elif words[1] == 'on':
-            pass  # turn on words[2:]
+            data['action'] = 'on'
+        item = ' '.join(data[2:])
     elif words[0] == 'play':
-        pass  # music
+        data['action'] = 'play'
+        item = ' '.join(data[1:])
     if words[-1] == 'leaving':
-        pass  # idle house setting
+        data['action'] = 'off'
+        data['action'] = 'home'
+        # idle house setting
     elif words[-1] == 'home':
-        pass  # house active
-    
+        data['action'] = 'on'
+        data['item'] = 'home'
+        # house active
+
+
+def __parse_text_simple(text):
+    return text
+
 
 def __parse_text(text):
     retval = ''
@@ -86,7 +100,7 @@ def pipeline(audio):
     text = __parse_audio(audio)
     if len(text) == 0:
         return None  # no actual text
-    doc = __parse_text(text)
+    doc = __parse_text_simple(text)
     if doc:
-        intent = __parse_intent(doc.sentences[0].words)
+        intent = __simple_intent(doc.sentences[0].words)
     return data
