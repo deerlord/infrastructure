@@ -17,7 +17,6 @@ RUN pip3 install python-openhab
 RUN python3 -c 'import stanfordnlp; stanfordnlp.download("en",force=True)'
 RUN pip3 install SpeechRecognition
 COPY ./app /opt/app
-#CMD ["python3", "/opt/app"]
 EOF
 docker build -t command .
 cd ../../
