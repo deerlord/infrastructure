@@ -16,7 +16,7 @@ def __parse_audio(audio):
             audio[24:28],
             byteorder='little',
         )
-        sample_width = 2
+        sample_width = 1
         b_audio = audio[44:]
         s_audio = sr.AudioData(
             b_audio,
@@ -24,7 +24,6 @@ def __parse_audio(audio):
             sample_width=sample_width,
         )
         result = R.recognize_sphinx(s_audio)
-        print(result)
     except sr.UnknownValueError:
         pass
     except sr.RequestError:
