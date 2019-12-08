@@ -1,3 +1,4 @@
+from io import BytesIO
 import speech_recognition as sr
 import stanfordnlp
 from openhabapi import ACTIONS
@@ -17,8 +18,9 @@ def __parse_audio(audio):
         with sr.AudioFile('audio') as source:
             audio = r.record(source)
         """
-        audio = sr.AudioData(audio)
-        result = r.recognize_sphinx(audio)
+        b_audio = BytesIO(audio)
+        s_audio = sr.AudioFil(b_audio)
+        result = r.recognize_sphinx(s_audio)
         print('got result')
         print(result)
     except Exception as e:
