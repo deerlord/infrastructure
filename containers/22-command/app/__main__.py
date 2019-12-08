@@ -10,7 +10,9 @@ class SpeechHandler(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         audio = self.rfile.read(content_length)
         print('got audio as')
+        print(type(audio))
         print(audio)
+
         retval = False
         result = language.pipeline(audio)
         # convert into command
