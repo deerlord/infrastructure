@@ -11,11 +11,11 @@ def __parse_audio(audio):
     try:
         r = sr.Recognizer()
         sample_rate = int.from_bytes(
-            audio[192:224],
+            audio[24:28],
             byteorder='little',
         )
         sample_width = 1
-        b_audio = audio[352:]
+        b_audio = audio[44:]
         s_audio = sr.AudioData(
             b_audio,
             sample_rate=sample_rate,
