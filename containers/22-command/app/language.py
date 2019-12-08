@@ -5,7 +5,6 @@ from openhabapi import ACTIONS
 
 NLP = stanfordnlp.Pipeline(lang='en')
 KEYWORD = 'What'
-
 R = sr.Recognizer()
 R.dynamic_energy_threshold = True
 
@@ -126,6 +125,8 @@ def pipeline(audio):
         return None  # no actual text
     words = __parse_text_simple(text)
     if len(words) > 0:
+        print('got words')
         if __keyword_check(words[0]):
+            print('getting intent')
             intent = __simple_intent(words[1:])
     return data
