@@ -4,7 +4,7 @@ import stanfordnlp
 from openhabapi import ACTIONS
 
 NLP = stanfordnlp.Pipeline(lang='en')
-KEYWORD = 'What'
+KEYWORD = 'what'
 R = sr.Recognizer()
 R.dynamic_energy_threshold = True
 

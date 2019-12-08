@@ -26,7 +26,6 @@ RUN python3 -c 'import stanfordnlp; stanfordnlp.download("en",force=True)'
 RUN apt install -y wget screen
 RUN wget https://www.signalogic.com/melp/EngSamples/Orig/male.wav
 COPY ./app /opt/app
-CMD ["screen", "-d", "-m", "python3", "/opt/app"]
 EOF
 docker build -t command .
 cd ../../
