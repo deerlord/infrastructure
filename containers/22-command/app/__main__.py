@@ -9,6 +9,8 @@ class SpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         audio = self.rfile.read(content_length)
+        self.send_response(200)
+        self.end_headers()
         retval = False
         result = language.pipeline(audio)
         # convert into command
@@ -23,8 +25,8 @@ class SpeechHandler(BaseHTTPRequestHandler):
         if result:
             openhab.request(command)
             retval = True
-        self.send_response(200 if retval else 500)
-        self.end_headers()
+        #self.send_response(200 if retval else 500)
+        #self.end_headers()
         self.wfile.write(b'')
 
 
