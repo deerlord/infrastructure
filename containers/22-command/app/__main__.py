@@ -22,8 +22,11 @@ class SpeechHandler(BaseHTTPRequestHandler):
 
         }
         """
-        if result:
-            #openhab.request(result)
+        if result['error']:
+            print('result it')
+            print(result)
+        else:
+            openhab.request(result)
             retval = True
         #self.send_response(200 if retval else 500)
         #self.end_headers()

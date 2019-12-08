@@ -36,6 +36,7 @@ def __simple_intent(words):
         'action': None,
         'item': None,
         'group': None,
+        'error': True,
     }
     remainder = []
     if words[0].lower() == 'turn':
@@ -57,6 +58,8 @@ def __simple_intent(words):
         data['group'] = 'idle'
         data['item'] = 'all'
         # house active
+    else:
+        data['error'] = True
     if remainder:
         pass  # handle rest of words, ie group
     return data
@@ -117,7 +120,13 @@ def __parse_complex_noun(words, index):
                 pass  # not sure what I was doing
 
 def pipeline(audio):
-    data = {'action': None, 'item': None, 'group': None, 'command': None}
+    data = {
+        'action': None,
+        'item': None, 
+        'group': None,
+        'command': None,
+        'error': None,
+    }
     text = __parse_audio(audio)
     text = 'Hal turn off kitchen lights'
     words = __parse_text_simple(text)
@@ -125,5 +134,4 @@ def pipeline(audio):
         if __keyword_check(words[0]):
             data = __simple_intent(words[1:])
             print('data is')
-            print(data)
     return data
