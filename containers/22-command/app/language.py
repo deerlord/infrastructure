@@ -3,6 +3,7 @@ import stanfordnlp
 from openhabapi import ACTIONS
 
 NLP = stanfordnlp.Pipeline(lang='en')
+KEYWORD = 'hal'
 
 def __parse_audio(audio):
     result = None
@@ -61,7 +62,7 @@ def __keyword_check(keyword):
 
 
 def __parse_text_simple(text):
-    return text
+    return text.split(' ')
 
 
 def __parse_text(text):
@@ -117,9 +118,8 @@ def pipeline(audio):
         return None
     if len(text) == 0:
         return None  # no actual text
-    doc = __parse_text_simple(text)
-    if len(doc.sentences >= 1):
-        words = doc.sentences[0].words
+    words = __parse_text_simple(text)
+    if len(words > 0):
         if __keyword_check(words[0]):
             intent = __simple_intent(words[1:])
     return data
