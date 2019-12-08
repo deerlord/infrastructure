@@ -14,10 +14,9 @@ class SpeechHandler(BaseHTTPRequestHandler):
         # convert into command
         """
         command = {
-            'action': 'ON',
-            'name': 'light 1',
-            'plural': False,
-            'room': None,
+            'action': 'on',
+            'group': None,
+            'item': 'all',
         }
         """
         if result:

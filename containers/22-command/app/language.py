@@ -9,12 +9,16 @@ def __parse_audio(audio):
     try:
         r = sr.Recognizer()
         result = r.recognize_sphinx(audio)
+    except Exception as e:
+        print(e)
+    """
     except sr.UnknownValueError:
         pass
     except sr.RequestError:
         pass
     except:
         pass
+    """
     return result
 
 
@@ -103,6 +107,8 @@ def __parse_complex_noun(words, index):
 def pipeline(audio):
     data = {'keyword': '', 'verbs': []}
     text = __parse_audio(audio)
+    if not text:
+        return None
     if len(text) == 0:
         return None  # no actual text
     doc = __parse_text_simple(text)
