@@ -124,6 +124,8 @@ def pipeline(audio):
     if len(text) == 0:
         return None  # no actual text
     words = __parse_text_simple(text)
+    print('got words')
+    print(words)
     if len(words) > 0:
         print('got words')
         if __keyword_check(words[0]):
