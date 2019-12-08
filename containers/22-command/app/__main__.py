@@ -9,6 +9,8 @@ class SpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         audio = self.rfile.read(content_length)
+        print('headers')
+        print(self.headers)
         print('got audio as')
         print(type(audio))
 
