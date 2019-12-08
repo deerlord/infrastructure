@@ -37,15 +37,16 @@ def __simple_intent(words):
         'item': None,
         'group': None,
     }
+    remainder = []
     if words[0].lower() == 'turn':
         if words[1] == 'off':
             data['action'] = 'off'
         elif words[1] == 'on':
             data['action'] = 'on'
-        data['item'] = words[2:]
+        remainder = words[2:]
     elif words[0].lower() == 'play':
         data['action'] = 'play'
-        data['item'] = words[1:]
+        remainder = words[1:]
     elif words[-1].lower() == 'leaving':
         data['action'] = 'off'
         data['group'] = 'idle'
@@ -56,6 +57,8 @@ def __simple_intent(words):
         data['group'] = 'idle'
         data['item'] = 'all'
         # house active
+    if remainder:
+        pass  # handle rest of words, ie group
     return data
 
 
