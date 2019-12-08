@@ -14,7 +14,7 @@ def __parse_audio(audio):
             audio[24:28],
             byteorder='little',
         )
-        sample_width = 1
+        sample_width = 2
         b_audio = audio[44:]
         print('bytes', len(b_audio))
         s_audio = sr.AudioData(
