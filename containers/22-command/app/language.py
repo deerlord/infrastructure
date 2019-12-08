@@ -17,6 +17,7 @@ def __parse_audio(audio):
         with sr.AudioFile('audio') as source:
             audio = r.record(source)
         """
+        audio = sr.AudioData(audio)
         result = r.recognize_sphinx(audio)
         print('got result')
         print(result)
