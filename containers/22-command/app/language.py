@@ -19,11 +19,12 @@ def __parse_audio(audio):
             audio = r.record(source)
         """
         sample_rate = audio[24:28]
-        sample_width = 0
+        sample_width = 16
         b_audio = audio[44:]
         s_audio = sr.AudioData(
             b_audio,
             sample_rate=sample_rate,
+            sample_width=sample_width,
         )
         result = r.recognize_sphinx(s_audio)
         print('got result')
