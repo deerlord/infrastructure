@@ -7,7 +7,7 @@ NLP = stanfordnlp.Pipeline(lang='en')
 KEYWORD = 'What'
 
 R = sr.Recognizer()
-R.energy_threshold = 
+R.dynamic_energy_threshold = True
 
 def __parse_audio(audio):
     result = None
