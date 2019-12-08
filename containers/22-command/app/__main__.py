@@ -24,8 +24,7 @@ class SpeechHandler(BaseHTTPRequestHandler):
             retval = True
         self.send_response(200 if retval else 500)
         self.end_headers()
-        response = BytesIO()
-        self.wfile.write(response)
+        self.wfile.write(b'')
 
 
 httpd = HTTPServer(('', 8080), SpeechHandler)
