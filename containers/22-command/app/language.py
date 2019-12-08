@@ -22,7 +22,6 @@ def __parse_audio(audio):
             sample_width=sample_width,
         )
         result = R.recognize_sphinx(s_audio)
-        print(result)
     except sr.UnknownValueError:
         pass
     except sr.RequestError:
@@ -121,4 +120,6 @@ def pipeline(audio):
     if len(words) > 0:
         if __keyword_check(words[0]):
             data = __simple_intent(words[1:])
+            print('data is')
+            print(data)
     return data
