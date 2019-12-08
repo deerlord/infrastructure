@@ -11,7 +11,6 @@ class SpeechHandler(BaseHTTPRequestHandler):
         audio = self.rfile.read(content_length)
         print('got audio as')
         print(type(audio))
-        print(audio)
 
         retval = False
         result = language.pipeline(audio)
