@@ -128,6 +128,7 @@ def pipeline(audio):
     data = {'keyword': '', 'verbs': []}
     text = __parse_audio(audio)
     if not text:
+        print('no text')
         return None
     if len(text) == 0:
         return None  # no actual text
