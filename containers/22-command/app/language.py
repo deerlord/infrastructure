@@ -9,12 +9,14 @@ def __parse_audio(audio):
     result = None
     try:
         r = sr.Recognizer()
+        """
         print('writing audio file')
         with open('audio', 'wb') as f:
             f.write(audio)
         print('reading audio file')
         with sr.AudioFile('audio') as source:
             audio = r.record(source)
+        """
         result = r.recognize_sphinx(audio)
         print('got result')
         print(result)
