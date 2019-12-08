@@ -9,15 +9,6 @@ class SpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         audio = self.rfile.read(content_length)
-        with open('audio', 'wb') as f:
-            f.write(audio)
-        with sr.AudioFile('audio') as source:
-            audio = r.record(source)
-        print('headers')
-        print(self.headers)
-        print('got audio as')
-        print(type(audio))
-
         retval = False
         result = language.pipeline(audio)
         # convert into command

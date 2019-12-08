@@ -8,6 +8,10 @@ def __parse_audio(audio):
     result = None
     try:
         r = sr.Recognizer()
+        with open('audio', 'wb') as f:
+            f.write(audio)
+        with sr.AudioFile('audio') as source:
+            audio = r.record(source)
         result = r.recognize_sphinx(audio)
     except Exception as e:
         print(e)
