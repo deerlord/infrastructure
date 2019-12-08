@@ -3,7 +3,7 @@ import speech_recognition as sr
 import stanfordnlp
 
 NLP = stanfordnlp.Pipeline(lang='en')
-KEYWORD = 'what'
+KEYWORD = 'Hal'
 R = sr.Recognizer()
 R.dynamic_energy_threshold = True
 
@@ -116,6 +116,7 @@ def __parse_complex_noun(words, index):
 def pipeline(audio):
     data = {'action': None, 'item': None, 'group': None, 'command': None}
     text = __parse_audio(audio)
+    text = 'Hal turn off kitchen lights'
     words = __parse_text_simple(text)
     if len(words) > 0:
         if __keyword_check(words[0]):
