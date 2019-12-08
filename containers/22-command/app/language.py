@@ -10,15 +10,7 @@ def __parse_audio(audio):
     result = None
     try:
         r = sr.Recognizer()
-        """
-        print('writing audio file')
-        with open('audio', 'wb') as f:
-            f.write(audio)
-        print('reading audio file')
-        with sr.AudioFile('audio') as source:
-            audio = r.record(source)
-        """
-        sample_rate = audio[24:28]
+        sample_rate = int(audio[24:28])
         sample_width = 16
         b_audio = audio[44:]
         s_audio = sr.AudioData(
