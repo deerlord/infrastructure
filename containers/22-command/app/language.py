@@ -42,10 +42,10 @@ def __simple_intent(words):
             data['action'] = 'off'
         elif words[1] == 'on':
             data['action'] = 'on'
-        data['item'] = data[2:]
+        data['item'] = words[2:]
     elif words[0].lower() == 'play':
         data['action'] = 'play'
-        data['item'] = data[1:]
+        data['item'] = words[1:]
     elif words[-1].lower() == 'leaving':
         data['action'] = 'off'
         data['group'] = 'idle'
