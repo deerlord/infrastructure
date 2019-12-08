@@ -1,7 +1,6 @@
 from io import BytesIO
 import speech_recognition as sr
 import stanfordnlp
-from openhabapi import ACTIONS
 
 NLP = stanfordnlp.Pipeline(lang='en')
 KEYWORD = 'what'
