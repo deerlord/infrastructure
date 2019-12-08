@@ -23,7 +23,6 @@ def __parse_audio(audio):
             sample_width=sample_width,
         )
         result = R.recognize_sphinx(s_audio)
-        print(result)
     except sr.UnknownValueError:
         pass
     except sr.RequestError:
@@ -39,16 +38,15 @@ def __simple_intent(words):
         'item': None,
         'group': None,
     }
-
     if words[0].lower() == 'turn':
         if words[1] == 'off':
             data['action'] = 'off'
         elif words[1] == 'on':
             data['action'] = 'on'
-        item = data[2:]
+        data['item'] = data[2:]
     elif words[0].lower() == 'play':
         data['action'] = 'play'
-        item = data[1:]
+        data['item'] = data[1:]
     elif words[-1].lower() == 'leaving':
         data['action'] = 'off'
         data['group'] = 'idle'
@@ -59,10 +57,11 @@ def __simple_intent(words):
         data['group'] = 'idle'
         data['item'] = 'all'
         # house active
+    return data
 
 
 def __keyword_check(keyword):
-    return keyword.lower() == KEYWORD
+    return keyword.lower() == KEYWORD.lower()
 
 
 def __parse_text_simple(text):
@@ -116,19 +115,10 @@ def __parse_complex_noun(words, index):
                 pass  # not sure what I was doing
 
 def pipeline(audio):
-    data = {'keyword': '', 'verbs': []}
+    data = {'action': None, 'item': None, 'group': None, 'command': None}
     text = __parse_audio(audio)
-    if not text:
-        print('no text')
-        return None
-    if len(text) == 0:
-        return None  # no actual text
     words = __parse_text_simple(text)
-    print('got words')
-    print(words)
     if len(words) > 0:
-        print('got words')
         if __keyword_check(words[0]):
-            print('getting intent')
-            intent = __simple_intent(words[1:])
+            data = __simple_intent(words[1:])
     return data

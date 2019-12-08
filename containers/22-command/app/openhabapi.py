@@ -2,7 +2,7 @@ from openhab import OpenHAB
 
 hab = OpenHAB('http://openhab:8080/rest')
 
-ACTIONS = [
+ITEM_ACTIONS = [
     'on',
     'off',
     'increase',
@@ -10,32 +10,44 @@ ACTIONS = [
     'up',
     'down',
     'stop',
+]
+
+EXTERNAL_COMMANDS = [
     'play',
 ]
 
-def request(command):
-    action = command['action'].lower()
-    if action not in ACTIONS:
-        return None
-    if command['action'] == 'play':
-        pass  # play
-    else:
-        pass
-    if command['plural']:
-        retval = __action_to_group(command['name'], action)
-    else:
-        item = hab.get_item(command['name'])
-        retval = __take_action(item, action)
-    return retval
+
+class ExternalCommands:
+    def play(request):
+        return True
 
 
-def __take_action(item, action):
-    return getattr(item, action)() if hasattr(item, action) else None
+def __handle_command(item, command):
+    cmd = getattr(item, 'command')
+    return cmd(command)
 
 
-def __action_to_group(type_, action):
-    return all([
-        __take_action(item, action)
-        for item in hab.fetch_all_items()
-        if item.type == type_
-    ])
+def request(data):
+    if data['action'] in EXTERNAL_COMMANDS:
+        cmd = getattr(ExternalCommands, data['action'])
+        result = cmd(data['item'])
+    elif data['action'] in ITEM_ACTIONS:
+        if data['group']:
+            pass
+        else:
+            items = [hab.get_items(data['item']),]
+        if (
+            isinstance(data['action'], dict) and
+            data['action'].has_key('command')
+        ):
+            action = 'command'
+        else:
+            action = data['action']
+        for item in items:
+            cmd = getattr(item, action)
+            result = all(
+                cmd(data['action']['command'])
+                if action == 'command'
+                else cmd()
+            )
+    return result
