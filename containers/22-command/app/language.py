@@ -119,7 +119,7 @@ def pipeline(audio):
     if len(text) == 0:
         return None  # no actual text
     words = __parse_text_simple(text)
-    if len(words > 0):
+    if len(words) > 0:
         if __keyword_check(words[0]):
             intent = __simple_intent(words[1:])
     return data
