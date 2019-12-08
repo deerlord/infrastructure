@@ -4,37 +4,32 @@ import stanfordnlp
 from openhabapi import ACTIONS
 
 NLP = stanfordnlp.Pipeline(lang='en')
-KEYWORD = 'hal'
+KEYWORD = 'What'
+
+R = sr.Recognizer()
+R.energy_threshold = 
 
 def __parse_audio(audio):
     result = None
     try:
-        r = sr.Recognizer()
         sample_rate = int.from_bytes(
             audio[24:28],
             byteorder='little',
         )
         sample_width = 2
         b_audio = audio[44:]
-        print('bytes', len(b_audio))
         s_audio = sr.AudioData(
             b_audio,
             sample_rate=sample_rate,
             sample_width=sample_width,
         )
-        result = r.recognize_sphinx(s_audio)
-        print('got result')
-        print(result)
-    except Exception as e:
-        print(e)
-    """
+        result = R.recognize_sphinx(s_audio)
     except sr.UnknownValueError:
         pass
     except sr.RequestError:
         pass
     except:
         pass
-    """
     return result
 
 
