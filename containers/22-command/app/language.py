@@ -24,6 +24,7 @@ def __parse_audio(audio):
             sample_width=sample_width,
         )
         result = R.recognize_sphinx(s_audio)
+        print(result)
     except sr.UnknownValueError:
         pass
     except sr.RequestError:
