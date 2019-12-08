@@ -18,31 +18,36 @@ def __parse_audio(audio):
     return result
 
 
-def __simple_intent(text):
-    _text = text
-    text = text.lower()
-    words = text.split(' ')
+def __simple_intent(words):
     data = {
         'action': None,
         'item': None,
+        'group': None,
     }
-    if words[0] == 'turn':
+
+    if words[0].lower() == 'turn':
         if words[1] == 'off':
             data['action'] = 'off'
         elif words[1] == 'on':
             data['action'] = 'on'
-        item = ' '.join(data[2:])
-    elif words[0] == 'play':
+        item = data[2:]
+    elif words[0].lower() == 'play':
         data['action'] = 'play'
-        item = ' '.join(data[1:])
-    if words[-1] == 'leaving':
+        item = data[1:]
+    elif words[-1].lower() == 'leaving':
         data['action'] = 'off'
-        data['action'] = 'home'
+        data['group'] = 'idle'
+        data['item'] = 'all'
         # idle house setting
-    elif words[-1] == 'home':
+    elif words[-1].lower() == 'home':
         data['action'] = 'on'
-        data['item'] = 'home'
+        data['group'] = 'idle'
+        data['item'] = 'all'
         # house active
+
+
+def __keyword_check(keyword):
+    return keyword.lower() == KEYWORD
 
 
 def __parse_text_simple(text):
@@ -101,6 +106,8 @@ def pipeline(audio):
     if len(text) == 0:
         return None  # no actual text
     doc = __parse_text_simple(text)
-    if doc:
-        intent = __simple_intent(doc.sentences[0].words)
+    if len(doc.sentences >= 1):
+        words = doc.sentences[0].words
+        if __keyword_check(words[0]):
+            intent = __simple_intent(words[1:])
     return data

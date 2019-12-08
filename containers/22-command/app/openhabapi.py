@@ -10,12 +10,17 @@ ACTIONS = [
     'up',
     'down',
     'stop',
+    'play',
 ]
 
 def request(command):
     action = command['action'].lower()
     if action not in ACTIONS:
         return None
+    if command['action'] == 'play':
+        pass  # play
+    else:
+        pass
     if command['plural']:
         retval = __action_to_group(command['name'], action)
     else:
