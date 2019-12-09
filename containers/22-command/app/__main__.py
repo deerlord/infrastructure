@@ -5,6 +5,9 @@ import language
 
 KEYWORD = 'HAL'.lower()
 
+
+
+
 class SpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
@@ -13,15 +16,6 @@ class SpeechHandler(BaseHTTPRequestHandler):
         self.end_headers()
         retval = False
         result = language.pipeline(audio)
-        # convert into command
-        """
-        command = {
-            'action': 'on',
-            'group': None,
-            'item': 'all',
-
-        }
-        """
         if result['error']:
             print('result it')
             print(result)

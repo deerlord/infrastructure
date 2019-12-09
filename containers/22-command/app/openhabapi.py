@@ -30,7 +30,7 @@ def __handle_command(item, command):
 def request(data):
     if data['action'] in EXTERNAL_COMMANDS:
         cmd = getattr(ExternalCommands, data['action'])
-        result = cmd(data['item'])
+        result = cmd(data['item']))
     elif data['action'] in ITEM_ACTIONS:
         if data['group']:
             pass
@@ -41,13 +41,12 @@ def request(data):
             data['action'].has_key('command')
         ):
             action = 'command'
+            args = [data['item'],]
         else:
             action = data['action']
-        for item in items:
-            cmd = getattr(item, action)
-            result = all(
-                cmd(data['action']['command'])
-                if action == 'command'
-                else cmd()
-            )
+            args = []
+        result = all([
+            getattr(item, action)(*args)
+            for item in items
+        ])
     return result
