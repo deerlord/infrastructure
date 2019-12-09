@@ -4,6 +4,11 @@ import openhabapi
 import language
 
 
+STREAMABLE = [
+    'play',
+]
+
+
 def stream_chunk(client, chunk):
     return client.wfile.write('{}\r\n{}\r\n'.format(len(chunk), chunk))
 
@@ -21,18 +26,15 @@ class SpeechHandler(BaseHTTPRequestHandler):
             print(result)
         else:
             result = openhab.request(data)
-        if data['command'] == 'play':
-            for chunk in result:
-                client.wfile.write(
-                    '{}\r\n{}\r\n'.format(
-                        hex(len(chunk)),
-                        chunk
-                    )
-                )
-            client.wfile.write('0\r\n\r\n')
-        #self.send_response(200 if retval else 500)
-        #self.end_headers()
-        self.wfile.write(b'')
+        if data['command'] in STREAMABLE:
+            for chunk in result.stream():
+                size = hex(len(chunk))[2:]
+                packet = '{}\r\n{}\r\n'.format(size, chunk)
+                self.wfile.write(packet)
+            self.wfile.write('0\r\n\r\n')
+        else:
+            self.wfile.write(bytes(result, 'ascii')) # not sure if right
+        self.wfile.write(b'\n')
 
 
 httpd = HTTPServer(('', 8080), SpeechHandler)
