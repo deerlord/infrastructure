@@ -28,6 +28,15 @@ def __handle_command(item, command):
 
 
 def request(data):
+    if data['command'] in EXTERNAL_COMMANDS:
+        cmd = getattr(ExternalCommands, data['command'])
+        cmd(data['item'])
+    elif data['commmand'] in ITEM_ACTIONS:
+        # get item
+        cmd = getattr(item, data['command'])
+        cmd()
+
+def request(data):
     if data['action'] in EXTERNAL_COMMANDS:
         cmd = getattr(ExternalCommands, data['action'])
         result = cmd(data['item']))

@@ -1,6 +1,8 @@
 from io import BytesIO
 import speech_recognition as sr
 import stanfordnlp
+from openhabapi import EXTERNAL_COMMANDS
+
 
 NLP = stanfordnlp.Pipeline(lang='en')
 KEYWORD = 'Hal'
@@ -63,6 +65,24 @@ def __simple_intent(words):
     if remainder:
         pass  # handle rest of words, ie group
     return data
+
+
+def __simple_intent(words):
+    data = {'command': None}
+    if words[0].lower() == 'turn':
+        if words[1] == 'off':
+            data['command'] == 'off'
+        elif words[1].lower() == 'on':
+            data['command'] == 'on'
+    elif words[0] in EXTERNAL_COMMANDS:
+        data['command'] == words[0]
+    elif words[0] == 'raise':
+        data['command'] = 'up'
+    elif words[0] == 'lower':
+        data['command'] = 'down'
+    else:
+        return {}
+    data['item'] = ' '.join(words[1:])
 
 
 def __keyword_check(keyword):
