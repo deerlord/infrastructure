@@ -3,9 +3,9 @@ from io import BytesIO
 import openhabapi
 import language
 
-KEYWORD = 'HAL'.lower()
 
-
+def stream_chunk(client, chunk):
+    return client.wfile.write('{}\r\n{}\r\n'.format(len(chunk), chunk))
 
 
 class SpeechHandler(BaseHTTPRequestHandler):
@@ -15,13 +15,21 @@ class SpeechHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         retval = False
-        result = language.pipeline(audio)
-        if result['error']:
+        data = language.pipeline(audio)
+        if data['error']:
             print('result it')
             print(result)
         else:
-            openhab.request(result)
-            retval = True
+            result = openhab.request(data)
+        if data['command'] == 'play':
+            for chunk in result:
+                client.wfile.write(
+                    '{}\r\n{}\r\n'.format(
+                        hex(len(chunk)),
+                        chunk
+                    )
+                )
+            client.wfile.write('0\r\n\r\n')
         #self.send_response(200 if retval else 500)
         #self.end_headers()
         self.wfile.write(b'')

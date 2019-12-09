@@ -74,6 +74,9 @@ def __simple_intent(words):
             data['command'] == 'off'
         elif words[1].lower() == 'on':
             data['command'] == 'on'
+        else:
+            return data
+        words.pop()
     elif words[0] in EXTERNAL_COMMANDS:
         data['command'] == words[0]
     elif words[0] == 'raise':
@@ -81,8 +84,10 @@ def __simple_intent(words):
     elif words[0] == 'lower':
         data['command'] = 'down'
     else:
-        return {}
-    data['item'] = ' '.join(words[1:])
+        return data
+    words.pop()
+    data['item'] = ' '.join(words[])
+    return data
 
 
 def __keyword_check(keyword):
@@ -153,5 +158,4 @@ def pipeline(audio):
     if len(words) > 0:
         if __keyword_check(words[0]):
             data = __simple_intent(words[1:])
-            print('data is')
     return data

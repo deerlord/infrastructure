@@ -21,7 +21,8 @@ RUN pip3 install pocketsphinx \
   aiohttp \
   requests \
   stanfordnlp \
-  python-openhab
+  python-openhab \
+  flask
 RUN python3 -c 'import stanfordnlp; stanfordnlp.download("en",force=True)'
 RUN apt install -y wget screen
 RUN wget https://www.signalogic.com/melp/EngSamples/Orig/male.wav
