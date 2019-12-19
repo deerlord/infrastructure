@@ -7,3 +7,4 @@ if [[ $(container_running dnsmasq) -eq 1 ]]
 then
   docker restart dnsmasq 
 fi
+cd -
