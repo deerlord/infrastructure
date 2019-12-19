@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# This script has only been tested on
+# $ uname -v
+#     1 SMP Debian 4.19.67-2+deb10u2 (2019-11-11)
 
 set -euo pipefail
 
@@ -18,10 +22,9 @@ apt install -y docker.io
 systemctl start docker
 systemctl enable docker
 
-set_static_ip() {
-  interface="$1"
-  sed -e "/^iface ${interface}/ d" -i /etc/network/interfaces
-  cat >> /etc/network/interfaces <<EOF
+interface='enp0s25'
+sed -e "/^iface ${interface}/ d" -i /etc/network/interfaces
+cat >> /etc/network/interfaces <<EOF
 auto ${interface}
 iface ${interface} inet static
   address ${HOST_IP}
@@ -29,9 +32,6 @@ iface ${interface} inet static
   gateway ${HOST_GATEWAY}
   dns-nameservers localhost
 EOF
-}
-
-set_static_ip enp0s25
 
 # firewall rules
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
