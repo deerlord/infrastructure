@@ -26,7 +26,8 @@ class SpeechHandler(BaseHTTPRequestHandler):
             print(result)
         else:
             result = openhab.request(data)
-        if data['command'] in STREAMABLE:
+        # check result
+        if data['verb'] in STREAMABLE:
             for chunk in result.stream():
                 size = hex(len(chunk))[2:]
                 packet = '{}\r\n{}\r\n'.format(size, chunk)
@@ -34,7 +35,6 @@ class SpeechHandler(BaseHTTPRequestHandler):
             self.wfile.write('0\r\n\r\n')
         else:
             self.wfile.write(bytes(result, 'ascii')) # not sure if right
-        self.wfile.write(b'\n')
 
 
 httpd = HTTPServer(('', 8080), SpeechHandler)

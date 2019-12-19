@@ -68,25 +68,28 @@ def __simple_intent(words):
 
 
 def __simple_intent(words):
-    data = {'command': None}
+    data = {
+        'verb': None,
+        'subject': None,
+    }
     if words[0].lower() == 'turn':
         if words[1] == 'off':
-            data['command'] == 'off'
+            data['verb'] == 'off'
         elif words[1].lower() == 'on':
-            data['command'] == 'on'
+            data['verb'] == 'on'
         else:
             return data
         words.pop()
     elif words[0] in EXTERNAL_COMMANDS:
-        data['command'] == words[0]
+        data['verb'] == words[0]
     elif words[0] == 'raise':
-        data['command'] = 'up'
+        data['verb'] = 'up'
     elif words[0] == 'lower':
-        data['command'] = 'down'
+        data['verb'] = 'down'
     else:
         return data
     words.pop()
-    data['item'] = ' '.join(words[])
+    data['subject'] = ' '.join(words[])
     return data
 
 
