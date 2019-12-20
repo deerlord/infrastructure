@@ -2,6 +2,8 @@
 
 source ./conf.d/CONFIG
 
+VOLUMES=/var/lib/docker/volumes
+
 dev_remove_containers() {
   docker ps -a | awk '{print $1}' | grep -v 'CONTAINER' | while read id
   do
@@ -113,9 +115,11 @@ EOF
 remove_http_ingress() {
   container=$1
   network="${container}_http_ingress"
+  mv -v ${VOLUMES}/nginx/_data/conf.d/${container}.conf{,-disabled}
   docker network disconnect $network $container > /dev/null 2>&1
   docker network disconnect $network nginx > /dev/null 2>&1
   docker network remove $network > /dev/null 2>&1
+  mv -v ${VOLUMES}/nginx/_data/conf.d/${container}.conf{,-disabled}
 }
 
 remove_http_egress() {
