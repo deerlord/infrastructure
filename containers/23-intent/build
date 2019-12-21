@@ -4,8 +4,7 @@
 mkdir -p ./.build/intent/
 cd ./.build/intent/
 cat > Dockerfile <<EOF
-FROM debian
-${APT_UPDATE}
+${DOCKER_DEBIAN}
 RUN apt install -y git
 RUN apt install -y python3.7
 RUN apt install -y python3-pip
