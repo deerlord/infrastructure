@@ -4,10 +4,8 @@
 mkdir -p ./.build/voice/
 cd ./.build/voice/
 cp -r ../../containers/22-voice/app ./
-cat > Dockerfile <<'EOF'
-FROM debian
-RUN apt update -y
-RUN apt upgrade -y
+cat > Dockerfile <<EOF
+${DOCKER_DEBIAN}
 RUN apt install -y python3.7
 RUN apt install -y python3-pip
 RUN apt install -y curl
