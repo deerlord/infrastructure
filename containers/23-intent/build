@@ -3,7 +3,6 @@
 /usr/sbin/useradd -r -s /sbin/nologin intent
 mkdir -p ./.build/intent/
 cd ./.build/intent/
-cp -r ../../containers/23-intent/app ./
 cat > Dockerfile <<EOF
 FROM debian
 ${APT_UPDATE}
@@ -11,7 +10,6 @@ RUN apt install -y git
 RUN apt install -y python3.7
 RUN apt install -y python3-pip
 RUN git clone https://github.com/MycroftAI/mycroft-core.git 
-COPY ./app /opt/app
 EOF
 docker build -t intent .
 cd ../../
