@@ -4,10 +4,9 @@
 docker volume create dnsmasq
 mkdir ./dnsmasq/
 cd ./dnsmasq/
-cat > Dockerfile <<'EOF'
+cat > Dockerfile <<EOF
 FROM debian
-RUN apt update -y
-RUN apt upgrade -y
+${APT_UPDATE}
 RUN apt install -y wget
 RUN apt install -y dnsmasq dnsmasq-utils
 RUN mkdir -p /etc/dnsmasq/
@@ -17,14 +16,14 @@ EXPOSE 53/tcp
 EXPOSE 67/udp
 CMD ["/usr/sbin/dnsmasq", "-k", "--log-facility=/var/log/dnsmasq"]
 EOF
-cat > /var/lib/docker/volumes/dnsmasq/_data/local_hosts <<EOF
+cat > ${VOLUMES}/dnsmasq/_data/local_hosts <<EOF
 ${HOST_IP} ${HOST_NAME} ${HOST_NAME}.${HOST_DOMAIN}
 ${HOST_GATEWAY} router router.${HOST_DOMAIN}
 EOF
-touch /var/lib/docker/volumes/dnsmasq/_data/static
+touch ${VOLUMES}/dnsmasq/_data/static
 add_static_lease ${HOST_MAC} ${HOST_IP}
 add_static_lease ${GATEWAY_MAC} ${HOST_GATEWAY}
-cat > /var/lib/docker/volumes/dnsmasq/_data/conf <<EOF
+cat > ${VOLUMES}/dnsmasq/_data/conf <<EOF
 user=root
 domain-needed
 bogus-priv
@@ -54,5 +53,6 @@ EOF
 docker build -t dnsmasq .
 cd ..
 rm -rf ./dnsmasq/
+cp -v ../containers/00-dnsmasq/cron /etc/cron.d/dnsmasq 
 update_ad_domains
-chown -R dnsmasq /var/lib/docker/volumes/dnsmasq/_data/
+chown -R dnsmasq ${VOLUMES}/dnsmasq/_data/

@@ -7,10 +7,11 @@
 # error codes
 # 1: config file not specified
 # 2: config file not found
-# 3: install directory not passed
-# 4: install directory already exists
+# 3: install directory already exists
 
 set -euo pipefail
+
+INSTALL_DIR=/opt/infra
 
 if [[ ${1} == -c ]]
 then
@@ -29,29 +30,16 @@ else
   exit 1
 fi
 
-if [[ ${3} == -d ]]
+if [[ -e ${INSTALL_DIR} ]]
 then
-  if [[ -z ${4} ]]
-  then
-    echo "No install directory passed to -d option, aborting" >2
-    exit 3
-  else
-    install_dir="${4}"
-  fi
-else
-  install_dir='/opt/infra/'
+  echo "Install directory ${INSTALL_DIR} already exists, aborting."
+  exit 3
 fi
 
-if [[ -e ${install_dir} ]]
-then
-  echo "Install directory ${install_dir} already exists, aborting."
-  exit 4
-fi
-
-mkdir ${install_dir}
-cp -r ./ ${install_dir}
-cp ${config} ${install_dir}/conf.d/CONFIG
-cd ${install_dir}
+mkdir ${INSTALL_DIR}
+cp -r ./ ${INSTALL_DIR}
+cp ${config} ${INSTALL_DIR}/conf.d/CONFIG
+cd ${INSTALL_DIR}
 
 source ./bin/activate
 
@@ -74,16 +62,6 @@ EOF
 
 # firewall rules
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
-
-if [[ -e /opt/infra ]]
-then
-  echo 'Install directory /opt/infra/ already exists, aborting.'
-  exit 1
-fi
-
-mkdir /opt/infra/
-cp -r ./ /opt/infra/
-
 
 all() {
   for image in $(ls ./containers/ | grep -v command)

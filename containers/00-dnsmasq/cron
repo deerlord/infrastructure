@@ -1,0 +1,1 @@
+0 0 * * * /opt/infra/bin/update_ad_domains

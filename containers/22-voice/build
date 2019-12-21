@@ -6,16 +6,19 @@ cd ./.build/voice/
 cp -r ../../containers/22-voice/app ./
 cat > Dockerfile <<'EOF'
 FROM debian
-RUN apt update -y && apt upgrade -y && \
-    apt install -y python3.7 \
-    python3-pip \
-    curl
-RUN pip3 install pocketsphinx \
-  SpeechRecognition \
-  stanfordnlp \
+RUN apt update -y
+RUN apt upgrade -y
+RUN apt install -y python3.7
+RUN apt install -y python3-pip
+RUN apt install -y curl
+RUN apt install -y swig
+RUN apt install -y libpulse-dev
+RUN apt install -y libasound2-dev
+RUN apt install -y wget
+RUN pip3 install pocketsphinx
+RUN pip3 install SpeechRecognition
+RUN pip3 install stanfordnlp
 RUN python3 -c 'import stanfordnlp; stanfordnlp.download("en",force=True)'
-RUN apt install -y wget screen
-RUN wget https://www.signalogic.com/melp/EngSamples/Orig/male.wav
 COPY ./app /opt/app
 EOF
 docker build -t voice .

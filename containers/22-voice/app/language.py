@@ -2,14 +2,15 @@ from io import BytesIO
 import speech_recognition as sr
 import stanfordnlp
 
-
 NLP = stanfordnlp.Pipeline(lang='en')
 KEYWORD = 'Hal'
 R = sr.Recognizer()
 R.dynamic_energy_threshold = True
 
-
 def __keyword_check(k):
+    """
+    Check if the keyword we found is the right one. 
+    """
     return True if k == KEYWORD else False
 
 
@@ -38,7 +39,7 @@ def __parse_audio(audio):
 
 
 def __parse_text(text):
-    words = NLP.pipeline(text)
+    words = NLP(text)
     # probably need some processing/handling here
     return words
 
