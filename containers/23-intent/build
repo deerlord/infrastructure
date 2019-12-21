@@ -4,7 +4,7 @@
 mkdir -p ./.build/intent/
 cd ./.build/intent/
 cp -r ../../containers/23-intent/app ./
-cat > Dockerfile <<'EOF'
+cat > Dockerfile <<EOF
 FROM debian
 ${APT_UPDATE}
 RUN apt install -y git
