@@ -2,8 +2,8 @@
 
 source ./conf.d/CONFIG
 
-VOLUMES=/var/lib/docker/volumes
-APT_UPDATE='RUN apt update -y; apt upgrade -y'
+export VOLUMES=/var/lib/docker/volumes
+export APT_UPDATE='RUN apt update -y; apt upgrade -y'
 
 dev_remove_containers() {
   docker ps -a | awk '{print $1}' | grep -v 'CONTAINER' | while read id
