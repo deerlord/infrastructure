@@ -6,18 +6,15 @@ KEYWORD = 'hal'
 k_len = len(KEYWORD.split(' ')
 
 
-def __keyword_check(sentence):
-    return (
-        True
-        if ' '.join(sentence[k_len]).lower() == KEYWORD
-        else False
-    )
-
-
 def process(audio_data):
-    nlp_result = language.pipeline(audio_data)
-    request = intent.pipeline(nlp_request)
-    return True
+    result = language.pipeline(audio_data)
+    # need to do some checking here
+    sentence = result.sentence[0]
+    return (
+        intent.pipeline(sentence)
+        if ' '.join(sentence[k_len]).lower() == KEYWORD
+        else ''
+    )
 
 
 class SpeechHandler(BaseHTTPRequestHandler):
@@ -27,7 +24,8 @@ class SpeechHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         result = process(audio)
-        self.wfile.write(bytes(result, 'ascii')) # not sure if right
+        if result:
+            pass  # handle, maybe command to openhab?
 
 
 httpd = HTTPServer(('', 8080), SpeechHandler)
