@@ -63,7 +63,7 @@ EOF
 # firewall rules
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
 
-all() {
+all_containers() {
   for image in $(ls ./containers/ | grep -v command)
   do
     containers/$image/build
@@ -78,4 +78,3 @@ debug() {
   bash -x ./containers/01-ntpd/create
 }
 
-all
