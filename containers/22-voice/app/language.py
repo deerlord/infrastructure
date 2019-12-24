@@ -3,16 +3,8 @@ import speech_recognition as sr
 import stanfordnlp
 
 NLP = stanfordnlp.Pipeline(lang='en')
-KEYWORD = 'Hal'
 R = sr.Recognizer()
 R.dynamic_energy_threshold = True
-
-def __keyword_check(k):
-    """
-    Check if the keyword we found is the right one. 
-    """
-    return True if k == KEYWORD else False
-
 
 def __parse_audio(audio):
     result = None
@@ -60,8 +52,7 @@ def pipeline(audio):
     # test text for now
     text = 'Hal turn off kitchen lights'
     words = __parse_text(text)
-    if len(words) > 0:
-        if __keyword_check(words[0].text):
-            data = __parse_intent(words[1:])
+    if len(words) == 0:
+        data = []
     return data
 
