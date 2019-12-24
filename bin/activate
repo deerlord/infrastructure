@@ -154,7 +154,7 @@ add_openhab_http_item() {
 update_ad_domains() {
   list='https://raw.githubusercontent.com/hectorm/hmirror/master/data/adaway.org/list.txt'
   echo "${HOST_IP} $(curl ${list} 2>/dev/null | tr '\n' ' ')" \
-    > /var/lib/docker/volumes/dnsmasq/_data/ad_domains
+    > ${VOLUMES}/dnsmasq/_data/ad_domains
 }
 
 add_static_lease() {
