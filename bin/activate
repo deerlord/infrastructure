@@ -171,6 +171,18 @@ add_static_lease() {
   fi
 }
 
+set_volume_ownership() {
+  user="$1"
+  if [[ -z $2 ]]
+  then
+    vol=$user
+  else
+    vol=$2
+  fi
+  chown -R ${user} ${VOLUMES}/${vol}/_data/
+  chmod -R o-rwx ${VOLUMES}/${vol}/_data/
+}
+
 export -f basic_container
 export -f container_exists
 export -f container_running
@@ -182,3 +194,4 @@ export -f remove_http_egress
 export -f run_as
 export -f update_ad_domains
 export -f add_static_lease
+export -f set_volume_ownership

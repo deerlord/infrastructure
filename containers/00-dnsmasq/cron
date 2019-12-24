@@ -1,1 +1,1 @@
-0 0 * * * /opt/infra/bin/update_ad_domains
+0 0 * * * dnsmasq /opt/infra/bin/update_ad_domains

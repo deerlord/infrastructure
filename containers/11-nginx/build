@@ -16,12 +16,12 @@ docker run -d \
 sleep 10
 docker stop nginx
 docker rm nginx
-rm /var/lib/docker/volumes/nginx/_data/conf.d/default.conf
-mkdir -p /var/lib/docker/volumes/ssl/_data/clients/
-mkdir -p /var/lib/docker/volumes/ssl/_data/revoked/
-touch /var/lib/docker/volumes/ssl/_data/clients.crt
-touch /var/lib/docker/volumes/ssl/_data/revoked.crt
-cat > /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf <<'EOF'
+rm ${VOLUMES}/nginx/_data/conf.d/default.conf
+mkdir -p ${VOLUMES}/ssl/_data/clients/
+mkdir -p ${VOLUMES}/ssl/_data/revoked/
+touch ${VOLUMES}/ssl/_data/clients.crt
+touch ${VOLUMES}/ssl/_data/revoked.crt
+cat > ${VOLUMES}/nginx/_data/conf.d/force_https.conf <<'EOF'
 server {
   listen 80 default_server;
   server_name _;
@@ -35,7 +35,7 @@ server {
   ssl_protocols TLSv1.3;
 }
 EOF
-cat > /var/lib/docker/volumes/nginx/_data/conf.d/items.conf <<'EOF'
+cat > ${VOLUMES}/nginx/_data/conf.d/items.conf <<'EOF'
 server {
   listen 443 ssl;
   server_name control.deerlord.lan;
@@ -47,8 +47,8 @@ server {
   ssl_verify_client on;
 }
 EOF
-> /var/lib/docker/volumes/nginx/_data/conf.d/items.conf
-cat > /var/lib/docker/volumes/nginx/_data/conf.d/blackhole.conf <<'EOF'
+> ${VOLUMES}/nginx/_data/conf.d/items.conf
+cat > ${VOLUMES}/nginx/_data/conf.d/blackhole.conf <<'EOF'
 server {
   listen 443 ssl default_server;
   ssl_certificate /etc/ssl/nginx.crt;
@@ -59,10 +59,11 @@ server {
 EOF
 sed -i \
   -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
-  /var/lib/docker/volumes/nginx/_data/conf.d/force_https.conf
+  ${VOLUMES}/nginx/_data/conf.d/force_https.conf
 openssl req -newkey rsa:8192 -nodes \
-  -keyout /var/lib/docker/volumes/ssl/_data/nginx.key \
+  -keyout ${VOLUMES}/ssl/_data/nginx.key \
   -x509 -days 3650 \
-  -out /var/lib/docker/volumes/ssl/_data/nginx.crt \
+  -out ${VOLUMES}/ssl/_data/nginx.crt \
   -subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${ORGANIZATIONALUNIT}/CN=${COMMONNAME}/emailAddress=${EMAIL}"
-chown -R nginx /var/lib/docker/volumes/nginx/_data/
+set_volume_ownership nginx ssl
+set_volume_ownership nginx

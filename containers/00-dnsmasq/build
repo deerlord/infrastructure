@@ -55,4 +55,4 @@ cd ..
 rm -rf ./dnsmasq/
 cp ../../containers/00-dnsmasq/cron /etc/cron.d/dnsmasq 
 update_ad_domains
-chown -R dnsmasq ${VOLUMES}/dnsmasq/_data/
+set_volume_ownership dnsmasq

@@ -15,11 +15,11 @@ rm -rf ./squid/
 docker volume create squid_spool
 docker volume create squid_conf
 docker network create egress
-cat > /var/lib/docker/volumes/squid_conf/_data/squid.conf <<'EOF'
+cat > ${VOLUMES}/squid_conf/_data/squid.conf <<'EOF'
 include /etc/squid/conf.d/*.conf
 EOF
-mkdir /var/lib/docker/volumes/squid_conf/_data/conf.d/
-cat > /var/lib/docker/volumes/squid_conf/_data/conf.d/proxy.conf <<'EOF'
+mkdir ${VOLUMES}/squid_conf/_data/conf.d/
+cat > ${VOLUMES}/squid_conf/_data/conf.d/proxy.conf <<'EOF'
 acl localnet src 0.0.0.1-0.255.255.255  # RFC 1122 "this" network (LAN)
 acl localnet src 10.0.0.0/8             # RFC 1918 local private network (LAN)
 acl localnet src 100.64.0.0/10          # RFC 6598 shared address space (CGN)
@@ -46,4 +46,5 @@ refresh_pattern ^gopher:        1440    0%      1440
 refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
 refresh_pattern .               0       20%     4320
 EOF
-chown -R squid /var/lib/docker/volumes/squid_conf/_data/
+set_volume_ownership squid squid_conf
+set_volume_ownership squid squid_spool

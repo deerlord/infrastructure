@@ -22,11 +22,13 @@ docker run -d \
 sleep 15
 docker stop openhab
 docker rm openhab
-cat >> /var/lib/docker/volumes/openhab_conf/_data/services/addons.cfg <<'EOF'
+cat >> ${VOLUMES}/openhab_conf/_data/services/addons.cfg <<'EOF'
 persistence = 'jdbc'
 EOF
-touch /var/lib/docker/volumes/openhab_userdata/_data/sqlite.db
-cat > /var/lib/docker/volumes/openhab_conf/_data/services/jdbc.cfg <<'EOF'
+touch ${VOLUMES}/openhab_userdata/_data/sqlite.db
+cat > ${VOLUMES}/openhab_conf/_data/services/jdbc.cfg <<'EOF'
 url=jdbc:sqlite:/openhab/userdata/sqlite.db
 EOF
-chown -R openhab /var/lib/docker/volumes/openhab_*/_data/
+set_volume_ownership openhab openhab_conf
+set_volume_ownership openhab openhab_userdata
+set_volume_ownership openhab openhab_addons
