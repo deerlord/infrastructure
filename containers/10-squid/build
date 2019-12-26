@@ -1,17 +1,14 @@
 #!/bin/bash
 
+mkdir -p ./.build/squid/
+cd ./.build/squid/
+
 /usr/sbin/useradd -r -s /sbin/nologin squid
-mkdir ./squid/
-cd ./squid/
 cat > Dockerfile <<EOF
 FROM sameersbn/squid
 RUN ln -sf /dev/stdout /var/log/access.log
 RUN chown $(id -u squid) /var/log/access.log
 EOF
-docker build -t squid .
-cd ../
-rm -rf ./squid/
-
 docker volume create squid_spool
 docker volume create squid_conf
 docker network create egress
@@ -48,3 +45,7 @@ refresh_pattern .               0       20%     4320
 EOF
 set_volume_ownership squid squid_conf
 set_volume_ownership squid squid_spool
+
+docker build -t squid .
+cd ../../
+rm -rf ./build/squid/

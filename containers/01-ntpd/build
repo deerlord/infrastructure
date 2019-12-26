@@ -1,8 +1,9 @@
 #!/bin/bash
 
+mkdir -p ./.build/ntpd/
+cd ./.build/ntpd/
+
 /usr/sbin/useradd -r -s /sbin/nologin ntpd
-mkdir ./ntpd/
-cd ./ntpd/
 cat > Dockerfile <<'EOF'
 FROM debian
 RUN apt update -y
@@ -12,22 +13,19 @@ COPY ntp.conf /etc/ntp.conf
 EXPOSE 123/udp
 CMD ["/usr/sbin/ntpd", "-n"]
 EOF
-cat > ntp.conf <<'EOF'
+cat > ntp.conf <<EOF
 listen on *
 server time1.google.com
 server time2.google.com
 server time3.google.com
 server time4.google.com
 restrict default kod nomodify notrap nopeer noquery
-restrict HOST_GATEWAY mask HOST_SUBNET modify notrap
+restrict ${HOST_GATEWAY} mask ${HOST_SUBNET} modify notrap
 server 127.127.1.0
 fudge 127.127.1.0 stratum 10
 driftfile /dev/shm/ntp.drift
 EOF
-sed -i \
-  -e "s HOST_GATEWAY ${HOST_GATEWAY} g" \
-  -e "s HOST_SUBNET ${HOST_SUBNET} g" \
-  ./ntp.conf
+
 docker build -t ntpd .
-cd ..
-rm -rf ./ntpd/
+cd ../../
+rm -rf ./.build/ntpd/
