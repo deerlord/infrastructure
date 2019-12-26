@@ -2,7 +2,7 @@
 
 source ./conf.d/CONFIG
 
-export VOLUMES=/var/lib/docker/volumes
+export VOLUMES=${VOLUMES}
 export APT_UPDATE='RUN apt update -y; apt upgrade -y'
 export DOCKER_DEBIAN='FROM debian$(echo -e \n)RUN apt update -y; apt upgrade -y'
 
@@ -61,7 +61,7 @@ container_running() {
 
 public_service() {
   NAME=$1
-  echo "${HOST_IP} ${NAME}.${HOST_DOMAIN}" >> /var/lib/docker/volumes/dnsmasq/_data/local_hosts
+  echo "${HOST_IP} ${NAME}.${HOST_DOMAIN}" >> ${VOLUMES}/dnsmasq/_data/local_hosts
   docker restart dnsmasq
 }
 
@@ -88,7 +88,7 @@ http_ingress() {
   fi
   if [[ $(container_exists nginx) -eq 1 && $(container_exists $container) -eq 1 ]]
   then
-    conf="/var/lib/docker/volumes/nginx/_data/conf.d/${container}.conf"
+    conf="${VOLUMES}/nginx/_data/conf.d/${container}.conf"
 cat > $conf <<'EOF'
 server {
   listen 443 ssl;
@@ -140,13 +140,13 @@ add_openhab_http_item() {
   name="$1"
   cert="$2"
   # verify and possibly convert cert
-  existing_cert=$(grep -l "${2}" /var/lib/docker/volumes/ss/_data/clients/* | grep -c "${name}")
+  existing_cert=$(grep -l "${2}" ${VOLUMES}/ss/_data/clients/* | grep -c "${name}")
   if [[ ${existing_cert} -eq 0 ]]
   then
-    echo "${cert}" > /var/lib/docker/volumes/ssl/_data/clients/${name}.crt
-    chown nginx. /var/lib/docker/volumes/ssl/_data/clients/${name}.crt
-    cat /var/lib/docker/volumes/ssl/_data/clients/${name}.crt >> \
-      /var/lib/docker/volumes/ssl/_data/clients.crt
+    echo "${cert}" > ${VOLUMES}/ssl/_data/clients/${name}.crt
+    chown nginx. ${VOLUMES}/ssl/_data/clients/${name}.crt
+    cat ${VOLUMES}/ssl/_data/clients/${name}.crt >> \
+      ${VOLUMES}/ssl/_data/clients.crt
   fi
 
 }
@@ -160,10 +160,10 @@ update_ad_domains() {
 add_static_lease() {
   mac_address="$1"
   ip="$2"
-  has_lease=$(grep -c ${ip} /var/lib/docker/volumes/dnsmasq/_data/static) 
+  has_lease=$(grep -c ${ip} ${VOLUMES}/dnsmasq/_data/static) 
   if [[ $has_lease -eq 0 ]]
   then
-    echo "dhcp-host=${mac_address},${ip}" >> /var/lib/docker/volumes/dnsmasq/_data/static
+    echo "dhcp-host=${mac_address},${ip}" >> ${VOLUMES}/dnsmasq/_data/static
     if [[ $(container_running dnsmasq) -eq 1 ]]
     then
       docker restart dnsmasq

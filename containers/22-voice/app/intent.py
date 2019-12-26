@@ -1,4 +1,4 @@
 
 
-def pipeline(words):
-    pass
+def process(words):
+    return words
