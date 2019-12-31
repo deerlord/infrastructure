@@ -1,9 +1,9 @@
 #!/bin/bash
 
-mkdir -p ./.build/dnsmasq/
-cd ./.build/dnsmasq/
 
-/usr/sbin/useradd -r -s /sbin/nologin dnsmasq
+
+container_prep dnsmasq
+
 docker volume create dnsmasq
 cat > Dockerfile <<EOF
 FROM debian
@@ -55,6 +55,4 @@ ln -s /opt/infra/containers/00-dnsmasq/cron /etc/cron.d/dnsmasq
 update_ad_domains
 set_volume_ownership dnsmasq
 
-docker build -t dnsmasq .
-cd ../../
-rm -rf ./.build/dnsmasq/
+container_build dnsmasq

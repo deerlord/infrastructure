@@ -1,9 +1,7 @@
 #!/bin/bash
 
-mkdir -p ./.build/ntpd/
-cd ./.build/ntpd/
+container_prep ntpd
 
-/usr/sbin/useradd -r -s /sbin/nologin ntpd
 cat > Dockerfile <<'EOF'
 FROM debian
 RUN apt update -y
@@ -26,6 +24,4 @@ fudge 127.127.1.0 stratum 10
 driftfile /dev/shm/ntp.drift
 EOF
 
-docker build -t ntpd .
-cd ../../
-rm -rf ./.build/ntpd/
+container_build ntpd

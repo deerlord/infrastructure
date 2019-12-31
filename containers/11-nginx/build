@@ -1,7 +1,8 @@
 #!/bin/bash
 
+container_prep nginx
+
 docker pull nginx
-/usr/sbin/useradd -r -s /sbin/nologin nginx
 docker volume create nginx
 docker volume create ssl
 docker run -d \
@@ -67,3 +68,5 @@ openssl req -newkey rsa:8192 -nodes \
   -subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${ORGANIZATIONALUNIT}/CN=${COMMONNAME}/emailAddress=${EMAIL}"
 set_volume_ownership nginx ssl
 set_volume_ownership nginx
+
+container_build nginx

@@ -38,7 +38,6 @@ class SpeechHandler(BaseHTTPRequestHandler):
         process(audio)
 
 
-
 httpd = HTTPServer(('', 8080), SpeechHandler)
 httpd.serve_forever()
 

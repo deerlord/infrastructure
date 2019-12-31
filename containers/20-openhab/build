@@ -1,7 +1,8 @@
 #!/bin/bash
 
+container_prep openhab
+
 docker pull openhab/openhab
-/usr/sbin/useradd -r -s /sbin/nologin openhab
 docker volume create openhab_conf
 docker volume create openhab_userdata
 docker volume create openhab_addons
@@ -32,3 +33,5 @@ EOF
 set_volume_ownership openhab openhab_conf
 set_volume_ownership openhab openhab_userdata
 set_volume_ownership openhab openhab_addons
+
+container_build openhab

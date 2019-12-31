@@ -6,6 +6,21 @@ export VOLUMES=${VOLUMES}
 export APT_UPDATE='RUN apt update -y; apt upgrade -y'
 export DOCKER_DEBIAN='FROM debian$(echo -e \n)RUN apt update -y; apt upgrade -y'
 
+container_prep() {
+  container="$1"
+  mkdir -p ./.build/$container
+  cd ./.build/$container
+  /usr/sbin/useradd -r -s /sbin/nologin $container
+}
+
+container_build() {
+  container="$1"
+  docker build -t $container .
+  cd ../../
+  rm -rf ./.build/$container
+}
+
+
 dev_remove_containers() {
   docker ps -a | awk '{print $1}' | grep -v 'CONTAINER' | while read id
   do

@@ -1,9 +1,7 @@
 #!/bin/bash
 
-mkdir -p ./.build/squid/
-cd ./.build/squid/
+container_prep squid
 
-/usr/sbin/useradd -r -s /sbin/nologin squid
 cat > Dockerfile <<EOF
 FROM sameersbn/squid
 RUN ln -sf /dev/stdout /var/log/access.log
@@ -46,6 +44,4 @@ EOF
 set_volume_ownership squid squid_conf
 set_volume_ownership squid squid_spool
 
-docker build -t squid .
-cd ../../
-rm -rf ./build/squid/
+container_build squid
