@@ -36,7 +36,7 @@ then
   exit 3
 fi
 
-mkdir ${INSTALL_DIR}
+mkdir -p ${INSTALL_DIR}
 cp -r ./ ${INSTALL_DIR}
 cp ${config} ${INSTALL_DIR}/conf.d/CONFIG
 cd ${INSTALL_DIR}
@@ -68,6 +68,11 @@ all_containers() {
   do
     containers/$image/build
     containers/$image/create
+    if [[ -f containers/$image/cron ]]
+    then
+      container=$(echo $container | cut -d'-' -f2)
+      cp -v containers/$image/cron /etc/cron.d/$container
+    fi
   done
 }
 

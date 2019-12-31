@@ -198,6 +198,8 @@ set_volume_ownership() {
   chmod -R o-rwx ${VOLUMES}/${vol}/_data/
 }
 
+export -f container_prep
+export -f container_build
 export -f basic_container
 export -f container_exists
 export -f container_running
