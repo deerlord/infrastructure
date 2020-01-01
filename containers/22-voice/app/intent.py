@@ -1,4 +1,4 @@
 
 
-def process(words):
-    return words
+def process(text):
+    return text

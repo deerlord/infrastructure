@@ -1,6 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import audio
-import language
 import intent
 
 KEYWORD = 'hal'
@@ -19,14 +18,14 @@ def process(data):
     Returns:
     list: list of processed word objects.
     """
-    text = audio.process(audio_data)
-    words = language.process(text)
-    sentence = result.sentence[0]
-    return (
-        intent.process(sentence)
-        if ' '.join(sentence[k_len]).lower() == KEYWORD
-        else ''
-    )
+    text = audio.process(data)
+    try:
+        keywords = ' '.join(text.split(' ')[k_len]])
+    except:
+        pass  # k_len not a valid length
+    if keywords != KEYWORD:
+        return
+    return intent.process(text)
 
 
 class SpeechHandler(BaseHTTPRequestHandler):
@@ -35,7 +34,7 @@ class SpeechHandler(BaseHTTPRequestHandler):
         audio = self.rfile.read(content_length)
         self.send_response(200)
         self.end_headers()
-        process(audio)
+        action = process(audio)
 
 
 httpd = HTTPServer(('', 8080), SpeechHandler)
