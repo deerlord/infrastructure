@@ -16,9 +16,7 @@ RUN apt install -y libasound2-dev
 RUN apt install -y wget
 RUN pip3 install pocketsphinx
 RUN pip3 install SpeechRecognition
-RUN mkdir -p /root/build/
-WORKDIR /root/build
-RUN git clone https://github.com/mycroftai/adapt.git 
+RUN pip3 install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
 COPY ./app /opt/app
 EOF
 
