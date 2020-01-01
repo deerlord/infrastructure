@@ -1,8 +1,6 @@
 #!/bin/bash
 
-/usr/sbin/useradd -r -s /sbin/nologin voice
-mkdir -p ./.build/voice/
-cd ./.build/voice/
+container_prep voice
 
 cp -r ../../containers/22-voice/app ./
 cat > Dockerfile <<EOF
@@ -10,6 +8,7 @@ FROM debian
 RUN apt update -y && apt upgrade -y
 RUN apt install -y python3.7
 RUN apt install -y python3-pip
+RUN apt install -y git
 RUN apt install -y curl
 RUN apt install -y swig
 RUN apt install -y libpulse-dev
@@ -17,11 +16,10 @@ RUN apt install -y libasound2-dev
 RUN apt install -y wget
 RUN pip3 install pocketsphinx
 RUN pip3 install SpeechRecognition
-RUN pip3 install stanfordnlp
-RUN python3 -c 'import stanfordnlp; stanfordnlp.download("en",force=True)'
+RUN mkdir -p /root/build/
+WORKDIR /root/build
+RUN git clone https://github.com/mycroftai/adapt.git 
 COPY ./app /opt/app
 EOF
 
-docker build -t voice .
-cd ../../
-rm -rf ./.build/voice/
+container_build voice
