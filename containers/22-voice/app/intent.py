@@ -1,5 +1,4 @@
 import json
-#import sys
 from adapt.entity_tagger import EntityTagger
 from adapt.tools.text.tokenizer import EnglishTokenizer
 from adapt.tools.text.trie import Trie
@@ -62,9 +61,12 @@ def setup():
 
 
 def process(text):
+    print("using text: ", text)
     for intent in engine.determine_intent(text):
+        print("intent is: ", intent)
         if intent and intent.get('confidence') > 0:
             print(json.dumps(intent, indent=4))
 
-
+print("attempting to setup()")
 setup()
+print("ran setup")

@@ -22,12 +22,6 @@ def process(data):
     list: list of processed word objects.
     """
     text = audio.process(data)
-    try:
-        keywords = ' '.join(text.split(' ')[k_len])
-    except:
-        pass  # k_len not a valid length
-    if keywords != KEYWORD:
-        return
     return intent.process(text)
 
 
@@ -43,6 +37,7 @@ class SpeechHandler(BaseHTTPRequestHandler):
         self.end_headers()
         print("ended headers, processing audio")
         action = process(audio)
+        print("action is", action)
 
 print("creating http server")
 httpd = HTTPServer(('', 8080), SpeechHandler)
