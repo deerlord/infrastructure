@@ -15,7 +15,10 @@ container_prep() {
 
 container_build() {
   container="$1"
-  docker build -t $container .
+  if [[ -e Dockerfile ]]
+  then
+    docker build -t $container .
+  fi
   cd ../../
   rm -rf ./.build/$container
 }

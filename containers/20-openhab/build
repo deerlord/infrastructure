@@ -34,7 +34,4 @@ set_volume_ownership openhab openhab_conf
 set_volume_ownership openhab openhab_userdata
 set_volume_ownership openhab openhab_addons
 
-docker build -t openhab .
-
-
-#container_build openhab
+conttainer_build openhab
