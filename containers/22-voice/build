@@ -18,7 +18,6 @@ RUN pip3 install pocketsphinx
 RUN pip3 install SpeechRecognition
 RUN pip3 install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
 COPY ./app /opt/app
-CMD ["python3", "/opt/app"]
 EOF
 
 container_build voice
