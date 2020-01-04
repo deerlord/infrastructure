@@ -30,10 +30,15 @@ def process(data):
 
 class SpeechHandler(BaseHTTPRequestHandler):
     def do_POST(self):
+        print("entering POST handler")
         content_length = int(self.headers['Content-Length'])
+        pritn("content length is: ", content_length)
         audio = self.rfile.read(content_length)
+        print("read audio file, sending 200")
         self.send_response(200)
+        print("sent response")
         self.end_headers()
+        print("ended headers, processing audio")
         action = process(audio)
 
 
