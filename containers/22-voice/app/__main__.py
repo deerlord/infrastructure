@@ -20,7 +20,7 @@ def process(data):
     """
     text = audio.process(data)
     try:
-        keywords = ' '.join(text.split(' ')[k_len]])
+        keywords = ' '.join(text.split(' ')[k_len])
     except:
         pass  # k_len not a valid length
     if keywords != KEYWORD:
