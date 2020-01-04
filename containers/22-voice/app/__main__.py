@@ -3,7 +3,7 @@ import audio
 import intent
 
 KEYWORD = 'hal'
-k_len = len(KEYWORD.split(' ')
+k_len = len(KEYWORD.split(' '))
 
 def process(data):
     """
