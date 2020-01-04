@@ -41,7 +41,8 @@ class SpeechHandler(BaseHTTPRequestHandler):
         print("ended headers, processing audio")
         action = process(audio)
 
-
+print("creating http server")
 httpd = HTTPServer(('', 8080), SpeechHandler)
+print("starting server")
 httpd.serve_forever()
 
