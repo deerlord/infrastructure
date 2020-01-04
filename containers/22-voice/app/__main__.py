@@ -2,6 +2,9 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import audio
 import intent
 
+print("begin http server prep")
+
+
 KEYWORD = 'hal'
 k_len = len(KEYWORD.split(' '))
 
