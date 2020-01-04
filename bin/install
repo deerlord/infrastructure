@@ -64,22 +64,14 @@ EOF
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
 
 all_containers() {
-  for image in $(ls ./containers/ | grep -v command)
+	for image in $(ls ./containers/)
   do
     containers/$image/build
     containers/$image/create
     if [[ -f containers/$image/cron ]]
     then
-      container=$(echo $container | cut -d'-' -f2)
-      cp -v containers/$image/cron /etc/cron.d/$container
+      container=$(echo $image | cut -d'-' -f2)
+      cp containers/$image/cron /etc/cron.d/$container
     fi
   done
 }
-
-debug() {
-  bash -x ./containers/00-dnsmasq/build
-  bash -x ./containers/00-dnsmasq/create
-  bash -x ./containers/01-ntpd/build
-  bash -x ./containers/01-ntpd/create
-}
-
