@@ -64,7 +64,7 @@ EOF
 #/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
 
 all_containers() {
-	for image in $(ls ./containers/)
+  for image in $(ls ./containers/)
   do
     containers/$image/build
     containers/$image/create
