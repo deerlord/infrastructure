@@ -23,6 +23,10 @@ then
    echo "Cannot find specified config file (${config}), aborting." >2
    exit 2
   fi
+elif [[ -f conf.d/CONFIG ]]
+then
+  mv -v ./conf.d/CONFIG ./conf.d/CONFIG.tmp    
+  config='./conf.d/CONFIG.tmp'
 else
   echo "No config file specified, aborting." >2
   echo "ex:" >2
@@ -30,16 +34,7 @@ else
   exit 1
 fi
 
-if [[ -e ${INSTALL_DIR} ]]
-then
-  echo "Install directory ${INSTALL_DIR} already exists, aborting."
-  exit 3
-fi
-
-mkdir -p ${INSTALL_DIR}
-cp -r ./ ${INSTALL_DIR}
 cp ${config} ${INSTALL_DIR}/conf.d/CONFIG
-cd ${INSTALL_DIR}
 
 source ./bin/activate
 
