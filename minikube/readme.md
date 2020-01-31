@@ -1,4 +1,4 @@
-run `setup.sh`. You can edit `.minikube/config/config.json` to set parameters for the VM.
+Run `setup.sh`. You can edit `.minikube/config/config.json` to set parameters for the VM.
 
 To disable libvirt's built in dhcp/dns servers
 ```
@@ -8,3 +8,6 @@ virsh # net-edit default
 >>> remove dhcp option, add: <dns enabled='no'/>
 virsh # net-start default
 ```
+
+
+You can then start the VM `minikube start`
