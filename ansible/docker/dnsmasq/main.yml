@@ -38,5 +38,5 @@
       - dnsmasq:/etc/dnsmasq
     ports:
       - 53:53/tcp
-      - 67:67/udp
+      - 53:53/udp
       - 67:67/tcp
