@@ -37,6 +37,6 @@
     volumes:
       - dnsmasq:/etc/dnsmasq
     ports:
-      - 53/udp:53/udp
-      - 53/tcp:53/tcp
-      - 67/tcp:67/tcp
+      - 53:53/tcp
+      - 67:67/udp
+      - 67:67/tcp
