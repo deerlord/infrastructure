@@ -1,3 +1,0 @@
-nginx
-- reverse proxy
-  \ handle 502 (upstream service probably not ready yet)
