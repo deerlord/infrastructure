@@ -1,0 +1,26 @@
+- name: install docker
+  package:
+    name: docker
+    state: present
+- name: install firewwalld
+  package:
+    name: firewalld
+    state: present
+- name: start docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+- name: start  firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+- name: remove python docker-py
+  pip:
+    name: docker-py
+    state: absent
+- name: install python docker
+  pip:
+    name: docker
+    state: present

@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  remote_user: root
+  become: yes
+  become_method: sudo
+  debugger: on_failed
+  roles:
+    - common
+  tasks:
+  - include_tasks: docker/dnsmasq/main.yml
