@@ -1,0 +1,24 @@
+---
+- name: open firewall
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop:
+    - 123/tcp
+- name: configuration
+  template:
+    src: roles/ntpd/docker/conf/ntp.conf.j2
+    dest: roles/ntpd/docker/ntp.conf
+- name: setup image
+  docker_image:
+    name: ntpd
+    path: roles/ntpd/docker/
+    state: build
+- name: create container
+  docker_container:
+    name: ntpd
+    image: ntpd
+    state: started
+    ports:
+      - 123:123/udp

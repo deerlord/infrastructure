@@ -1,0 +1,30 @@
+---
+- name: create configuration volume
+  docker_volume:
+    name: squid_conf
+    state: present
+- name: create spool volume
+  docker_volume:
+    name: squid_spool
+    state: present
+- name: configuration
+  template:
+    src: roles/squid/docker/conf/conf.j2
+    dest: /var/lib/docker/volumes/squid_conf/_data/conf
+- name: setup image
+  docker_image:
+    name: squid
+    path: roles/squid/docker/
+    state: build
+- name: create container
+  docker_container:
+    name: squid
+    image: squid
+    state: started
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - squid_conf:/etc/squid
+      - squid_spool:/var/spool/squid
+    ports:
+      - 123:123/udp

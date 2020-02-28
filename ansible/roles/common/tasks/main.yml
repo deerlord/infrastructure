@@ -2,7 +2,7 @@
   package:
     name: docker
     state: present
-- name: install firewwalld
+- name: install firewalld
   package:
     name: firewalld
     state: present
@@ -23,4 +23,8 @@
 - name: install python docker
   pip:
     name: docker
+    state: present
+- name: install pyOpenSSL
+  pip:
+    name: pyOpenSSL
     state: present

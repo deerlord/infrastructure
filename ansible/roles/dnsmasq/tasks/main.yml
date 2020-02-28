@@ -1,5 +1,5 @@
 ---
-- name: open firewall for dnsmasq
+- name: open firewall
   firewalld:
     port: "{{ item }}"
     permanent: yes
@@ -8,7 +8,7 @@
     - 53/udp
     - 53/tcp
     - 67/udp
-- name: setup dnsmasq image
+- name: setup image
   docker_image:
     name: dnsmasq
     path: roles/dnsmasq/docker/
@@ -17,7 +17,7 @@
   docker_volume:
     name: dnsmasq
     state: present
-- name: dnsmasq configuration
+- name: configuration
   template:
     src: roles/dnsmasq/docker/conf/conf.j2
     dest: /var/lib/docker/volumes/dnsmasq/_data/conf
