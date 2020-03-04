@@ -1,0 +1,6 @@
+---
+- name: build image
+  docker_image:
+    name: dnsmasq
+    path: roles/dnsmasq/docker/
+    state: build

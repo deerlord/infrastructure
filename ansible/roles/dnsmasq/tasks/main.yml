@@ -1,42 +1,7 @@
 ---
-- name: open firewall
-  firewalld:
-    port: "{{ item }}"
-    permanent: yes
-    state: enabled
-  loop:
-    - 53/udp
-    - 53/tcp
-    - 67/udp
-- name: setup image
-  docker_image:
-    name: dnsmasq
-    path: roles/dnsmasq/docker/
-    state: build
-- name: create docker volume
-  docker_volume:
-    name: dnsmasq
-    state: present
-- name: configuration
-  template:
-    src: roles/dnsmasq/docker/conf/conf.j2
-    dest: /var/lib/docker/volumes/dnsmasq/_data/conf
-- name: static leases
-  template:
-    src: roles/dnsmasq/docker/conf/static.j2
-    dest: /var/lib/docker/volumes/dnsmasq/_data/static
-- name: local hosts
-  template:
-    src: roles/dnsmasq/docker/conf/local_hosts.j2
-    dest: /var/lib/docker/volumes/dnsmasq/_data/local_hosts
-- name: create dnsmasq container
-  docker_container:
-    name: dnsmasq
-    image: dnsmasq
-    state: started
-    volumes:
-      - dnsmasq:/etc/dnsmasq
-    ports:
-      - 53:53/udp
-      - 53:53/tcp
-      - 67:67/udp
+- name: setup
+  include_tasks: setup.yml
+- name: build image
+  include_tasks: build.yml
+- name: deploy container
+  include_tasks: deploy.yml

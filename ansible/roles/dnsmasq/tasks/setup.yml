@@ -1,0 +1,26 @@
+---
+- name: open firewall
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop:
+    - 53/udp
+    - 53/tcp
+    - 67/udp
+- name: create docker volume
+  docker_volume:
+    name: dnsmasq
+    state: present
+- name: configuration
+  template:
+    src: roles/dnsmasq/docker/conf/conf.j2
+    dest: /var/lib/docker/volumes/dnsmasq/_data/conf
+- name: static leases
+  template:
+    src: roles/dnsmasq/docker/conf/static.j2
+    dest: /var/lib/docker/volumes/dnsmasq/_data/static
+- name: local hosts
+  template:
+    src: roles/dnsmasq/docker/conf/local_hosts.j2
+    dest: /var/lib/docker/volumes/dnsmasq/_data/local_hosts
