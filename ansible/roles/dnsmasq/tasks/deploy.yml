@@ -1,5 +1,5 @@
 ---
-- name: create container
+- name: deploy container
   docker_container:
     name: dnsmasq
     image: dnsmasq

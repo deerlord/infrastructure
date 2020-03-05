@@ -1,0 +1,5 @@
+- name: build image
+  docker_image:
+    name: nginx
+    path: roles/nginx/docker/
+    state: build

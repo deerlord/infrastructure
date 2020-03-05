@@ -1,0 +1,6 @@
+---
+- name: build image
+  docker_image:
+    name: ntpd
+    path: roles/ntpd/docker/
+    state: build

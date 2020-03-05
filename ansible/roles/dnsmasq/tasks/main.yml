@@ -1,7 +1,7 @@
 ---
 - name: setup
   include_tasks: setup.yml
-- name: build image
+- name: build
   include_tasks: build.yml
-- name: deploy container
+- name: deploy
   include_tasks: deploy.yml
