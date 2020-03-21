@@ -1,0 +1,6 @@
+---
+- name: build image
+  docker_image:
+    name: squid
+    path: roles/squid/docker/
+    state: build
