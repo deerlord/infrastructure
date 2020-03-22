@@ -1,0 +1,6 @@
+---
+- name: build image
+  docker_image:
+    name: openhab
+    path: roles/openhab/docker/
+    state: build
