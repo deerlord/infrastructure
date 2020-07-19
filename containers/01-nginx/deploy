@@ -8,6 +8,7 @@ $(basic_container nginx) \
   -p 80:80 \
   -p 443:443 \
   -p 853:853 \
+  -p 8053:8053 \
   nginx
 set_volume_ownership nginx
 chown -R root ${VOLUMES}/nginx/_data/ssl/private/

@@ -18,6 +18,8 @@ user=root
 domain-needed
 bogus-priv
 no-resolv
+proxy-dnssec
+server=127.0.0.1#853
 no-poll
 domain=${HOST_DOMAIN}
 expand-hosts
@@ -27,9 +29,6 @@ addn-hosts=/etc/dnsmasq/ad_domains
 conf-file=/etc/dnsmasq/static
 dhcp-leasefile=/etc/dnsmasq/leases
 dhcp-option=6,${HOST_GATEWAY}
-server=/${HOST_NAME}/
-server=8.8.8.8
-server=8.8.4.4
 no-hosts
 dhcp-range=${DHCP_START},${DHCP_END},${DHCP_TIME}
 dhcp-option=option:router,${HOST_GATEWAY}
@@ -41,16 +40,18 @@ log-queries
 log-dhcp
 EOF
 
-cat > ${VOLUMES}/nginx/_data/conf.d/dot_gateway.stream <<'EOF'
+sed -i '1s|^|load_module "modules/ngx_stream_js_module.so";\n|' ${VOLUMES}/nginx/_data/nginx.conf
+
+cat > ${VOLUMES}/nginx/_data/conf.d/doh_gateway.stream <<'EOF'
 stream {
-  # DNS upstream
+  js_include /etc/nginx/njs.d/nginx_stream.js;
   upstream dns {
     zone dns 64k;
     server nameresolution:53;
   }
-  # DoT server for TLS
   server {
-    listen 853 ssl;
+    listen 8053 ssl;
+    js_filter dns_filter_doh_request;
     ssl_certificate /etc/nginx/ssl/certs/nginx.crt;
     ssl_certificate_key /etc/nginx/ssl/private/nginx.key;
     proxy_pass dns;

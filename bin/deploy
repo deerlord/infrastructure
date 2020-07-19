@@ -1,0 +1,16 @@
+for script in setup build deploy
+do
+  bash containers/00-squid/$script
+done
+
+for script in setup build deploy
+do
+  bash containers/01-nginx/$script
+done
+
+for script in setup build deploy
+do
+  bash containers/10-nameresolution/$script
+done
+
+

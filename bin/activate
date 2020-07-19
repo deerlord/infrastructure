@@ -104,6 +104,7 @@ http_egress() {
     docker network connect $network $container
     docker network connect $network squid
   fi
+  docker restart squid
 }
 
 http_ingress() {
@@ -138,6 +139,7 @@ EOF
     docker network connect $network $container
     docker network connect $network nginx
     public_service $container
+    docker restart nginx
   fi
 }
 

@@ -15,4 +15,5 @@ docker network create dns_http_stream
 docker network connect dns_http_stream nameresolution
 docker network connect dns_http_stream nginx
 public_service dns
-
+public_service dhcp
+docker restart nginx

@@ -22,7 +22,9 @@ mkdir -p ${VOLUMES}/nginx/_data/ssl/clients/
 mkdir -p ${VOLUMES}/nginx/_data/ssl/revoked/
 touch ${VOLUMES}/nginx/_data/ssl/clients.crt
 touch ${VOLUMES}/nginx/_data/ssl/revoked.crt
-echo -e '\ninclude /etc/nginx/conf.d/*.stream;' >> ${VOLUMES}/nginx/_data/nginx.conf
+cat >>${VOLUMES}/nginx/_data/nginx.conf <<'EOF'
+include /etc/nginx/conf.d/*.stream;
+EOF
 
 cat > ${VOLUMES}/nginx/_data/conf.d/force_https.conf <<'EOF'
 server {
@@ -39,6 +41,10 @@ server {
   ssl_protocols TLSv1.3;
 }
 EOF
+
+git clone https://github.com/TuxInvader/nginx-dns.git
+cd nginx-dns
+cp -rv njs.d ${VOLUMES}/nginx/_data/
 
 sed -i \
   -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
