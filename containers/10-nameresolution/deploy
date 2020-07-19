@@ -12,7 +12,7 @@ $(basic_container nameresolution) \
   --dns=${DNS_TWO} \
   nameresolution
 docker network create dns_http_stream
-docker network connect dns_http_stream dns
+docker network connect dns_http_stream nameresolution
 docker network connect dns_http_stream nginx
 public_service dns
 

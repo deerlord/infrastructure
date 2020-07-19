@@ -46,7 +46,7 @@ stream {
   # DNS upstream
   upstream dns {
     zone dns 64k;
-    server dnsmasq:53;
+    server nameresolution:53;
   }
   # DoT server for TLS
   server {
