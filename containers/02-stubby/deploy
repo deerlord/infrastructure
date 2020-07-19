@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source ./bin/activate
+
+$(basic_container stubby) \
+  $(container_use_system_time) \
+  stubby
+docker network create stubby_net
+docker network connect stubby_net stubby
+docker start stubby

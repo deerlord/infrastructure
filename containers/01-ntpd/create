@@ -1,6 +1,0 @@
-#!/bin/bash
-
-$(basic_container ntpd) \
-  -p 123:123 \
-  ntpd
-public_service time

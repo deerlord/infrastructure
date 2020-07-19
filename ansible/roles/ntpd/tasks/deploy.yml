@@ -1,8 +1,0 @@
----
-- name: deploy container
-  docker_container:
-    name: ntpd
-    image: ntpd
-    state: started
-    ports:
-      - 123:123/udp

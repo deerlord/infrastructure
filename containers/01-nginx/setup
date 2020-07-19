@@ -1,0 +1,56 @@
+#!/bin/bash
+source ./bin/activate
+
+setup_prep nginx
+
+docker pull nginx
+docker volume create nginx
+docker run -d \
+  $(run_as nginx) \
+  --restart=always \
+  --name=nginx \
+  --net=host \
+  $(container_use_system_time) \
+  -v 'nginx:/etc/nginx/' \
+  nginx
+sleep 10
+docker stop nginx
+docker rm nginx
+mkdir -p ${VOLUMES}/nginx/_data/ssl/private/
+mkdir -p ${VOLUMES}/nginx/_data/ssl/certs/
+mkdir -p ${VOLUMES}/nginx/_data/ssl/clients/
+mkdir -p ${VOLUMES}/nginx/_data/ssl/revoked/
+touch ${VOLUMES}/nginx/_data/ssl/clients.crt
+touch ${VOLUMES}/nginx/_data/ssl/revoked.crt
+echo -e '\ninclude /etc/nginx/conf.d/*.stream;' >> ${VOLUMES}/nginx/_data/nginx.conf
+
+cat > ${VOLUMES}/nginx/_data/conf.d/force_https.conf <<'EOF'
+server {
+  listen 80 default_server;
+  server_name *.HOST_DOMAIN;
+  return 301 https://$host$request_uri;
+}
+# force https on public services
+server {
+  listen 443 ssl;
+  server_name *.HOST_DOMAIN;
+  ssl_certificate /etc/nginx/ssl/certs/nginx.crt;
+  ssl_certificate_key /etc/nginx/ssl/private/nginx.key;
+  ssl_protocols TLSv1.3;
+}
+EOF
+
+sed -i \
+  -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
+  ${VOLUMES}/nginx/_data/conf.d/force_https.conf
+
+openssl req -newkey rsa:8192 -nodes \
+  -keyout ${VOLUMES}/nginx/_data/ssl/private/nginx.key \
+  -x509 -days 3650 \
+  -out ${VOLUMES}/nginx/_data/ssl/certs/nginx.crt \
+  -subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${ORGANIZATIONALUNIT}/CN=${COMMONNAME}/emailAddress=${EMAIL}"
+
+set_volume_ownership nginx
+chown -R root ${VOLUMES}/nginx/_data/ssl/private
+chmod -R g-wx ${VOLUMES}/nginx/_data/ssl/private
+

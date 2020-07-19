@@ -1,0 +1,15 @@
+#!/bin/bash
+source ./bin/activate
+
+$(basic_container nginx) \
+  $(container_use_system_time) \
+  -v 'nginx:/etc/nginx/' \
+  -v 'ssl:/etc/ssl/' \
+  -p 80:80 \
+  -p 443:443 \
+  -p 853:853 \
+  nginx
+set_volume_ownership nginx
+chown -R root ${VOLUMES}/nginx/_data/ssl/private/
+chmod g-wx ${VOLUMES}/nginx/_data/ssl/private/*
+docker start nginx

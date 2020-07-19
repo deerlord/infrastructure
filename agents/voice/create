@@ -1,5 +1,0 @@
-#!/bin/bash
-
-$(basic_container voice) \
-  --device /dev/snd \
-  voice

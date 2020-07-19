@@ -1,0 +1,25 @@
+#!/bin/bash
+
+source ./bin/activate
+
+container_prep stubby
+
+cat > Dockerfile <<'EOF'
+FROM debian
+RUN apt update -y
+RUN apt upgrade -y
+RUN apt install -y stubby
+COPY stubby.yml stubby.yml
+RUN cat stubby.yml >> /etc/stubby/stubby.yml
+RUN rm stubby.yml
+CMD ["/usr/bin/stubby"]
+EOF
+
+cat >> stubby.yml <<'EOF'
+  - address_data: 8.8.8.8
+    tls_auth_name: "dns.google"
+  - address_data: 8.8.4.4
+    tls_auth_name: "dns.google"
+EOF
+
+container_build stubby

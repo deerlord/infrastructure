@@ -1,6 +1,0 @@
-#!/bin/bash
-
-docker stop nginx
-cat /var/lib/docker/volumes/ssl/_data/clients/*.crt > /var/lib/docker/volumes/ssl/_data/clients.crt
-cat /var/lib/docker/volumes/ssl/_data/revoked/*.crt > /var/lib/docker/volumes/ssl/_data/revoked.crt
-docker start nginx

@@ -1,2 +1,0 @@
-${HOST_IP} ${HOST_NAME} ${HOST_NAME}.${HOST_DOMAIN}
-${HOST_GATEWAY} router router.${HOST_DOMAIN}

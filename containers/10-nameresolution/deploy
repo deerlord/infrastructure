@@ -1,0 +1,18 @@
+#!/bin/bash
+source ./bin/activate
+
+set_volume_ownership nameresolution dnsmasq
+
+$(basic_container nameresolution) \
+  --cap-add=NET_ADMIN \
+  $(container_use_system_time) \
+  -v 'dnsmasq:/etc/dnsmasq/' \
+  -p 67:67/udp \
+  --dns=${DNS_ONE} \
+  --dns=${DNS_TWO} \
+  nameresolution
+docker network create dns_http_stream
+docker network connect dns_http_stream dns
+docker network connect dns_http_stream nginx
+public_service dns
+

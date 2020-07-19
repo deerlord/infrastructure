@@ -1,1 +1,0 @@
-0 0 * * * dnsmasq /opt/infra/cron/update_ad_domains

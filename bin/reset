@@ -1,5 +1,0 @@
-#!/bin/bash
-
-source ./bin/activate
-dev_remove_containers
-dev_remove_images

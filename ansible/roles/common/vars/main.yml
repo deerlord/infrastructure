@@ -1,9 +1,0 @@
-HOST_MAC: "{{ ansible_default_ipv4.macaddress }}"
-HOST_IP: "{{ ansible_default_ipv4.address }}"
-HOST_NAME: "{{ ansible_hostname }}"
-HOST_GATEWAY: "{{ ansible_default_ipv4.gateway }}"
-HOST_DOMAIN: "{{ ansible_domain }}"
-HOST_SUBNET: "{{ ansible_default_ipv4.netmask }}"
-
-GATEWAY_MAC: 6c:3b:6b:f9:17:02
-GATEWAY_IP: "{{ ansible_default_ipv4.gateway }}"

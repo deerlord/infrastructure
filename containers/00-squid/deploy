@@ -1,0 +1,12 @@
+#!/bin/bash
+source ./bin/activate
+
+$(basic_container squid) \
+  --net=egress \
+  $(container_use_system_time) \
+  -v 'squid_spool:/var/spool/squid' \
+  -v 'squid_conf:/etc/squid/' \
+  squid
+set_volume_ownership squid squid_conf
+set_volume_ownership squid squid_spool
+docker start squid

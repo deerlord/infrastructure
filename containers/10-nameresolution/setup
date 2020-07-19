@@ -1,0 +1,62 @@
+#!/bin/bash
+source ./bin/activate
+
+setup_prep nameresolution
+
+docker volume create dnsmasq
+
+cat > ${VOLUMES}/dnsmasq/_data/local_hosts <<EOF
+${HOST_IP} ${HOST_NAME} ${HOST_NAME}.${HOST_DOMAIN}
+${HOST_GATEWAY} router router.${HOST_DOMAIN}
+EOF
+
+touch ${VOLUMES}/dnsmasq/_data/static
+add_static_lease ${HOST_MAC} ${HOST_IP}
+add_static_lease ${GATEWAY_MAC} ${HOST_GATEWAY}
+cat > ${VOLUMES}/dnsmasq/_data/conf <<EOF
+user=root
+domain-needed
+bogus-priv
+no-resolv
+no-poll
+domain=${HOST_DOMAIN}
+expand-hosts
+local=/${HOST_DOMAIN}/
+addn-hosts=/etc/dnsmasq/local_hosts
+addn-hosts=/etc/dnsmasq/ad_domains
+conf-file=/etc/dnsmasq/static
+dhcp-leasefile=/etc/dnsmasq/leases
+dhcp-option=6,${HOST_GATEWAY}
+server=/${HOST_NAME}/
+server=8.8.8.8
+server=8.8.4.4
+no-hosts
+dhcp-range=${DHCP_START},${DHCP_END},${DHCP_TIME}
+dhcp-option=option:router,${HOST_GATEWAY}
+dhcp-option=option:ntp-server,${HOST_IP}
+#dhcp-range=eth,${DHCP_ETH_START},${DHCP_ETH_END},${DHCP_ETH_TIME}
+#dhcp-range=wifi,${DHCP_WIFI_START},${DHCP_WIFI_END},${DHCP_WIFI_TIME}
+dhcp-lease-max=25
+log-queries
+log-dhcp
+EOF
+
+cat > ${VOLUMES}/nginx/_data/conf.d/dot_gateway.stream <<'EOF'
+stream {
+  # DNS upstream
+  upstream dns {
+    zone dns 64k;
+    server dnsmasq:53;
+  }
+  # DoT server for TLS
+  server {
+    listen 853 ssl;
+    ssl_certificate /etc/nginx/ssl/certs/nginx.crt;
+    ssl_certificate_key /etc/nginx/ssl/private/nginx.key;
+    proxy_pass dns;
+  }
+}
+EOF
+
+update_ad_domains
+set_volume_ownership nameresolution dnsmasq

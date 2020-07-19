@@ -1,7 +1,0 @@
----
-- name: setup
-  include_tasks: setup.yml
-- name: build
-  include_tasks: build.yml
-- name: deploy
-  include_tasks: deploy.yml
