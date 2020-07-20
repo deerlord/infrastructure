@@ -5,7 +5,7 @@ import requests
 class OpenWeatherAPI():
 
     url = 'https://api.openweathermap.org/data/2.5/onecall'
-    __api_key: str = ''
+    __api_key = ''
 
     def __init__(
         self,
@@ -21,15 +21,15 @@ class OpenWeatherAPI():
 
     @property
     def current(self):
-        return self.__data(current=True)
+        return self.__data(current=True).get('current', {})
 
     @property
     def hourly(self):
-        return self.__data(hourly=True)
+        return self.__data(hourly=True).get('hourly', {})
 
     @property
     def daily(self):
-        return self.__data(daily=True)
+        return self.__data(daily=True).get('daily', {})
 
     def __data(
         self,
@@ -50,11 +50,6 @@ class OpenWeatherAPI():
         query_url = self.url + f'?lat={self.__lat}&lon={self.__lon}' + f'&units={self.__units}' + exclude_str + f'&appid={self.__api_key}'
         result = requests.get(query_url) 
         return result.json()
-      
-    @property
-    def temp_difference(self):
-        data = self.__data()['current']
-        return data['feels_like'] - data['temp']
 
     @property
     def data(self):
