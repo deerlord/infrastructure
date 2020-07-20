@@ -1,5 +1,7 @@
 import dataclasses
 import requests
+import pytz
+from src import settings
 
 
 class OpenWeatherAPI():
@@ -24,6 +26,10 @@ class OpenWeatherAPI():
         return self.__data(current=True).get('current', {})
 
     @property
+    def minutely(self):
+        return self.__data(minutely).get('minutely', {})
+
+    @property
     def hourly(self):
         return self.__data(hourly=True).get('hourly', {})
 
@@ -31,6 +37,10 @@ class OpenWeatherAPI():
     def daily(self):
         return self.__data(daily=True).get('daily', {})
 
+    @property
+    def data(self):
+        return self.__data(True, True, True, True)
+    
     def __data(
         self,
         current: bool = False,
@@ -47,10 +57,18 @@ class OpenWeatherAPI():
             if not value
         ])
         exclude_str = f'&exclude={exclude}' if exclude else ''
-        query_url = self.url + f'?lat={self.__lat}&lon={self.__lon}' + f'&units={self.__units}' + exclude_str + f'&appid={self.__api_key}'
+        query_url = (
+            self.url +
+            f'?lat={self.__lat}&lon={self.__lon}' +
+            f'&units={self.__units}' +
+            exclude_str +
+            f'&appid={self.__api_key}'
+        )
         result = requests.get(query_url) 
         return result.json()
-
-    @property
-    def data(self):
-        return self.__data(True, False, True, True)
+    
+    def _convert_utc_to_local(timestamp):
+        dtime = datetime.datetime.fromtimestamp(timestamp)
+        return dtime.replace(
+            tzinfo=datetime.timezone.utc
+        ).astimezone(tz=pytz.timezone(settings.timezone))

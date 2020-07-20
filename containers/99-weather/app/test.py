@@ -1,4 +1,4 @@
-import interface
+from src import interface
 import datetime
 from pytz import timezone
 
@@ -8,6 +8,7 @@ LAT='30.412494'
 LON='-97.744411'
 
 client = interface.OpenWeatherAPI(api_key=API_KEY, lat=LAT, lon=LON)
-data = client.current
-
-print(client.current)
+data = client.data
+print('len minutely', len(data['minutely']))
+print('len hourly', len(data['hourly']))
+print('len daily', len(data['daily']))
