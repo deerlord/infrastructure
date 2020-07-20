@@ -42,6 +42,13 @@ EOF
 
 sed -i '1s|^|load_module "modules/ngx_stream_js_module.so";\n|' ${VOLUMES}/nginx/_data/nginx.conf
 
+cat > ${VOLUMES}/nginx/_data/conf.d/doh_gateway.conf <<'EOF'
+upstream dohloop {
+  zone dohloop 64k;
+  server 127.0.0.1:8053;
+}
+EOF
+
 cat > ${VOLUMES}/nginx/_data/conf.d/doh_gateway.stream <<'EOF'
 stream {
   js_include /etc/nginx/njs.d/nginx_stream.js;
@@ -50,11 +57,20 @@ stream {
     server nameresolution:53;
   }
   server {
-    listen 8053 ssl;
+    listen 127.0.0.1:8053;
     js_filter dns_filter_doh_request;
-    ssl_certificate /etc/nginx/ssl/certs/nginx.crt;
-    ssl_certificate_key /etc/nginx/ssl/private/nginx.key;
     proxy_pass dns;
+  }
+}
+EOF
+
+sed -i '$d' ${VOLUMES}/nginx/_data/conf.d/force_https.conf
+cat >>${VOLUMES}/nginx/_data/conf.d/force_https.conf <<'EOF'
+
+  location /dns-query {
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_pass http://dohloop;
   }
 }
 EOF
