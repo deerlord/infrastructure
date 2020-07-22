@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source ./bin/activate
+
+setup_prep influxdb
+docker pull influxdb
+docker volume create influxdb

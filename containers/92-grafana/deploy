@@ -1,0 +1,9 @@
+#!/bin/bash
+
+source ./bin/activate
+
+$(basic_container grafana) \
+  $(container_use_system_time) \
+  -p 3000:3000 \
+  grafana
+docker start grafana

@@ -1,16 +1,12 @@
-for script in setup build deploy
-do
-  bash containers/00-squid/$script
-done
+function deploy() {
+  for script in setup build deploy
+  do
+    bash containers/$1/$script
+  done
+}
 
-for script in setup build deploy
+for container in ls containers
 do
-  bash containers/01-nginx/$script
+  deploy $container
 done
-
-for script in setup build deploy
-do
-  bash containers/10-nameresolution/$script
-done
-
 

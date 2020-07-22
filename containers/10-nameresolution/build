@@ -13,6 +13,7 @@ RUN apt install -y stubby
 RUN mkdir -p /etc/dnsmasq/
 RUN echo 'conf-file=/etc/dnsmasq/conf' > /etc/dnsmasq.conf
 EXPOSE 53/tcp
+EXPOSE 53/udp
 EXPOSE 67/udp
 RUN sed -i '/listen_addresses/,+2d' /etc/stubby/stubby.yml
 COPY stubby.yml stubby.yml

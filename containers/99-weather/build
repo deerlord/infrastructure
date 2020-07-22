@@ -1,0 +1,21 @@
+#!/bin/bash
+source ./bin/activate
+
+container_prep weather
+
+cp -r ../../containers/99-weather/app ./
+
+cat >Dockerfile <<'EOF'
+FROM debian
+RUN apt update -y
+RUN apt upgrade -y
+RUN apt install -y python3
+RUN apt install -y python3-pip
+RUN apt install -y curl
+COPY app /opt/app
+WORKDIR /opt/app/
+RUN pip3 install -r requirements.txt
+CMD ["python3", "/opt/app/interface.py"]
+EOF
+
+container_build weather

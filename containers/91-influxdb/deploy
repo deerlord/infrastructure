@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source ./bin/activate
+
+$(basic_container influxdb) \
+  $(container_use_systme_time) \
+  --net=influxdb \
+  -e INFLUXDB_HTTP_AUTH_ENABLED=false \
+  -v 'influxdb:/var/lib/influxb' \
+  influxdb
+docker start influxdb

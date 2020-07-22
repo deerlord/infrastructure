@@ -1,0 +1,9 @@
+#!/bin/activate
+
+source ./bin/activate
+
+$(basic_container mongo) \
+  $(container_use_system_time) \
+  -v 'mongo:/data/db' \
+  mongo
+docker start mongo

@@ -20,7 +20,7 @@ container_build() {
   container="$1"
   if [[ -e Dockerfile ]]
   then
-    docker build --pull --no-cache -t $container .
+    docker build -t $container . #--pull --no-cache -t $container .
   fi
   cd ../../
   rm -rf ./.build/$container

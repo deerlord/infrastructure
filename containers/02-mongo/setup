@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source ./bin/activate
+
+docker pull mongo
+setup_prep mongo
+docker volume create mongo
+set_volume_ownership mongo
