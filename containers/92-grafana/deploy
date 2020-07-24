@@ -4,6 +4,9 @@ source ./bin/activate
 
 $(basic_container grafana) \
   $(container_use_system_time) \
+  --net=influxdb \
   -p 3000:3000 \
   grafana
+http_ingress grafana 3000
+docker network connect influxdb grafana
 docker start grafana

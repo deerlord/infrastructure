@@ -22,23 +22,23 @@ class OpenWeatherAPI():
         self.__lat = lat
         self.__lon = lon
 
-    @property
+    def map(self):
+        prefix = 'https://tile.openweathermap.org/map'
+        url = f'{prefix}/{layer}/{z}/{x}/{y}.png?appid={self.__api_key}'
+        requests.get(url)
+
     def current(self):
         return self.__data(current=True).get('current', {})
 
-    @property
     def minutely(self):
         return self.__data(minutely=True).get('minutely', {})
 
-    @property
     def hourly(self):
         return self.__data(hourly=True).get('hourly', {})
 
-    @property
     def daily(self):
         return self.__data(daily=True).get('daily', {})
 
-    @property
     def data(self):
         return self.__data(True, True, True, True)
 
@@ -90,61 +90,64 @@ class InfluxDB():
             self.__client.create_database('weather')
         self.__client.switch_database('weather')
 
-    def _prep(self, data):
-        dt = datetime.datetime.fromtimestamp(data.get('dt'))
+    def _local_time(self, dt):
+        dt = datetime.datetime.utcfromtimestamp(dt)
         dt_str = dt.strftime('%Y-%m-%dT%H:%M:%SZ')
         return dt_str
 
     def _write(self, measurement, fields, time, tags={}):
-        try:
-            data_wrapper = [{
-                "measurement": measurement,
-                "tags": tags,
-                "time": time,
-                "fields": fields
-            }]
-            self.__client.write_points(data_wrapper)
-        except influxdb.exceptions.InfluxDBClientError:
-            pass
+        data_wrapper = [{
+            "measurement": measurement,
+            "tags": tags,
+            "time": time,
+            "fields": fields
+        }]
+        self.__client.write_points(data_wrapper)
 
     def get_current(self):
-        query = 'SELECT * FROM "weather"."autogen"."current"'
+        query = 'SELECT * FROM current' 
         return self.__client.query(query)
 
     def current(self, data):
-        dt = self._prep(data)
         weather = data.get('weather')[0]
-        return self._write(
-            'current',
-            tags={},
-            fields={
-                'sunrise': data.get('sunrise'),
-                'sunset': data.get('sunset'),
-                'temp': data.get('temp'),
-                'feels_like': data.get('feels_like'),
-                'pressure': data.get('pressure'),
-                'humidity': data.get('humidity'),
-                'dew_point': data.get('dew_point'),
-                'uvi': data.get('uvi'),
-                'clouds': data.get('clouds'),
-                'visibility': data.get('visibility'),
-                'wind_speed': data.get('wind_speed'),
-                'wind_deg': data.get('wind_deg'),
-                'weather_id': weather.get('id'),
-                'weather_main': weather.get('main'),
-                'weather_desc': weather.get('description'),
-                'weather_icon': weather.get('icon'),
-                'rain': data.get('rain', 0),
-                'snow': data.get('snow', 0)
-            },
-            time=dt
-        )
+        try:
+            self._write(
+                'current',
+                tags={},
+                fields={
+                    'sunrise': data.get('sunrise'),
+                    'sunset': data.get('sunset'),
+                    'temp': float(data.get('temp')),
+                    'feels_like': float(data.get('feels_like')),
+                    'pressure': float(data.get('pressure')),
+                    'humidity': float(data.get('humidity')),
+                    'dew_point': float(data.get('dew_point')),
+                    'uvi': float(data.get('uvi')),
+                    'clouds': float(data.get('clouds')),
+                    'visibility': float(data.get('visibility')),
+                    'wind_speed': float(data.get('wind_speed')),
+                    'wind_deg': float(data.get('wind_deg')),
+                    'weather_id': int(weather.get('id')),
+                    'weather_main': str(weather.get('main')),
+                    'weather_desc': str(weather.get('description')),
+                    'weather_icon': str(weather.get('icon')),
+                    'rain': float(data.get('rain', 0)),
+                    'snow': float(data.get('snow', 0))
+                },
+                time=self._local_time(data.get('dt'))
+            )
+            print('wrote to influx')
+        except Exception as e:
+            print(e)
 
 
 def main():
     from os import environ as settings
     from time import sleep
+    from datetime import datetime, timedelta
+    import pprint
 
+    pp = pprint.PrettyPrinter(indent=4)
     weather = OpenWeatherAPI(
         api_key=settings['API_KEY'],
         lat=settings['LAT'],
@@ -152,10 +155,14 @@ def main():
         units=settings['UNITS']
     )
     database = InfluxDB()
+    now = datetime.now
+    interval = timedelta(seconds=90)
     while True:
-        data = weather.current
+        _next = now() + interval
+        data = weather.current()
+        pp.pprint(data)
         database.current(data=data)
-        sleep(60)
+        sleep((_next - now()).seconds)
 
 
 if __name__ == '__main__':

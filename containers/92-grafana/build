@@ -3,7 +3,3 @@
 source ./bin/activate
 
 docker run -d --name=grafana grafana/grafana
-docker exec -t grafana grafana-cli plugins install simpod-json-datasource
-docker commit grafana grafana
-docker stop grafana
-docker rm grafana

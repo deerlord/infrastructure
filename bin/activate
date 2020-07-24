@@ -109,6 +109,12 @@ http_egress() {
 
 http_ingress() {
   container=$1
+  if [[ -z $2 ]]
+  then
+    port='8080'
+  else
+    port="$2"
+  fi
   network="${container}_http_ingress"
   if [[ $(docker network ls | awk '{print $2}' | grep -c $network) -eq 0 ]]
   then
@@ -122,7 +128,7 @@ server {
   listen 443 ssl;
   server_name container.HOST_DOMAIN;
   location / {
-    proxy_pass http://container:8080/;
+    proxy_pass http://container:PORT/;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -134,6 +140,7 @@ EOF
     sed -i \
       -e "s container ${container} g" \
       -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
+      -e "s PORT ${port} g" \
       $conf
     chown nginx $conf
     docker network connect $network $container

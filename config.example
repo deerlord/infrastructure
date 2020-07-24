@@ -1,14 +1,14 @@
 # information about the host we're running on
 export HOST_NAME=="$(hostnamectl | grep 'Static hostname' | awk '{print $3}')" # HOSTNAME.google.com
 export HOST_DOMAIN='deerlord.lan' # mail.HOST_DOMAIN 
-export HOST_IP='192.168.88.19'
-export HOST_MAC='dc:a6:32:95:8a:23' # mac address
-export HOST_GATEWAY='192.168.88.1'
+export HOST_IP=''
+export HOST_MAC='' # mac address
+export HOST_GATEWAY=''
 export GATEWAY_MAC="$(grep -P "^${HOST_GATEWAY} " /proc/net/arp | awk '{print $4}')"
-export HOST_SUBNET='255.255.0.0'
+export HOST_SUBNET=''
 # DHCP settings for dnsmasq
-export DHCP_START='192.168.88.10'
-export DHCP_END='192.168.88.50'
+export DHCP_START=''
+export DHCP_END=''
 export DHCP_TIME='12h'
 export DHCP_ETH_START=''
 export DHCP_ETH_END=''
@@ -20,11 +20,11 @@ export DHCP_WIFI_TIME=''
 export DNS_ONE=1.1.1.1
 export DNS_TWO=1.0.0.1
 # NGINX SSL values
-export COUNTRY='US'
-export STATE='Texas'
-export LOCALITY='Austin'
-export ORGANIZATION='deerlord'
-export ORGANIZATIONALUNIT='local'
+export COUNTRY=''
+export STATE=''
+export LOCALITY=''
+export ORGANIZATION=''
+export ORGANIZATIONALUNIT=''
 export COMMONNAME="*.${HOST_DOMAIN}"
 export EMAIL=''
 # NTP values

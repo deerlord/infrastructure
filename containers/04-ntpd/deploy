@@ -1,0 +1,10 @@
+#!/bin/bash
+source ./bin/activate
+
+$(basic_container ntpd) \
+  -v '/etc/localtime:/etc/localtime' \
+  -v '/etc/timezone:/etc/timezone:ro' \
+  -p 123:123 \
+  ntpd
+public_service time
+docker start ntpd
