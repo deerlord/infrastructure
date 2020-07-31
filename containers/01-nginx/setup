@@ -49,6 +49,8 @@ sed -i \
   -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
   ${VOLUMES}/nginx/_data/conf.d/force_https.conf
 
+
+"replace with letsencrypt"
 openssl req -newkey rsa:8192 -nodes \
   -keyout ${VOLUMES}/nginx/_data/ssl/private/nginx.key \
   -x509 -days 3650 \

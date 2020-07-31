@@ -89,6 +89,12 @@ class InfluxDB():
         if not has_weather_db:
             self.__client.create_database('weather')
         self.__client.switch_database('weather')
+        self.__client.create_retention_policy(
+            'current',
+            '24h',
+            '1',
+            'weather'
+        )
 
     def _local_time(self, dt):
         dt = datetime.datetime.utcfromtimestamp(dt)
@@ -117,8 +123,8 @@ class InfluxDB():
                 fields={
                     'sunrise': data.get('sunrise'),
                     'sunset': data.get('sunset'),
-                    'temp': float(data.get('temp')),
-                    'feels_like': float(data.get('feels_like')),
+                    'temp': int(data.get('temp')),
+                    'feels_like': int(data.get('feels_like')),
                     'pressure': float(data.get('pressure')),
                     'humidity': float(data.get('humidity')),
                     'dew_point': float(data.get('dew_point')),

@@ -6,7 +6,7 @@ $(basic_container influxdb) \
   $(container_use_system_time) \
   --net=influxdb \
   -e INFLUXDB_HTTP_AUTH_ENABLED=false \
-  -v 'influxdb:/var/lib/influxb' \
+  -v 'influxdb:/var/lib/influxdb' \
   influxdb
 http_ingress influxdb 8086
 docker start influxdb
