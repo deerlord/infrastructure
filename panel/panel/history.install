@@ -1,0 +1,6 @@
+curl -sL https://deb.nodesource.com/setup_lts.x | bash -
+apt install -y nodejs
+npm install -g vue
+npm install -g @vue/cli
+npm install -g axios
+vue create panel
