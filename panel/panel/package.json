@@ -14,7 +14,9 @@
     "dns": "^0.2.2",
     "fetch": "^1.1.0",
     "net": "^1.0.2",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-axios": "^2.1.5",
+    "vuetrend": "^0.3.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

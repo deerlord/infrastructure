@@ -110,41 +110,81 @@ class InfluxDB():
         }]
         self.__client.write_points(data_wrapper)
 
+    def hourly(self, data: list):
+        """
+        Drop series from "hourly"
+        """
+        points = []
+        for d in data:
+            weather = point.get('weather')[0]
+            point = {
+                'hourly',
+                tags={},
+                fields={
+                    'dt': d.get('dt'),
+                    'temp': int(d.get('temp')),
+                    'feels_like': int(d.get('feels_like')),
+                    'pressure': float(d.get('pressure')),
+                    'humidity': float(d.get('humidity')),
+                    'clouds': float(d.get('clouds')),
+                    'visibility': float(d.get('visibility')),
+                    'wind_speed': float(d.get('windd_speed')),
+                    'weather_id': int(weather.get('id')),
+                    'weather_main': str(weather.get('main')),
+                    'weather_desc': str(weather.get('description')),
+                    'weather_icon': str(weather.get('icon')),
+                    'rain': float(d.get(
+                        'rain',
+                        {'1h': 0}
+                    )['1h'],
+                    'snow': float(d.get(
+                        'snow',
+                        {'1h': 0}
+                    )['1h'],
+                    'pop': float(d.get('pop'))
+                }
+            )
+            points.append(point)
+        self.__client.delete_series(measurement='hourly')
+        self.__client.write_points(points)
+
     def get_current(self):
         query = 'SELECT * FROM current' 
         return self.__client.query(query)
 
     def current(self, data):
         weather = data.get('weather')[0]
-        try:
-            self._write(
-                'current',
-                tags={},
-                fields={
-                    'sunrise': data.get('sunrise'),
-                    'sunset': data.get('sunset'),
-                    'temp': int(data.get('temp')),
-                    'feels_like': int(data.get('feels_like')),
-                    'pressure': float(data.get('pressure')),
-                    'humidity': float(data.get('humidity')),
-                    'dew_point': float(data.get('dew_point')),
-                    'uvi': float(data.get('uvi')),
-                    'clouds': float(data.get('clouds')),
-                    'visibility': float(data.get('visibility')),
-                    'wind_speed': float(data.get('wind_speed')),
-                    'wind_deg': float(data.get('wind_deg')),
-                    'weather_id': int(weather.get('id')),
-                    'weather_main': str(weather.get('main')),
-                    'weather_desc': str(weather.get('description')),
-                    'weather_icon': str(weather.get('icon')),
-                    'rain': float(data.get('rain', 0)),
-                    'snow': float(data.get('snow', 0))
-                },
-                time=self._local_time(data.get('dt'))
-            )
-            print('wrote to influx')
-        except Exception as e:
-            print(e)
+        self._write(
+            'current',
+            tags={},
+            fields={
+                'sunrise': data.get('sunrise'),
+                'sunset': data.get('sunset'),
+                'temp': int(data.get('temp')),
+                'feels_like': int(data.get('feels_like')),
+                'pressure': float(data.get('pressure')),
+                'humidity': float(data.get('humidity')),
+                'dew_point': float(data.get('dew_point')),
+                'uvi': float(data.get('uvi')),
+                'clouds': float(data.get('clouds')),
+                'visibility': float(data.get('visibility')),
+                'wind_speed': float(data.get('wind_speed')),
+                'wind_deg': float(data.get('wind_deg')),
+                'weather_id': int(weather.get('id')),
+                'weather_main': str(weather.get('main')),
+                'weather_desc': str(weather.get('description')),
+                'weather_icon': str(weather.get('icon')),
+                'rain': float(data.get(
+                    'rain',
+                    {'1h': 0}
+                )['1h']),
+                'snow': float(data.get(
+                    'snow',
+                    {'1h': 0}
+                )['1h'])
+            },
+            time=self._local_time(data.get('dt'))
+        )
 
 
 def main():
@@ -166,8 +206,11 @@ def main():
     while True:
         _next = now() + interval
         data = weather.current()
-        pp.pprint(data)
-        database.current(data=data)
+        data = weather.data()
+        current = data['current']
+        pp.pprint(current)
+        database.current(data=current)
+        database.hourly(data=data['hourly'])
         sleep((_next - now()).seconds)
 
 
