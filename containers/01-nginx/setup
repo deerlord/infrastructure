@@ -22,9 +22,6 @@ mkdir -p ${VOLUMES}/nginx/_data/ssl/clients/
 mkdir -p ${VOLUMES}/nginx/_data/ssl/revoked/
 touch ${VOLUMES}/nginx/_data/ssl/clients.crt
 touch ${VOLUMES}/nginx/_data/ssl/revoked.crt
-cat >>${VOLUMES}/nginx/_data/nginx.conf <<'EOF'
-include /etc/nginx/conf.d/*.stream;
-EOF
 
 cat > ${VOLUMES}/nginx/_data/conf.d/force_https.conf <<'EOF'
 server {
@@ -41,6 +38,14 @@ server {
 }
 EOF
 
+# remove final bracket
+sed -i -e '$d' ${VOLUMES}/nginx/_data/nginx.cof 
+cat >> ${VOLUMES}/nginx/_data/nginx.conf <<'EOF'
+    server_names_hash_bucket_size 128;
+}
+include /etc/nginx/coonf.d/*.stream;
+EOF
+
 git clone https://github.com/TuxInvader/nginx-dns.git
 cd nginx-dns
 cp -rv njs.d ${VOLUMES}/nginx/_data/
@@ -50,7 +55,7 @@ sed -i \
   ${VOLUMES}/nginx/_data/conf.d/force_https.conf
 
 
-"replace with letsencrypt"
+#$ TODO: replace with letsencrypt
 openssl req -newkey rsa:8192 -nodes \
   -keyout ${VOLUMES}/nginx/_data/ssl/private/nginx.key \
   -x509 -days 3650 \
