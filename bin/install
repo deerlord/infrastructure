@@ -1,10 +1,21 @@
 #!/bin/bash
 
-bash containers/00-nameresolution/setup
-bash containers/00-nameresolution/build
-bash containers/00-nameresolution/deploy
-bash containers/01-ntpd/setup
-bash containers/01-ntpd/build
-bash containers/01-ntpd/deploy
+if [ ! -e ./config ]
+then
+  echo 'You do not have a config file created. Run'
+  echo '  cp config.example config'
+  echo 'and edit for your environment.'
+  echo 'Then run the installer again'
+fi
+
+# create and deploy docker containers
+for service in $(ls ./containers/)
+do
+  for step in setup build deploy
+  do
+    bash ./containers/${service}/${step}
+  done
+done
+
 ln -s /opt/networking/crons/update_ad_domains \
   /etc/cron.daily/update_ad_domains
