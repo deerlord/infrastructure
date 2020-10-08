@@ -1,0 +1,10 @@
+#!/bin/bash
+
+bash containers/00-nameresolution/setup
+bash containers/00-nameresolution/build
+bash containers/00-nameresolution/deploy
+bash containers/01-ntpd/setup
+bash containers/01-ntpd/build
+bash containers/01-ntpd/deploy
+ln -s /opt/networking/crons/update_ad_domains \
+  /etc/cron.daily/update_ad_domains
