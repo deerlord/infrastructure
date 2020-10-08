@@ -21,8 +21,8 @@ no-resolv
 proxy-dnssec
 server=127.0.0.1#853
 no-poll
-domain=${HOST_DOMAIN}
 expand-hosts
+domain=${HOST_DOMAIN}
 local=/${HOST_DOMAIN}/
 addn-hosts=/etc/dnsmasq/local_hosts
 addn-hosts=/etc/dnsmasq/ad_domains
