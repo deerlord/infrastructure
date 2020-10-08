@@ -3,8 +3,6 @@
 source ./config
 
 export VOLUMES=/var/lib/docker/volumes
-export APT_UPDATE='RUN apt update -y; apt upgrade -y'
-export DOCKER_DEBIAN='FROM debian$(echo -e \n)RUN apt update -y; apt upgrade -y'
 
 setup_prep() {
   /usr/sbin/useradd -r -s /sbin/nologin $1
@@ -20,38 +18,10 @@ container_build() {
   container="$1"
   if [[ -e Dockerfile ]]
   then
-    docker build -t $container . #--pull --no-cache -t $container .
+    docker build --pull --no-cache -t $container .
   fi
   cd ../../
   rm -rf ./.build/$container
-}
-
-
-dev_remove_containers() {
-  docker ps -a | awk '{print $1}' | grep -v 'CONTAINER' | while read id
-  do
-    docker stop $id
-    docker rm $id
-  done
-}
-
-dev_remove_images() {
-  docker images -a | awk '{print $3}' | grep -v 'IMAGE' | while read id
-  do
-    docker rmi -f $id
-  done
-  docker volume rm nginx
-  docker volume rm ssl
-  docker volume rm dnsmasq
-  docker volume rm openhab_addons
-  docker volume rm openhab_conf
-  docker volume rm openhab_userdata
-  docker volume rm squid_conf
-  docker volume rm squid_spool
-  docker network rm egress
-  docker network rm openhab
-  docker network rm openhab_http_egress
-  docker network rm openhab_http_ingress
 }
 
 basic_container() {
@@ -92,99 +62,8 @@ public_service() {
   docker restart nameresolution
 }
 
-http_egress() {
-  container=$1
-  network="${container}_http_egress"
-  if [[ $(docker network ls | awk '{print $2}' | grep -c $network) -eq 0 ]]
-  then
-    docker network create $network --internal
-  fi
-  if [[ $(container_exists squid) -eq 1 && $(container_exists $container) -eq 1 ]]
-  then
-    docker network connect $network $container
-    docker network connect $network squid
-  fi
-  docker restart squid
-}
-
-http_ingress() {
-  container=$1
-  if [[ -z $2 ]]
-  then
-    port='8080'
-  else
-    port="$2"
-  fi
-  network="${container}_http_ingress"
-  if [[ $(docker network ls | awk '{print $2}' | grep -c $network) -eq 0 ]]
-  then
-    docker network create $network --internal
-  fi
-  if [[ $(container_exists nginx) -eq 1 && $(container_exists $container) -eq 1 ]]
-  then
-    conf="${VOLUMES}/nginx/_data/conf.d/${container}.conf"
-cat > $conf <<'EOF'
-server {
-  listen 443 ssl;
-  server_name container.HOST_DOMAIN;
-  location / {
-    proxy_pass http://container:PORT/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header Request-URI $request_uri;
-  }
-}
-EOF
-    sed -i \
-      -e "s container ${container} g" \
-      -e "s HOST_DOMAIN ${HOST_DOMAIN} g" \
-      -e "s PORT ${port} g" \
-      $conf
-    chown nginx $conf
-    docker network connect $network $container
-    docker network connect $network nginx
-    public_service $container
-    docker restart nginx
-  fi
-}
-
-remove_http_ingress() {
-  container=$1
-  network="${container}_http_ingress"
-  mv -v ${VOLUMES}/nginx/_data/conf.d/${container}.conf{,-disabled}
-  docker network disconnect $network $container > /dev/null 2>&1
-  docker network disconnect $network nginx > /dev/null 2>&1
-  docker network remove $network > /dev/null 2>&1
-  mv -v ${VOLUMES}/nginx/_data/conf.d/${container}.conf{,-disabled}
-}
-
-remove_http_egress() {
-  container=$1
-  network="${container}_http_egress"
-  docker network disconnect $network $container > /dev/null 2>&1
-  docker network disconnect $network squid > /dev/null 2>&1
-  docker network remove $network > /dev/null 2>&1
-}
-
 run_as() {
   echo "--env USER_ID=$(id -u $1) --env GROUP_ID=$(id -g $1)"
-}
-
-add_openhab_http_item() {
-  name="$1"
-  cert="$2"
-  # verify and possibly convert cert
-  existing_cert=$(grep -l "${2}" ${VOLUMES}/ss/_data/clients/* | grep -c "${name}")
-  if [[ ${existing_cert} -eq 0 ]]
-  then
-    echo "${cert}" > ${VOLUMES}/ssl/_data/clients/${name}.crt
-    chown nginx. ${VOLUMES}/ssl/_data/clients/${name}.crt
-    cat ${VOLUMES}/ssl/_data/clients/${name}.crt >> \
-      ${VOLUMES}/ssl/_data/clients.crt
-  fi
-
 }
 
 update_ad_domains() {
@@ -225,14 +104,6 @@ set_volume_ownership() {
   chmod -R o-rwx ${VOLUMES}/${vol}/_data/
 }
 
-install_cron() {
-  if [ -z $1 ]
-  then
-    return 1
-  fi
-  ln -s /opt/infrastructure/containers/*-${1}/cron /etc/cron.d/${1}
-}
-
 export -f container_prep
 export -f container_build
 export -f basic_container
@@ -240,13 +111,8 @@ export -f container_use_system_time
 export -f container_exists
 export -f container_running
 export -f public_service
-export -f http_egress
-export -f http_ingress
-export -f remove_http_ingress
-export -f remove_http_egress
 export -f run_as
 export -f update_ad_domains
 export -f add_static_lease
 export -f set_volume_ownership
-export -f install_cron
 export -f setup_prep

@@ -19,18 +19,4 @@ export DHCP_WIFI_TIME=''
 # DNS values
 export DNS_ONE=1.1.1.1
 export DNS_TWO=1.0.0.1
-# NGINX SSL values
-export COUNTRY=''
-export STATE=''
-export LOCALITY=''
-export ORGANIZATION=''
-export ORGANIZATIONALUNIT=''
-export COMMONNAME="*.${HOST_DOMAIN}"
-export EMAIL=''
-# NTP values
 export NTP_SERVER="time.${HOST_DOMAIN}"
-# OpenWeatherMap API
-export WEATHER_API_KEY=''
-export LATITUDE=''
-export LONGITUDE=''
-export UNITS=''
