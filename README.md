@@ -1,11 +1,8 @@
+### NETWORKING SERVICES ON SMALL MACHINES
 
-## dnsmasq
+This repository aims to provide a centralized networking resource. These services are run in Docker containers and each shares a similar file structure to prepare, create, and deploy the service in a container. Currently these services include:
+- dhcp and dns; dhcp provided by dnsmasq. dns provided by dnsmasq for dhcp clients, stubby upstream for DNS over TLS.
+- ntpd; a local time daemon for keeping your network in sync
 
-Notes:
-Docker typically needs `--cap-add=NET_ADMIN` to run a dnsmasq container. However, this seems to work in ansible without explicitly declaring this option. The TCP ports are accessible on the host OS, however this container has not been tested in production to confirm it truly works. If `NET_ADMIN` is required, you should be able to add this with `capabilities: NET_ADMIN` in the docker/dnsmasq/main.yml file.
-
-```
-$ docker ps
-CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                                                        NAMES
-3c7363161a71        dnsmasq             "/usr/sbin/dnsmasq -k"   About a minute ago   Up 56 seconds       0.0.0.0:53->53/udp, 0.0.0.0:53->53/tcp, 0.0.0.0:67->67/udp   dnsmasq
-```
+Future services:
+- ???
