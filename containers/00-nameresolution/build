@@ -3,6 +3,8 @@ source ./bin/activate
 
 container_prep nameresolution
 
+cp -v ${VOLUMES}/dnsmasq/_data/conf ./dnsmasq.conf
+
 cat > Dockerfile <<EOF
 FROM debian
 RUN apt update -y
@@ -11,7 +13,8 @@ RUN apt install -y wget
 RUN apt install -y dnsmasq dnsmasq-utils 
 RUN apt install -y stubby
 RUN mkdir -p /etc/dnsmasq/
-RUN echo 'conf-file=/etc/dnsmasq/conf' > /etc/dnsmasq.conf
+COPY ./dnsmasq.conf /etc/dnsmasq.conf
+#RUN echo 'conf-file=/etc/dnsmasq/conf' > /etc/dnsmasq.conf
 EXPOSE 53/tcp
 EXPOSE 53/udp
 EXPOSE 67/udp
