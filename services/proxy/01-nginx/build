@@ -1,0 +1,5 @@
+#!/bin/bash
+source ./bin/activate
+
+container_prep nginx
+container_build nginx
