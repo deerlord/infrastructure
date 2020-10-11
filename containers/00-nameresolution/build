@@ -14,7 +14,6 @@ RUN apt install -y dnsmasq dnsmasq-utils
 RUN apt install -y stubby
 RUN mkdir -p /etc/dnsmasq/
 COPY ./dnsmasq.conf /etc/dnsmasq.conf
-#RUN echo 'conf-file=/etc/dnsmasq/conf' > /etc/dnsmasq.conf
 EXPOSE 53/tcp
 EXPOSE 53/udp
 EXPOSE 67/udp

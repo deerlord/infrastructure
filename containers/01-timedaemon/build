@@ -1,7 +1,7 @@
 #!/bin/bash
 source ./bin/activate
 
-container_prep ntpd
+container_prep timedaemon
 
 cat > Dockerfile <<'EOF'
 FROM debian
@@ -25,4 +25,4 @@ fudge 127.127.1.0 stratum 10
 driftfile /dev/shm/ntp.drift
 EOF
 
-container_build ntpd
+container_build timedaemon
