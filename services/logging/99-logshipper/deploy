@@ -3,5 +3,5 @@ source ./bin/activate
 
 $(basic_container logshipper) \
   $(container_use_system_time) \
-  --mount type=bind,source=/var/log/containers/,target=/var/log/containers \
   logshipper
+docker start logshipper
