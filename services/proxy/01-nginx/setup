@@ -37,9 +37,8 @@ server {
   ssl_protocols TLSv1.3;
 }
 EOF
-
 # remove final bracket
-sed -i -e '$d' ${VOLUMES}/nginx/_data/nginx.cof 
+sed -i -e '$d' ${VOLUMES}/nginx/_data/nginx.conf 
 cat >> ${VOLUMES}/nginx/_data/nginx.conf <<'EOF'
     server_names_hash_bucket_size 128;
 }

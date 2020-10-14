@@ -2,8 +2,6 @@
 source ./bin/activate
 
 $(basic_container timedaemon) \
-  -v '/etc/localtime:/etc/localtime' \
-  -v '/etc/timezone:/etc/timezone:ro' \
   -p 123:123 \
   timedaemon
 public_service time
