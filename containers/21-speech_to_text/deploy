@@ -1,0 +1,10 @@
+#!/bin/bash
+source ./bin/activate
+
+$(basic_container speech_to_text) \
+  --cap-add=NET_ADMIN \
+  $(container_use_system_time) \
+  speech_to_text
+http_ingress speech_to_text
+public_service speech_to_text
+docker start speech_to_text

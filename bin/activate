@@ -20,7 +20,7 @@ container_build() {
   container="$1"
   if [[ -e Dockerfile ]]
   then
-    docker build -t $container . #--pull --no-cache -t $container .
+    docker build --pull --no-cache -t $container .
   fi
   cd ../../
   rm -rf ./.build/$container
@@ -148,6 +148,17 @@ EOF
     public_service $container
     docker restart nginx
   fi
+}
+
+http_ingress_client_cert() {
+  if [[ -z $1 || -z $2  ]]
+  then
+    return 1
+  fi
+  service="$1"
+  client_cert_path="$2"
+  mkdir -p ${VOLUMES}/nginx/_data/ssl/clients/${service}
+  cp ${client_cert_path} ${VOLUMES}/nginx/_data/ssl/clients/${service}/
 }
 
 remove_http_ingress() {

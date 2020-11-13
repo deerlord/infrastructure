@@ -66,6 +66,7 @@ class OpenWeatherAPI():
             f'&appid={self.__api_key}'
         )
         result = requests.get(query_url) 
+        print('API result', result)
         return result.json()
 
 
@@ -116,19 +117,19 @@ class InfluxDB():
         """
         points = []
         for d in data:
-            weather = point.get('weather')[0]
+            weather = d.get('weather')[0]
             point = {
-                'hourly',
-                tags={},
-                fields={
-                    'dt': d.get('dt'),
+                'measurement': 'hourly',
+                "tags": {},
+                'time': d.get('dt'),
+                'fields': {
                     'temp': int(d.get('temp')),
                     'feels_like': int(d.get('feels_like')),
                     'pressure': float(d.get('pressure')),
                     'humidity': float(d.get('humidity')),
                     'clouds': float(d.get('clouds')),
                     'visibility': float(d.get('visibility')),
-                    'wind_speed': float(d.get('windd_speed')),
+                    'wind_speed': float(d.get('wind_speed')),
                     'weather_id': int(weather.get('id')),
                     'weather_main': str(weather.get('main')),
                     'weather_desc': str(weather.get('description')),
@@ -136,14 +137,14 @@ class InfluxDB():
                     'rain': float(d.get(
                         'rain',
                         {'1h': 0}
-                    )['1h'],
+                    )['1h']),
                     'snow': float(d.get(
                         'snow',
                         {'1h': 0}
-                    )['1h'],
+                    )['1h']),
                     'pop': float(d.get('pop'))
                 }
-            )
+            }
             points.append(point)
         self.__client.delete_series(measurement='hourly')
         self.__client.write_points(points)
@@ -202,10 +203,9 @@ def main():
     )
     database = InfluxDB()
     now = datetime.now
-    interval = timedelta(seconds=90)
+    interval = timedelta(seconds=600)
     while True:
         _next = now() + interval
-        data = weather.current()
         data = weather.data()
         current = data['current']
         pp.pprint(current)

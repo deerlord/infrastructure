@@ -1,8 +1,9 @@
 #!/bin/bash
 
-/usr/sbin/useradd -r -s /sbin/nologin sphinx
-mkdir ./sphinx/
-cd ./sphinx/
+source ./bin/activate
+
+container_prep speech_to_text
+
 cat > speech.py <<'EOF'
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from io import BytesIO
@@ -29,6 +30,7 @@ EOF
 cat > Dockerfile <<'EOF'
 FROM debian
 RUN apt update -y
+RUN apt upgrade -y
 RUN apt install -y python3.7
 RUN apt install -y python3-pip
 RUN pip3 install SpeechRecognition
@@ -36,6 +38,5 @@ RUN mkdir /opt/speech/
 COPY ./speech.py /opt/speech
 CMD ["python3", "/opt/speech/speech.py"]
 EOF
-docker build -t sphinx .
-cd ..
-rm -rf ./sphinx/
+
+container_build speech_to_text

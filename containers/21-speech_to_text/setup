@@ -1,0 +1,5 @@
+#/bin/bash
+
+source ./bin/activate
+
+setup_prep speech_to_text
