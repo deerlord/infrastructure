@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd /opt/networking/
+source bin/activate
+update_ad_domains

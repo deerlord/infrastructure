@@ -1,5 +1,0 @@
-#!/bin/activate
-
-source ./bin/activate
-
-docker run -d --name=grafana grafana/grafana

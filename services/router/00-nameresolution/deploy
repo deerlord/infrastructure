@@ -1,0 +1,17 @@
+#!/bin/bash
+source ./bin/activate
+
+set_volume_ownership nameresolution dnsmasq
+
+$(basic_container nameresolution) \
+  --cap-add=NET_ADMIN \
+  $(container_use_system_time) \
+  -v 'dnsmasq:/etc/dnsmasq/' \
+  -p 53:53/udp \
+  -p 53:53/tcp \
+  -p 67:67/udp \
+  nameresolution
+  #--dns=${DNS_ONE} \
+  #--dns=${DNS_TWO} \
+public_service dns
+public_service dhcp

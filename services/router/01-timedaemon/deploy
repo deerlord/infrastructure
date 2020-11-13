@@ -1,0 +1,9 @@
+#!/bin/bash
+source ./bin/activate
+
+$(basic_container timedaemon) \
+  -p 123:123 \
+  --privileged \
+  timedaemon
+public_service time
+docker start timedaemon

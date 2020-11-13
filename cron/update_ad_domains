@@ -1,9 +1,0 @@
-#!/bin/bash
-
-cd /opt/infra/
-source ./bin/activate
-update_ad_domains
-if [[ $(container_running dnsmasq) -eq 1 ]]
-then
-  docker restart dnsmasq 
-fi

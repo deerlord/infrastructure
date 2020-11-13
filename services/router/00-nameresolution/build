@@ -1,0 +1,44 @@
+#!/bin/bash
+source ./bin/activate
+
+container_prep nameresolution
+
+cp -v ${VOLUMES}/dnsmasq/_data/conf ./dnsmasq.conf
+
+cat > Dockerfile <<EOF
+FROM debian
+RUN apt update -y
+RUN apt upgrade -y
+RUN apt install -y wget
+RUN apt install -y dnsmasq dnsmasq-utils 
+RUN apt install -y stubby
+RUN mkdir -p /etc/dnsmasq/
+COPY ./dnsmasq.conf /etc/dnsmasq.conf
+EXPOSE 53/tcp
+EXPOSE 53/udp
+EXPOSE 67/udp
+RUN sed -i '/listen_addresses/,+2d' /etc/stubby/stubby.yml
+COPY stubby.yml stubby.yml
+RUN cat stubby.yml >> /etc/stubby/stubby.yml
+RUN rm stubby.yml
+COPY run.sh /usr/bin/run.sh
+RUN chmod +x /usr/bin/run.sh
+CMD ["bash", "/usr/bin/run.sh"]
+EOF
+
+cat > stubby.yml <<'EOF'
+  - address_data: 8.8.8.8
+    tls_auth_name: "dns.google"
+  - address_data: 8.8.4.4
+    tls_auth_name: "dns.google"
+listen_addresses:
+  - 127.0.0.1@853
+  - 0::1@853 
+EOF
+
+cat > run.sh <<'EOF'
+/usr/sbin/dnsmasq --log-facility=/var/log/dnsmasq
+/usr/bin/stubby -l
+EOF
+
+container_build nameresolution

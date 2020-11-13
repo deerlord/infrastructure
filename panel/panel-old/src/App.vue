@@ -1,1 +1,0 @@
-views/weather/current.vue
