@@ -1,0 +1,3 @@
+design.txt
+- create over-arching plan/design of what needs to be done
+- break it down into manageable pieces

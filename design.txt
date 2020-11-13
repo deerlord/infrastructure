@@ -1,0 +1,54 @@
+## NOTES 
+
+All services share a few things in common
+- based on a source docker image (debian?)
+  self updating?
+- some level of OS setup (user, volumes)
+- automatic restart (docker actually does this already)
+- use of NTP/time service
+
+non-common but shared among some containers
+- ability to connect to forward/reverse proxy
+- adding DNS entry for service to DNSmasq
+  IPs may differ if using distributed setup, DNSmasq may not be on same box as service
+
+Some thoughts
+- the Docker library may do a lot of the things we already need, IE  building images/launching containers. We should aim to utilize the library as best as we are able, and "glue" those libraries to definition files; this allows new services to be added, although some custom functions (such as updating connecting to the HTTP reverse proxy) may still require code.
+- Definition file: something like  a Dockerfile.
+
+
+## SERVICES
+
+### Name Resolution
+DHCP; for addressing local machines
+DNS; for handling lookups
+- dnsmasq handles both of these and allows DHCP clients to have their hostnames be resolved on the network
+
+Upstream DNS resolver:
+- stubby can provide DNS over HTTPS
+caveat: dnsmasq does not seem to allow hostnames for its upstream server, only IPs. IPs are likely not static on Docker networks, however we technically can run stubby in the same container as dnsmasq. This is not recommended, we should find a better way. 
+
+### Reverse Proxy
+NGINX; works well for this, widely known. no brainer
+
+### Forward Proxy
+SQUID; works well, specifically designed for this AFAIK.
+
+### Home Automation
+OPENHAB; open source, can be reverese/forward proxied.
+
+### Custom Services
+Custom python code
+- see containers/21-speech_to_text/build for a loose example of how we could create this. For example, the following could be provided
+
+```
+def main(kwarg_one, kwarg_two, ...):
+    return (result, file_type)
+```
+
+Our code can then handle the following
+- ensuring the container is connected to reverse proxy
+- decoding the HTTP message and massing it to `main()`
+- re-encoding the result to an HTTP response
+
+This can easily allow "small" applications, such as speech to text, without needing to re-invent the wheel (HTTP handling) every time.
