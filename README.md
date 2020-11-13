@@ -1,8 +1,3 @@
-### NETWORKING SERVICES ON SMALL MACHINES
+## PYTHON REWORK IN PROGRESS 
 
-This repository aims to provide a centralized networking resource. These services are run in Docker containers and each shares a similar file structure to prepare, create, and deploy the service in a container. Currently these services include:
-- dhcp and dns; dhcp provided by dnsmasq. dns provided by dnsmasq for dhcp clients, stubby upstream for DNS over TLS.
-- ntpd; a local time daemon for keeping your network in sync
-
-Future services:
-- ???
+This project aims to run home network services in docker container(s), not necessarily in a distributed fashion. See TODO.txt for more details.
